@@ -1,5 +1,5 @@
 ---
-layout: home
+layout: default
 title: AI Agent Registry
 ---
 
@@ -7,18 +7,8 @@ title: AI Agent Registry
 
 A standardized, hierarchical persona system for multi-agent AI applications.
 
-**32 personas** organized across **L0–L4 + TEAM** layers with a sync script
+**32 personas** organized across **L0-L4 + TEAM** layers with a sync script
 for Hermes and import guides for 5+ runtimes.
-
----
-{: .mt-4 }
-
-<div class="d-flex flex-items-center flex-wrap" style="gap: 0.5rem 1rem;">
-<a class="btn btn-primary" href="/ai-agent-registry/personas/">Browse Persona Catalog</a>
-<a class="btn" href="/ai-agent-registry/docs/HIERARCHY.md">Read Framework Docs</a>
-<a class="btn" href="/ai-agent-registry/docs/IMPORT-GUIDE.md">Import Guide</a>
-<a class="btn" href="/ai-agent-registry/CONTRIBUTING.md">Contribute</a>
-</div>
 
 ---
 

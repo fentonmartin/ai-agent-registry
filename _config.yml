@@ -1,13 +1,11 @@
 ---
 # AI Agent Registry — GitHub Pages configuration
-# Uses jekyll-theme-primer (GitHub's own clean, modern theme)
+# Theme: jekyll-theme-primer (GitHub's clean, modern documentation theme)
 
 title: AI Agent Registry
 description: A standardized, hierarchical persona system for multi-agent AI applications.
-logo: /assets/images/logo.svg
 theme: jekyll-theme-primer
 
-# Show README.md as the homepage
 repository: fentonmartin/ai-agent-registry
 baseurl: /ai-agent-registry
 url: https://fentonmartin.github.io
@@ -19,25 +17,24 @@ kramdown:
     block:
       line_numbers: false
 
-# Exclude build artifacts and non-docs files
+# Exclude non-docs files from Pages build
 exclude:
-  - pages_config.json
-  - Gemfile
-  - .github
   - sync
   - scripts
   - config
   - examples
+  - Gemfile
+  - LICENSE
+  - .github
+  - _config.yml
 
-# Navigation links
-navigation_top:
-  - title: Hierarchy
-    url: /docs/HIERARCHY.md
-  - title: Import Guide
-    url: /docs/IMPORT-GUIDE.md
-  - title: Naming
-    url: /docs/NAMING.md
-  - title: Contributing
-    url: /CONTRIBUTING.md
-  - title: License
-    url: /LICENSE
+# Default layout for persona and docs files
+defaults:
+  - scope:
+      path: "personas"
+    values:
+      layout: page
+  - scope:
+      path: "docs"
+    values:
+      layout: page
