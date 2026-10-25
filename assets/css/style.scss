@@ -61,16 +61,52 @@ a:hover {
   border-top-color: #ccc !important;
 }
 
-/* Code blocks: dark theme */
+/* Code blocks: readable on dark */
 .main-content pre,
 .main-content .highlight {
-  background-color: #1e1e1e !important;
-  color: #d4d4d4 !important;
-  border-color: #333 !important;
+  background-color: #f8f8f8 !important;
+  color: #24292f !important;
+  border-color: #d0d7de !important;
 }
 .main-content code {
-  background-color: #2d2d2d !important;
-  color: #d4d4d4 !important;
+  background-color: #f1f3f5 !important;
+  color: #57606a !important;
+}
+.highlight .c,
+.highlight .c1,
+.highlight .cd,
+.highlight .cm,
+.highlight .cp,
+.highlight .cs {
+  color: #6e7781 !important;
+}
+.highlight .k,
+.highlight .kd,
+.highlight .kn,
+.highlight .kp,
+.highlight .kr,
+.highlight .kv {
+  color: #005cc3 !important;
+}
+.highlight .s,
+.highlight .s1,
+.highlight .s2,
+.highlight .sc,
+.highlight .sd,
+.highlight .se,
+.highlight .sh,
+.highlight .si,
+.highlight .sr,
+.highlight .ss {
+  color: #032f63 !important;
+}
+.highlight .m,
+.highlight .mf,
+.highlight .mh,
+.highlight .mi,
+.highlight .mo,
+.highlight .il {
+  color: #006270 !important;
 }
 
 /* Horizontal rules: darker */
