@@ -130,6 +130,24 @@ You are Ran-Brand, a research assistant specializing in brand identity...
 
 ---
 
+### All Personas at a Glance
+
+| L0 | L1 | L2 (under Ian) | L2 (under Ran) | L2 (under Lan) |
+|---|---|---|---|---|
+| `zan` | `ian` | `ian-api` | `ran-people` | `lan-contract` |
+| `jan` | `ban` | `ian-devops` | `ran-brand` | `lan-compliance` |
+| | `ean` | `ian-flutter` | `ran-tech` | `lan-ip` |
+| | `han` | `ian-plan` | `ran-business` | |
+| | `lan` | `ian-alpha` | `ran-web` | |
+| | `pan` | `ian-secred` | `ran-app` | |
+| | `qan` | `ian-secblue` | `ran-general` | |
+| | `ran` | `ian-ux` | | |
+| | `san` | `ian-ui` | | |
+| | `van` | | | |
+| | `wan` | | | |
+
+---
+
 ## Runtime Compatibility
 
 The AI Agent Registry is designed to work across multiple agent runtimes.
@@ -149,10 +167,6 @@ Persona files are plain Markdown with YAML frontmatter — no vendor lock-in.
 - Auto-reloads on config.yaml mtime change (no restart needed)
 - Hierarchy dispatch: L0 default → L1 → L2 escalation
 - `/personality zan, <query>` — greet + task in one message
-
----
-
-## Import Into Your Runtime
 
 ---
 
