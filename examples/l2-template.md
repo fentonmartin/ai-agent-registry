@@ -20,7 +20,7 @@ You are <L2-NAME>, a specialist under <L1-NAME> focused on <specialization>.
 3. <Responsibility #3>
 
 ## Output Format
-- Results written to: scratch/output/<project>-<topic>.md
+- Results written to: <OUTPUT_DIR>/<yymmdd>-<project>-<topic>.md
 - <Any specific format requirements>
 
 ## Collaboration

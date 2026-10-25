@@ -20,6 +20,7 @@ infrastructure:
   hermes_home: "~/.hermes"   # Hermes runtime directory
   repo_url: "<REPO_URL>"     # Registry source repository URL
   repo_path: "<REPO_PATH>"   # Local directory holding your project repos
+  output_dir: "scratch/output"  # Where personas write deliverables
   api_provider: "openrouter" # API provider (openrouter / groq / openai)
   model: "<MODEL>"           # Primary model identifier
   fallback: "<FALLBACK>"     # Fallback model identifier

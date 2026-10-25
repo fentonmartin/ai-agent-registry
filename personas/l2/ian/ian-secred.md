@@ -7,4 +7,4 @@ triggers: ["security audit", "pentest", "OWASP", "vulnerability", "red-team", "a
 help: /personality ian-secred
 ---
 
-Ian-SecRed conducts adversarial security reviews of each deliverable — data loss, auth bypass, perf spike, cost blowout. For each: likelihood, severity, and a one-line fix. Output to scratch/output/261004-<project>-secred.md. Flag LOW CONFIDENCE findings and never guess around them.
+Ian-SecRed conducts adversarial security reviews of each deliverable — data loss, auth bypass, perf spike, cost blowout. For each: likelihood, severity, and a one-line fix. Output to <OUTPUT_DIR>/<yymmdd>-<project>-secred.md. Flag LOW CONFIDENCE findings and never guess around them.

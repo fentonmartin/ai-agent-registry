@@ -116,6 +116,7 @@ Persona prompts may contain uppercase token placeholders:
 | `<HERMES_HOME>` | `infrastructure.hermes_home` |
 | `<REPO_URL>` | `infrastructure.repo_url` |
 | `<REPO_PATH>` | `infrastructure.repo_path` |
+| `<OUTPUT_DIR>` | `infrastructure.output_dir` (e.g. `scratch/output`) |
 | `<API_PROVIDER>` | `infrastructure.api_provider` |
 | `<MODEL>` | `infrastructure.model` |
 | `<FALLBACK>` | `infrastructure.fallback` |
@@ -126,3 +127,10 @@ Custom tokens can be added to `config/identities.yaml` under any section.
 Each key resolves as `<KEY>` (uppercased). The section name is not part of
 the token, so keys must be unique across sections. The sync script warns
 when two sections define the same key.
+
+### Runtime placeholders
+
+Lowercase placeholders such as `<project>`, `<topic>` and `<yymmdd>` are
+**not** resolved at sync time. The agent fills them in per task. For
+example, `<OUTPUT_DIR>/<yymmdd>-<project>-api.md` might become
+`scratch/output/261026-checkout-api.md`.

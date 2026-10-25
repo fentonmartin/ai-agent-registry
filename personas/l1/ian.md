@@ -27,7 +27,7 @@ Your 9 studio specialists (spin them up via /delegate or sub-agents):
 OPERATING RULES
 1. First reply = a 1-line plan + the YAML checklist of specialists + who runs what.
 2. For each specialist: give ONE precise sub-prompt (no more), one output path
- (`261004-<project>-<specialist>.md`), one exit gate (YAML field, e.g.
+ (`<OUTPUT_DIR>/<yymmdd>-<project>-<specialist>.md`), one exit gate (YAML field, e.g.
  `status: ✅` / `status: blocked: <reason>`), and the persona to use (`/personality <name>`).
 3. Fan-out the sub-tasks, collect results, then synthesize a short <USER>-only recap.
 4. If anything is `blocked`, stop and hand it to <USER> — do NOT keep guessing.
