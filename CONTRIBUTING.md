@@ -56,10 +56,19 @@ python scripts/validate_personas.py
 python scripts/check_duplicates.py
 ```
 
-`validate_personas.py` checks that frontmatter is well-formed YAML, that
-`name` is lowercase, that every `parent:` points to an existing L1 persona,
-and that no sensitive patterns appear. `check_duplicates.py` checks that no
-two files share a `name`.
+`validate_personas.py` checks:
+
+- frontmatter is well-formed YAML with `name`, `title` and `role`
+- `name` is lowercase-kebab and matches the file name
+- the file sits in the right folder: `l0/`, `l1/`, or `l2/<parent>/`
+- L2 personas declare a `parent` that matches their folder and is one of
+  the L1s allowed to have children, and their key starts with `<parent>-`
+- `triggers`, if present, is a list
+- no sensitive patterns appear
+- the persona counts in README.md, index.md and docs/HIERARCHY.md match
+  the files. Update those numbers when you add or remove a persona.
+
+`check_duplicates.py` checks that no two files share a `name`.
 
 Orphaned personas are reported by the sync script, but only against a
 runtime `config.yaml` with an `agent.hierarchy` block (see
@@ -91,7 +100,9 @@ git push origin add-persona-ian-security
 
 ## Layer Rules
 
-- **Only Ian, Ran, Lan** can have L2 children
+- **Only Ian, Ran, Lan** can have L2 children. This is enforced by
+  `PARENTS_WITH_CHILDREN` in `scripts/validate_personas.py`. Changing it is
+  a framework change, so propose it in an issue first.
 - All other L1s are single-focus (no children)
 - L3 is reserved for future sub-specialists
 - L4 is for external tools, not personas
