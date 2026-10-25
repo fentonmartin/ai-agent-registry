@@ -19,7 +19,8 @@ is active at a time (the default). `Zan` is the standard default.
 | `jan` | Jan | Default analyst tone (pull-only) |
 
 **Rules:**
-- L0 is NOT a hierarchy level in config.yaml — it's a convention.
+- L0 is listed in `agent.hierarchy.L0.members`; the active default is set
+  by the top-level `display.personality` key.
 - Only one L0 persona should be set as the active default.
 - Jan activates only on explicit "Jan" mention.
 
@@ -153,26 +154,38 @@ Before escalating:
 In `config.yaml`:
 
 ```yaml
+display:
+  personality: zan          # default L0 voice (top-level key)
+
 agent:
   hierarchy:
+    L0:
+      members: [zan, jan]
     L1:
-      ian:
-        display: Ian
-        children: [ian-api, ian-devops, ian-flutter, ian-plan, ian-alpha,
-                   ian-secred, ian-secblue, ian-ux, ian-ui]
-      ran:
-        display: Ran
-        children: [ran-people, ran-brand, ran-tech, ran-business,
-                   ran-web, ran-app, ran-general]
-      lan:
-        display: Lan
-        children: [lan-contract, lan-compliance, lan-ip]
-      # ... other L1s with no children
+      members: [ian, ban, ean, han, lan, pan, qan, ran, san, van, wan]
+    L2:
+      children:
+        ian: [ian-api, ian-devops, ian-flutter, ian-plan, ian-alpha,
+              ian-secred, ian-secblue, ian-ux, ian-ui]
+        ran: [ran-people, ran-brand, ran-tech, ran-business,
+              ran-web, ran-app, ran-general]
+        lan: [lan-contract, lan-compliance, lan-ip]
+    L3:
+      members: []
+    L4:
+      members: []
     TEAM:
       members: []
+  # >>> PERSONALITY SYNC (auto-managed) >>>
   personalities:
-    # (auto-managed by sync_personas.py)
+    # (written by sync_personas.py — do not edit by hand)
+  # <<< PERSONALITY SYNC <<<
 ```
+
+`sync_personas.py` validates this block after every sync. All six layers
+(`L0`–`L4`, `TEAM`) must be present, every key listed under `members` or
+`children` must be a synced persona, and every synced persona must appear
+somewhere in the hierarchy.
 
 ## Counting the Personas
 

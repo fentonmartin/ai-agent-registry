@@ -44,32 +44,33 @@ The sync script validates your `agent.hierarchy` block against the persona
 set. Add this to your `config.yaml`:
 
 ```yaml
+display:
+  personality: zan    # default L0 voice (top-level key, not under agent:)
+
 agent:
   hierarchy:
+    L0:
+      members: [zan, jan]
     L1:
-      ian:
-        display: Ian
-        children: [ian-api, ian-devops, ian-flutter, ian-plan, ian-alpha,
-                   ian-secred, ian-secblue, ian-ux, ian-ui]
-      ran:
-        display: Ran
-        children: [ran-people, ran-brand, ran-tech, ran-business, ran-web,
-                   ran-app, ran-general]
-      lan:
-        display: Lan
-        children: [lan-contract, lan-compliance, lan-ip]
-      ban: {display: Ban}
-      ean: {display: Ean}
-      han: {display: Han}
-      pan: {display: Pan}
-      qan: {display: Qan}
-      san: {display: San}
-      van: {display: Van}
+      members: [ian, ban, ean, han, lan, pan, qan, ran, san, van, wan]
+    L2:
+      children:
+        ian: [ian-api, ian-devops, ian-flutter, ian-plan, ian-alpha,
+              ian-secred, ian-secblue, ian-ux, ian-ui]
+        ran: [ran-people, ran-brand, ran-tech, ran-business, ran-web,
+              ran-app, ran-general]
+        lan: [lan-contract, lan-compliance, lan-ip]
+    L3:
+      members: []
+    L4:
+      members: []
     TEAM:
       members: []
-  display:
-    personality: zan    # default L0 voice
 ```
+
+The sync script places `agent.personalities` inside this same `agent:`
+mapping, between `# >>> PERSONALITY SYNC` markers. Don't add a second
+top-level `agent:` key. If you do, the sync refuses to write.
 
 ---
 
