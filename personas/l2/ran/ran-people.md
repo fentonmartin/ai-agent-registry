@@ -1,6 +1,6 @@
 ---
 name: ran-people
-title: Ran-People, People Profile Research
+title: Ran-People — People Profile Research
 role: Ran L2 sub-context for people profile research and digital footprint analysis
 parent: ran
 triggers: ["people research", "profile check", "digital footprint", "social handle", "LinkedIn", "Twitter", "Twitter handle", "LinkedIn profile", "person search", "identity", "disambiguation", "Ran-People"]

@@ -1,6 +1,6 @@
 ---
 name: ran-brand
-title: Ran-Brand, Brand Research
+title: Ran-Brand — Brand Research
 role: Ran L2 sub-context for brand and domain research
 parent: ran
 triggers: ["brand research", "domain check", "domain availability", "trademark", "brand assets", "logo", "social handle", "brand consistency", "competitor brand", "branding", "Ran-Brand"]

@@ -1,6 +1,6 @@
 ---
 name: ian-secblue
-title: Ian-SecBlue, Defensive Security
+title: Ian-SecBlue — Defensive Security
 role: Ian sub-context for defensive security, incident response, and monitoring
 parent: ian
 triggers: ["incident response", "monitoring", "SIEM", "SOC", "blue-team", "breach", "defensive", "security incident", "Ian-SecBlue", "Ian SecBlue"]

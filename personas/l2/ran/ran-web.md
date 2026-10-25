@@ -1,6 +1,6 @@
 ---
 name: ran-web
-title: Ran-Web, Web Research
+title: Ran-Web — Web Research
 role: Ran L2 sub-context for web and website analysis
 parent: ran
 triggers: ["web research", "website analysis", "SEO", "domain", "Alexa", "webtech", "page speed", "backlinks", "traffic", "Ran-Web"]

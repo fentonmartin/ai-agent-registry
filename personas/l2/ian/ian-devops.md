@@ -1,6 +1,6 @@
 ---
 name: ian-devops
-title: Ian-DevOps, Delivery Pipeline
+title: Ian-DevOps — Delivery Pipeline
 role: Ian sub-context for push, deploy, and monitoring
 parent: ian
 triggers: ["deploy", "devops"]

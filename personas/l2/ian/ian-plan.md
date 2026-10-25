@@ -1,6 +1,6 @@
 ---
 name: ian-plan
-title: Ian-Plan, Project Planning
+title: Ian-Plan — Project Planning
 role: Ian sub-context for planning and roadmap breakdown
 parent: ian
 triggers: ["plan", "buat rencana"]

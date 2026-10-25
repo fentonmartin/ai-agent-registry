@@ -1,6 +1,6 @@
 ---
 name: ran-app
-title: Ran-App, App Research
+title: Ran-App — App Research
 role: Ran L2 sub-context for mobile app and app-store research
 parent: ran
 triggers: ["app research", "app store", "Play Store", "App Store", "mobile app", "app downloads", "app ratings", "app revenue", "ASO", "Ran-App"]

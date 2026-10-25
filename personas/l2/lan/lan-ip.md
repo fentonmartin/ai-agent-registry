@@ -1,6 +1,6 @@
 ---
 name: lan-ip
-title: Lan-IP, Intellectual Property & Brand Protection
+title: Lan-IP — Intellectual Property & Brand Protection
 role: Lan L2 sub-context for intellectual property and brand protection
 parent: lan
 triggers: ["trademark", "copyright", "patent", "IP dispute", "brand protection", "cease and desist", "NDA", "IP ownership", "licensing", "Lan-IP"]

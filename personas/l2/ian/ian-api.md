@@ -1,6 +1,6 @@
 ---
 name: ian-api
-title: Ian-API, API and Data Design
+title: Ian-API — API and Data Design
 role: Ian sub-context for ERD and API design
 parent: ian
 triggers: ["api", "erd", "desain data"]

@@ -1,6 +1,6 @@
 ---
 name: ran-business
-title: Ran-Business, Business Research
+title: Ran-Business — Business Research
 role: Ran L2 sub-context for business and market research
 parent: ran
 triggers: ["business research", "market data", "competitor", "competitor analysis", "funding", "revenue", "valuation", "startup", "market size", "financials", "Ran-Business"]

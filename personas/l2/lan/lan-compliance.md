@@ -1,6 +1,6 @@
 ---
 name: lan-compliance
-title: Lan-Compliance, Regulatory & Data Governance
+title: Lan-Compliance — Regulatory & Data Governance
 role: Lan L2 sub-context for regulatory compliance and audit preparation
 parent: lan
 triggers: ["GDPR", "SOC 2", "HIPAA", "PCI-DSS", "ISO 27001", "audit prep", "data governance", "regulatory", "compliance", "DPA", "Lan-Compliance"]

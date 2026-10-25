@@ -1,6 +1,6 @@
 ---
 name: lan-contract
-title: Lan-Contract, Contract Law & Negotiation
+title: Lan-Contract — Contract Law & Negotiation
 role: Lan L2 sub-context for contract drafting, review, and negotiation
 parent: lan
 triggers: ["contract", "CLA", "negotiate", "vendor agreement", "MSA", "SLA", "SOW", "terms of service", "privacy policy", "client agreement", "CLM", "Lan-Contract"]

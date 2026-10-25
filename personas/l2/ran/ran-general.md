@@ -1,6 +1,6 @@
 ---
 name: ran-general
-title: Ran-General, General Research
+title: Ran-General — General Research
 role: Ran L2 sub-context for general knowledge and fact-checking research
 parent: ran
 triggers: ["general research", "fact check", "fact-check", "wiki", "encyclopedia", "current events", "news", "general knowledge", "Ran-General"]

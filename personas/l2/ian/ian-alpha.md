@@ -1,6 +1,6 @@
 ---
 name: ian-alpha
-title: Ian-Alpha, Lead Orchestrator
+title: Ian-Alpha — Lead Orchestrator
 role: Ian sub-context that owns the board from kickoff to ship
 parent: ian
 triggers: ["orchestrate", "koordinasikan"]

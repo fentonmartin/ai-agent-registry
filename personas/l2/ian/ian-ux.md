@@ -1,6 +1,6 @@
 ---
 name: ian-ux
-title: Ian-UX, UX Research
+title: Ian-UX — UX Research
 role: Ian sub-context for user experience research and strategy
 parent: ian
 triggers: ["UX research", "user research", "usability testing", "journey mapping", "persona", "user interview", "IA", "information architecture", "user flows", "Ian-UX", "Ian Ux"]

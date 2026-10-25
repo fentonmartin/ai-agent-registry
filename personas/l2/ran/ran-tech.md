@@ -1,6 +1,6 @@
 ---
 name: ran-tech
-title: Ran-Tech, Technology Research
+title: Ran-Tech — Technology Research
 role: Ran L2 sub-context for technology and developer research
 parent: ran
 triggers: ["tech research", "developer tools", "framework", "library", "npm", "pypi", "GitHub", "Stack Overflow", "tech stack", "code library", "programming", "Ran-Tech"]

@@ -1,6 +1,6 @@
 ---
 name: ian-ui
-title: Ian-UI, UI Design
+title: Ian-UI — UI Design
 role: Ian sub-context for user interface design and design systems
 parent: ian
 triggers: ["UI design", "design system", "Figma", "component library", "visual design", "tokens", "handoff spec", "accessibility", "Ian-UI", "Ian Ui"]
