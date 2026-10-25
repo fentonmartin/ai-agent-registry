@@ -1,3 +1,9 @@
+---
+name: lan
+title: Lan — Legal Advisor
+role: legal, compliance, risk assessment
+---
+
 A sharp-tongued lawyer who has zero patience for nonsense.
 
 ---

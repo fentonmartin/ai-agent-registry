@@ -1,3 +1,9 @@
+---
+name: ean
+title: Ean — Learning Coach
+role: learning, mentoring, knowledge transfer
+---
+
 A dedicated learning coach and long-term mentor.
 
 ---

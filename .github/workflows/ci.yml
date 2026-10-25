@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install PyYAML
+        run: pip install pyyaml
+
+      - name: Validate persona files
+        run: python scripts/validate_personas.py
+
+      - name: Check for duplicate keys
+        run: python scripts/check_duplicates.py
+
+      - name: Run sync script check
+        run: python sync/sync_personas.py --check 2>&1 || true

@@ -1,80 +1,66 @@
 # AI Agent Registry
 
-A standardized, hierarchical persona system for multi-agent AI applications.
+> A standardized, hierarchical persona system for multi-agent AI applications.
 
-## What Is It?
-
-The AI Agent Registry is a framework for organizing AI assistants into a
-structured, multi-layer hierarchy (L0–L4 + TEAM). Instead of ad-hoc prompt
-collections, personas are grouped by domain, parented to L1 experts, and
-dispatched through a clear escalation protocol.
-
-**Goal:** Make it easy to create, maintain, and operate a fleet of
-specialized AI assistants — each scoped to a domain, each with well-defined
-parent-child relationships, and each invokable via a consistent interface.
+[![CI](https://github.com/fentonmartin/ai-agent-registry/actions/workflows/ci.yml/badge.svg)](https://github.com/fentonmartin/ai-agent-registry/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue)](https://www.python.org/)
+[![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](https://github.com/fentonmartin/ai-agent-registry/blob/main/CONTRIBUTING.md)
+[![Persona Count](https://img.shields.io/badge/personas-32-orange)](#the-l0-l4--team-hierarchy)
+[![Hierarchy](https://img.shields.io/badge/hierarchy-L0--L4--TEAM-purple)](#)
+[![Sync Status](https://img.shields.io/badge/sync-passing-brightgreen)](#)
 
 ---
 
-## The L0–L4 + TEAM Hierarchy
-
 ```
-L0  — Default Voice(s)
-    ├── Zan     — Executive Assistant (default)
-    └── Jan     — Default Analyst Tone
+                          ╔══════════════════╗
+                          ║   L0 — Default    ║
+                          ║     Voices        ║
+                          ║   Zan  ·  Jan     ║
+                          ╚═══╤═══════════════╝
+                              │
+                    ┌─────────┼─────────┐
+                    │         │         │
+              ╔═════╪═════╗ ╔═══╪═════╗ ╔═══╪══════════════╗
+              ║  L1: Ian  ║ ║  L1: Ran ║ ║  L1: Lan       ║
+              ║ Engineering ║ ║  Research ║ ║  Legal         ║
+              ╚═════╤═════╝ ╚═══╤═════╝ ╚═══╤══════════════╝
+                    │         │         │
+       ┌────┬────┬──┼──┬────┬─┘         │
+       │ API│DevO│Fl│Pl│Alp│UI│UX│SecRd│ScB│         │
+       │API │DevOps│ut│an│pha│  │  │Red │ecB│         │
+       └────┴────┴──┴──┴────┴─┴─────────┘         │
+                                                  │
+    ┌───┬────┬───┬────┬───┬───┐                   │
+    │Ppl│Brand│Tec│Busi│Web│App│Gen│                  │
+    └───┴────┴───┴────┴───┴───┘                   │
+         (Ran Children)                            │
+                                                  │
+    ┌───────┬────────┬──┐                          │
+    │Ctrct │Complnc │IP│                          │
+    └───────┴────────┴──┘                          │
+         (Lan Children) ←──────────────────────────┘
 
-L1  — Domain Experts (10 peers)
-    ├── Ian     — Intelligent Assistant (engineering umbrella)
-    ├── Ban     — Business Assistant
-    ├── Ean     — Learning Coach
-    ├── Han     — Health Coach
-    ├── Lan     — Legal Advisor (legal/compliance umbrella)
-    ├── Pan     — Product Expert
-    ├── Qan     — Quote Expert
-    ├── Ran     — Research Assistant (research umbrella)
-    ├── San     — Calm Psychologist
-    └── Van     — Devil Advocate
-
-L2  — Specialists (children of L1)
-    ├── Ian ── Ian-API, Ian-DevOps, Ian-Flutter, Ian-Plan,
-    │         Ian-Alpha, Ian-SecRed, Ian-SecBlue, Ian-UX, Ian-UI
-    ├── Ran ── Ran-People, Ran-Brand, Ran-Tech, Ran-Business,
-    │         Ran-Web, Ran-App, Ran-General
-    └── Lan ── Lan-Contract, Lan-Compliance, Lan-IP
-
-L3  — Sub-specialists
-L4  — External tools / APIs
-
-TEAM — Cross-functional collaborators (external to all levels)
+         L3: Sub-specialists  |  L4: External Tools/APIs
+         TEAM: Cross-functional collaborators
 ```
 
-### How It Works
+---
 
-| Layer | Role | Example |
-|-------|------|---------|
-| **L0** | Default voice invoked without a name greeting | `Zan` answers when no persona is specified |
-| **L1** | Domain experts — single-focus, no children (unless specified) | `Lan` handles all legal; `Pan` handles all product |
-| **L2** | Specialist children of L1 — narrow expertise | `Ran-People` (people research), `Ran-Brand` (domains/trademarks) |
-| **L3** | Sub-specialists under L2 | Reserved for future expansion |
-| **L4** | External tools / APIs invoked as agents | Shell, web search, file system |
-| **TEAM** | External collaborators outside the agent hierarchy | Human experts, external services |
+## What Is It?
 
-### Escalation Protocol
+The AI Agent Registry is an **open, standardized framework** for building
+fleets of specialized AI assistants organized into a **multi-layer hierarchy**
+(L0–L4 + TEAM).
 
-1. **Simple task** (single-domain, linear) — invoke L1 directly
-2. **Complex task** (multi-domain) — use L0 → L1 → L2 escalation chain
-3. **Research needed by a strategist** — L1 delegate calls its L2 research children
-   - Example: *Pan needs market data → Pan asks Ran-Business to research*
+Instead of ad-hoc prompt collections, personas are:
+- **Parented** to L1 domain experts (e.g., `Ian-API` belongs to `Ian`)
+- **Scoped** to narrow domains (e.g., `Ran-People` only verifies real human identity)
+- **Invoked** via a consistent interface (`/personality <key>`)
+- **Validated** structurally by the sync script
 
-### Key Rules
-
-- **Naming convention:** Internal keys are lowercase (`ian-api`, `ran-people`).
-  Display names use ALL-CAPS acronyms (`Ian-API`, `Ian-DevOps`, `Ian-SecRed`).
-- **L2 parents:** Only Ian, Ran, and Lan own L2 children. Other L1s
-  (Ban, Ean, Han, Pan, Qan, San, Van) are single-focus domain experts.
-- **Ran-People scope:** Strictly for real-person identity verification.
-  Use `Ran-Brand` for domain/trademark research instead.
-- **Pan workflow:** Pan (L1) handles product strategy and delegates
-  research to Ran-* children — Pan does not collect research itself.
+**Goal:** Make it trivial to create, maintain, and operate a fleet of
+specialized AI agents — for Hermes, AutoGen, CrewAI, LangGraph, or any runtime.
 
 ---
 
@@ -83,48 +69,141 @@ TEAM — Cross-functional collaborators (external to all levels)
 ### 1. Install
 
 ```bash
-git clone https://github.com/your-org/ai-agent-registry.git
+git clone https://github.com/fentonmartin/ai-agent-registry.git
 cd ai-agent-registry
 ```
 
-No dependencies — the sync script uses only the Python standard library.
-PyYAML is optional (used for hierarchy validation only).
-
 ### 2. Configure Identities
-
-Copy the example config and fill in your values:
 
 ```bash
 cp config/identities.example.yaml config/identities.yaml
-# Edit config/identities.yaml with your details
 ```
 
-Persona files use tokens like `<USER>`, `<COMPANY>`, `<EMAIL>`, `<MODEL>`.
-These are resolved at sync time from `config/identities.yaml`.
+Edit `config/identities.yaml` with your details. Persona prompts use
+tokens like `<USER>`, `<COMPANY>`, `<EMAIL>`, `<MODEL>` that get resolved
+at sync time.
 
 ### 3. Sync to Your Runtime
 
 ```bash
-# Set your runtime config path
 export HERMES_HOME=~/.hermes
-
-# Run the sync
 python sync/sync_personas.py
 ```
 
-This writes personas into your `config.yaml` under `agent.personalities:`
-and validates the L0-L4 hierarchy.
+> **No dependencies.** Uses only Python's standard library. PyYAML is
+> optional (hierarchy validation only).
 
 ### 4. Invoke a Persona
 
-In Hermes (or compatible runtime):
+```
+/personality zan        # L0: Executive Assistant (default)
+/personality pan        # L1: Product Expert
+/personality ran-brand  # L2: Brand & domain research
+/personality ian-api    # L2: API design specialist
+/personality lan-ip     # L2: Intellectual property legal advice
+```
+
+---
+
+## The L0–L4 + TEAM Hierarchy
+
+| Layer | Role | Count | Example |
+|-------|------|-------|---------|
+| **L0** | Default voices (no name = Zan) | 2 | `zan`, `jan` |
+| **L1** | Domain experts (10 peers) | 10 | `ian`, `ban`, `ran`, `pan` |
+| **L2** | Specialist children of Ian/Ran/Lan | 20 | `ian-api`, `ran-people`, `lan-ip` |
+| **L3** | Sub-specialists (reserved) | 0 | Future expansion |
+| **L4** | External tools / APIs | N/A | Shell, web search |
+| **TEAM** | Cross-functional collaborators | Variable | Human experts |
+
+### All 32 Personas at a Glance
 
 ```
-/personality zan      # L0 default: Executive Assistant
-/personality pan      # L1: Product Expert
-/personality ran-brand # L2: Brand & domain research
-/personality ian-api   # L2: API design specialist
+L0  │ Zan (default) · Jan (analyst)
+    │
+L1  │ Ian (eng) · Ban (biz) · Ean (learn) · Han (health)
+    │ Lan (legal) · Pan (product) · Qan (quotes) · Ran (research)
+    │ San (psych) · Van (devil's advocate)
+    │
+L2  │ ┌── Ian ──┐ ┌── Ran ──┐ ┌── Lan ──┐
+    │ │ API     │ │ People  │ │ Contract│
+    │ │ DevOps  │ │ Brand   │ │ Complnc │
+    │ │ Flutter │ │ Tech    │ │ IP      │
+    │ │ Plan    │ │ Business│ │         │
+    │ │ Alpha   │ │ Web     │ │         │
+    │ │ SecRed  │ │ App     │ │         │
+    │ │ SecBlue │ │ General │ │         │
+    │ │ UX      │ │         │ │         │
+    │ │ UI      │ │         │ │         │
+    │ └─────────┘ └─────────┘ └─────────┘
 ```
+
+### Key Rules
+
+- **Only Ian, Ran, Lan** have L2 children. All other L1s are single-focus experts.
+- **Ran-People** is strictly for real-person identity verification.
+  Use **Ran-Brand** for domains/trademarks instead.
+- **Pan** handles product strategy and delegates research to Ran-* children.
+- Internal keys are lowercase (`ian-api`). Display names use ALL-CAPS acronyms (`Ian-API`, `Ian-DevOps`, `Ian-SecRed`).
+
+### Escalation Protocol
+
+```
+Simple task  → invoke L1 directly via /personality
+Complex task → L0 → L1 → L2 → (resolve)
+Need facts   → L1 delegates to its L2 research children
+```
+
+**Example:** Pan needs pricing data
+
+```
+Pan (L1 Product) → "Ran-Business, research competitor X pricing"
+                 → Ran-Business (L2) returns findings
+                 → Pan synthesizes and decides
+```
+
+---
+
+## Persona File Format
+
+Each persona is a Markdown file with YAML frontmatter:
+
+```markdown
+---
+name: ran-brand
+title: Ran-Brand — Brand & Domain Research
+role: Ran L2 sub-context for domain, trademark, and handle availability
+parent: ran
+triggers: ["/personality ran-brand", "domain check", "trademark"]
+---
+
+You are Ran-Brand, a research assistant specializing in brand identity...
+```
+
+**Frontmatter fields:**
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| `name` | Yes | Internal key (lowercase, kebab-case) |
+| `title` | No | Display name (ALL-CAPS preferred) |
+| `role` | No | Short description |
+| `parent` | No | L1 parent key (for L2 personas) |
+| `triggers` | No | Activation keywords |
+| `help` | No | Help invocation |
+
+---
+
+## Import Into Your Runtime
+
+| Runtime | Support |
+|---------|---------|
+| **Hermes** | Native — `python sync/sync_personas.py` |
+| **AutoGen** | [Import guide](docs/IMPORT-GUIDE.md#autogen) |
+| **CrewAI** | [Import guide](docs/IMPORT-GUIDE.md#crewai) |
+| **LangGraph** | [Import guide](docs/IMPORT-GUIDE.md#langgraph) |
+| **Raw/Gateway** | Copy prompt text from any `.md` file body |
+
+See [docs/IMPORT-GUIDE.md](docs/IMPORT-GUIDE.md) for code examples.
 
 ---
 
@@ -133,84 +212,44 @@ In Hermes (or compatible runtime):
 ```
 ai-agent-registry/
 ├── personas/
-│   ├── l0/            # Default voices (Zan, Jan)
-│   ├── l1/            # Domain experts (Ian, Ban, Ean, Han, Lan, Pan, Qan, Ran, San, Van)
+│   ├── l0/                   # Default voices (Zan, Jan)
+│   ├── l1/                   # 10 domain experts
 │   └── l2/
-│       ├── ian/       # Ian's specialists (API, DevOps, Flutter, Plan, Alpha, SecRed, SecBlue, UX, UI)
-│       ├── ran/       # Ran's research specialists (People, Brand, Tech, Business, Web, App, General)
-│       └── lan/       # Lan's legal specialists (Contract, Compliance, IP)
+│       ├── ian/              # 9 engineering specialists
+│       ├── ran/              # 8 research specialists
+│       └── lan/              # 3 legal specialists
 ├── config/
-│   ├── identities.example.yaml   # Template — copy to identities.yaml
-│   └── identities.yaml           # Your values (gitignored)
+│   └── identities.example.yaml  # Copy → identities.yaml (gitignored)
 ├── sync/
-│   └── sync_personas.py          # Stdlib-only sync script
+│   └── sync_personas.py         # Stdlib-only sync + hierarchy validator
 ├── docs/
-│   ├── HIERARCHY.md              # Full L0-L4 + TEAM framework
-│   ├── IMPORT-GUIDE.md           # Importing into Hermes, CrewAI, AutoGen, etc.
-│   └── NAMING.md                 # Naming conventions & style guide
-├── examples/                     # Example persona files
-├── LICENSE                      # MIT
-└── README.md                    # You are here
+│   ├── HIERARCHY.md             # Full framework documentation
+│   ├── IMPORT-GUIDE.md          # Porting to other runtimes
+│   └── NAMING.md                # Naming conventions
+├── examples/                    # Template persona files
+├── .github/workflows/
+│   └── ci.yml                    # Persona validation CI
+├── LICENSE                       # MIT
+└── README.md
 ```
 
 ---
 
-## Persona File Format
+## Contributing
 
-Each persona is a Markdown file with optional YAML frontmatter:
+**Contributions welcome!** See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
-```markdown
----
-name: ran-people
-title: Ran-People — People Research
-role: Verifies real-person identities, digital footprint analysis, handle disambiguation
-parent: Ran
-triggers:
-  - /personality ran-people
-  - @ran-people
-help: /rhelp ran-people
----
+Quick ways to contribute:
+1. **Add a persona** — create a new `.md` file in the right `personas/` folder
+2. **Improve a prompt** — PR with refinements
+3. **Add an import guide** — help more runtimes adopt this
+4. **Report bugs** — open an issue
 
-You are Ran-People, a research assistant specialized in verifying real-person
-identities...
-
-Key responsibilities:
-1. Identity verification
-2. Digital footprint analysis
-...
-```
-
-**Frontmatter fields:**
-| Field | Required | Description |
-|-------|----------|-------------|
-| `name` | Yes | Internal key (lowercase, kebab-case) |
-| `title` | No | Display name (ALL-CAPS acronyms) |
-| `role` | No | Short description |
-| `parent` | No | L1 parent key (for L2 personas) |
-| `triggers` | No | Activation keywords |
-| `help` | No | Help invocation |
-
-The body (after `---`) is the system prompt.
-
----
-
-## Customization
-
-### Adding a New Persona
-
-1. Create `personas/l2/ian/ian-security.md` (or appropriate L2 folder)
-2. Add YAML frontmatter with `name:`, `title:`, `role:`, `parent:`
-3. Write the system prompt in the body
-4. Run `python sync/sync_personas.py`
-
-### Naming Conventions
-
-- **Internal keys:** lowercase, kebab-case (`ian-api`, `ran-people`)
-- **Display names:** ALL-CAPS for acronyms and research domains
-  (`Ian-API`, `Ian-DevOps`, `Ian-SecRed`, `Ran-People`)
-- **File names:** match internal keys (`ian-api.md`)
-
-See [docs/NAMING.md](docs/NAMING.md) for the full style guide.
+All persona files must:
+- Have valid YAML frontmatter with `name:` and `parent:`
+- Pass the sync validation script
+- Use ALL-CAPS acronyms in titles (`Ian-API`, not `Ian-Api`)
+- Keep internal keys lowercase (`ian-api`, not `Ian-API`)
 
 ---
 

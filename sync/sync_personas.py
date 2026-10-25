@@ -38,10 +38,46 @@ import sys
 import json
 import pathlib
 import datetime
+import argparse
+
+# ── 2. identity token resolution ───────────────────────────────────────
+DEFAULT_IDENTITIES = pathlib.Path(__file__).resolve().parent.parent / "config" / "identities.yaml"
 
 # ── 1. locate the canonical persona folder ──────────────────────────────
 DEFAULT_DIR = pathlib.Path(__file__).resolve().parent.parent / "personas"
 FOLDER = pathlib.Path(os.environ.get("PERSONA_DIR", DEFAULT_DIR))
+
+
+def load_identities(path: pathlib.Path | None = None) -> dict[str, str]:
+    """Load identity tokens from identities.yaml. Returns {TOKEN: value}."""
+    p = path or pathlib.Path(os.environ.get("IDENTITIES_FILE", DEFAULT_IDENTITIES))
+    if not p.exists():
+        return {}
+    try:
+        import yaml
+        data = yaml.safe_load(p.read_text(encoding="utf-8"))
+    except ImportError:
+        print("WARN: PyYAML unavailable, skipping identity resolution.", file=sys.stderr)
+        return {}
+    except Exception as e:
+        print(f"WARN: cannot parse identities.yaml ({e!r})", file=sys.stderr)
+        return {}
+
+    tokens: dict[str, str] = {}
+    for section, values in (data or {}).items():
+        if isinstance(values, dict):
+            for k, v in values.items():
+                tokens[f"<{k.upper()}>"] = str(v) if v is not None else ""
+    return tokens
+
+
+def resolve_tokens(prompt: str, tokens: dict[str, str]) -> str:
+    """Replace tokens like <USER> with configured values."""
+    if not tokens:
+        return prompt
+    for token, value in tokens.items():
+        prompt = prompt.replace(token, value)
+    return prompt
 
 # config path (override via env)
 HERMES_HOME = os.environ.get("HERMES_HOME", os.path.expanduser("~/.hermes"))
@@ -97,7 +133,7 @@ def extract_prompt(fm, body: str) -> str:
     return body.strip()
 
 
-def build_personalities() -> dict[str, tuple[str, str, str]]:
+def build_personalities(tokens: dict[str, str] | None = None) -> dict[str, tuple[str, str, str]]:
     """Return {key: (prompt, title, role)}."""
     out: dict[str, tuple[str, str, str]] = {}
     used: dict[str, int] = {}
@@ -120,6 +156,8 @@ def build_personalities() -> dict[str, tuple[str, str, str]]:
                 used[key] = used.get(key, 0) + 1
                 key = f"{key}-{used[key]}"
         prompt = extract_prompt(fm, body)
+        if tokens:
+            prompt = resolve_tokens(prompt, tokens)
         title = (fm or {}).get("title") or f.name
         role = (fm or {}).get("role") or ""
         out[key] = (prompt, title, role)
@@ -268,12 +306,47 @@ def validate_hierarchy(personas: dict[str, tuple[str, str, str]]) -> int:
 
 
 def main() -> int:
+    parser = argparse.ArgumentParser(description="Sync persona files into agent runtime config.")
+    parser.add_argument("--check", action="store_true",
+                        help="Validate persona files without writing config.yaml")
+    parser.add_argument("--identities", type=pathlib.Path, default=None,
+                        help="Path to identities.yaml for token resolution")
+    parser.add_argument("--dry-run", action="store_true",
+                        help="Build personalities but don't write to config.yaml")
+    args = parser.parse_args()
+
     if not FOLDER.is_dir():
         print(f"ERROR: persona folder missing: {FOLDER}", file=sys.stderr)
         return 2
-    personas = build_personalities()
+
+    # Load identity tokens for <USER>, <COMPANY>, etc. resolution
+    tokens = load_identities(args.identities)
+    personas = build_personalities(tokens if tokens else None)
+
+    if args.check:
+        print(f"CHECK: {len(personas)} persona files validated.")
+        unresolved = set()
+        for key in sorted(personas):
+            prompt = personas[key][0]
+            matches = re.findall(r"<[A-Z_]+>", prompt)
+            unresolved.update(matches)
+        if unresolved:
+            print(f"  Unresolved tokens: {', '.join(sorted(unresolved))}")
+        else:
+            print("  All tokens resolved.")
+        validate_hierarchy(personas)
+        return 0
+
     block = render_block(personas)
     now = datetime.datetime.now(datetime.timezone.utc).strftime("%H:%M")
+
+    if args.dry_run:
+        print(f"[{now}] DRY RUN: {len(personas)} personas would be synced.")
+        for key in sorted(personas):
+            print(f"  - /personality {key}")
+        validate_hierarchy(personas)
+        return 0
+
     changed = inject_into_config(block)
     if not changed:
         validate_hierarchy(personas)
