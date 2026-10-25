@@ -1,0 +1,289 @@
+#!/usr/bin/env python3
+r"""sync_personas.py — sync persona files into your agent runtime's config.
+
+WHY:
+    Agent personalities live in config.yaml under `agent.personalities:`.
+    This script reads Markdown persona files from a source directory and
+    regenerates that config block so new/changed personas appear with
+    NO manual config edits.
+
+WHAT IT WATCHES:
+    Set PERSONA_DIR env var to point at your persona folder.
+    PERSONA_DIR defaults to the `personas/` directory in this repo.
+
+FILE FORMAT (each persona file):
+    ---
+    name: persona-key
+    title: Display Name
+    role: brief description
+    ---
+    <full system prompt here>
+
+    Or: no frontmatter — name is derived from filename stem.
+    A file is treated as a persona if it has frontmatter `name:` OR contains
+    an em-dash " — " in the stem (excludes README.md, etc.).
+
+USAGE:
+    python sync/sync_personas.py                    # sync into config.yaml
+    PERSONA_DIR=path python sync/sync_personas.py   # override source folder
+
+HIERARCHY ENFORCEMENT:
+    After syncing, validate_hierarchy() checks that your agent.hierarchy
+    (L0-L4 + TEAM) still matches the live persona set.
+"""
+from __future__ import annotations
+import os
+import re
+import sys
+import json
+import pathlib
+import datetime
+
+# ── 1. locate the canonical persona folder ──────────────────────────────
+DEFAULT_DIR = pathlib.Path(__file__).resolve().parent.parent / "personas"
+FOLDER = pathlib.Path(os.environ.get("PERSONA_DIR", DEFAULT_DIR))
+
+# config path (override via env)
+HERMES_HOME = os.environ.get("HERMES_HOME", os.path.expanduser("~/.hermes"))
+CONFIG_PATH = pathlib.Path(HERMES_HOME) / "config.yaml"
+
+# anchor markers (idempotent replace between these)
+START = "# >>> PERSONALITY SYNC (auto-managed) >>>"
+END = "# <<< PERSONALITY SYNC <<<"
+
+EM_DASH = "\u2014"  # —
+
+
+def slug(text: str) -> str:
+    """jan-default style slug from arbitrary text."""
+    text = re.sub(rf"\s*{EM_DASH}\s*", " ", text)
+    text = text.lower()
+    text = re.sub(r"[^a-z0-9]+", "-", text)
+    text = re.sub(r"-+", "-", text).strip("-")
+    return text or "unnamed"
+
+
+def parse_frontmatter(src: str):
+    """Return (frontmatter_dict_or_None, body_str)."""
+    if not src.startswith("---"):
+        return None, src
+    parts = re.split(r"^---\s*$", src, maxsplit=2, flags=re.MULTILINE)
+    if len(parts) < 3:
+        return None, src
+    fm: dict = {}
+    for line in parts[1].splitlines():
+        m = re.match(r"^([A-Za-z_][A-Za-z0-9_-]*)\s*:\s*(.*)$", line)
+        if m:
+            key, val = m.group(1), m.group(2).strip()
+            val = val.strip('"').strip("'")
+            fm[key] = val
+    return fm, parts[2].strip()
+
+
+def is_persona_file(path: pathlib.Path, fm) -> bool:
+    """A file is a persona if it has a frontmatter name OR contains an em-dash
+    in the stem (excludes README.md, _notes.md, etc.)."""
+    if fm and fm.get("name"):
+        return True
+    if path.name.lower() in {"readme.md", "agent.md", "notes.md"} or path.name.startswith("_"):
+        return False
+    return EM_DASH in path.stem
+
+
+def extract_prompt(fm, body: str) -> str:
+    """Prefer an explicit system_prompt; fall back to the body text."""
+    if fm and (fm.get("system_prompt") or fm.get("prompt")):
+        return (fm.get("system_prompt") or fm.get("prompt")).strip()
+    return body.strip()
+
+
+def build_personalities() -> dict[str, tuple[str, str, str]]:
+    """Return {key: (prompt, title, role)}."""
+    out: dict[str, tuple[str, str, str]] = {}
+    used: dict[str, int] = {}
+    if not FOLDER.is_dir():
+        print(f"WARN: persona folder not found: {FOLDER}", file=sys.stderr)
+        return out
+
+    for f in sorted(FOLDER.rglob("*.md")):
+        src = f.read_text(encoding="utf-8")
+        fm, body = parse_frontmatter(src)
+        if not is_persona_file(f, fm):
+            continue
+        base = slug(fm.get("name")) if (fm and fm.get("name")) else slug(f.stem.split(EM_DASH)[0].strip())
+        key = base
+        if key in out:
+            used[key] = used.get(key, 0) + 1
+            rest = f.stem.split(EM_DASH, 1)[1].strip() if EM_DASH in f.stem else ""
+            key = f"{base}-{slug(rest)}" if rest else f"{base}-{used[key]}"
+            while key in out:
+                used[key] = used.get(key, 0) + 1
+                key = f"{key}-{used[key]}"
+        prompt = extract_prompt(fm, body)
+        title = (fm or {}).get("title") or f.name
+        role = (fm or {}).get("role") or ""
+        out[key] = (prompt, title, role)
+    return out
+
+
+def render_block(personalities: dict[str, tuple[str, str, str]]) -> str:
+    """Render the agent.personalities YAML block (JSON scalars => valid YAML)."""
+    lines = [f"{START}", "agent:", "  personalities:"]
+    for key in sorted(personalities):
+        prompt = personalities[key][0]
+        lines.append(f"    {key}: {json.dumps(prompt, ensure_ascii=False)}")
+    lines.append(END)
+    return "\n".join(lines) + "\n"
+
+
+def inject_into_config(block: str) -> bool:
+    """Replace the marker block, or insert it after _config_version. Return True if changed."""
+    if not CONFIG_PATH.exists():
+        print(f"WARN: config.yaml not found at {CONFIG_PATH}", file=sys.stderr)
+        print(f"Set HERMES_HOME env var to your runtime config directory.", file=sys.stderr)
+        return False
+    text = CONFIG_PATH.read_text(encoding="utf-8")
+    if START in text:
+        new = re.sub(
+            rf"\n{re.escape(START)}.*?{re.escape(END)}\n",
+            lambda m: "\n" + block,
+            text,
+            flags=re.S,
+        )
+    else:
+        lines = text.splitlines(keepends=True)
+        anchor = 0
+        for i, ln in enumerate(lines):
+            if ln.startswith("_config_version:"):
+                anchor = i + 1
+                break
+        new = text[: len("".join(lines[:anchor]))] + block + "".join(lines[anchor:])
+    if new == text:
+        return False
+    # self-check: refuse to write invalid YAML
+    try:
+        import yaml
+        yaml.safe_load(new)
+    except ImportError:
+        pass
+    except Exception as e:
+        print(f"ERROR: sync would write INVALID YAML ({e!r}); config.yaml left untouched.",
+              file=sys.stderr)
+        return False
+    CONFIG_PATH.write_text(new, encoding="utf-8")
+    return True
+
+
+def validate_hierarchy(personas: dict[str, tuple[str, str, str]]) -> int:
+    """Check agent.hierarchy in config.yaml against the live persona set.
+
+    Verifies:
+      - L0..L4 + TEAM keys exist
+      - every persona referenced in hierarchy members/children exists in personas
+      - no persona in `personalities` is orphaned (absent from all layers)
+      - display.personality points to a living persona
+
+    Returns the number of warnings. Always advisory — never blocks sync.
+    """
+    try:
+        import yaml
+    except ImportError:
+        print("WARN: PyYAML unavailable, skipping hierarchy validation.",
+              file=sys.stderr)
+        return 0
+
+    warnings = 0
+    if not CONFIG_PATH.exists():
+        return 0
+
+    try:
+        cfg = yaml.safe_load(CONFIG_PATH.read_text(encoding="utf-8"))
+    except Exception as e:
+        print(f"WARN: cannot parse config.yaml for hierarchy validation ({e!r})",
+              file=sys.stderr)
+        return 0
+
+    hierarchy = cfg.get("agent", {}).get("hierarchy")
+    if not hierarchy:
+        print("WARN: agent.hierarchy block missing.",
+              file=sys.stderr)
+        return 1
+
+    # 1. Required layers
+    required_layers = ["L0", "L1", "L2", "L3", "L4", "TEAM"]
+    for layer in required_layers:
+        if layer not in hierarchy:
+            print(f"WARN: hierarchy layer '{layer}' missing",
+                  file=sys.stderr)
+            warnings += 1
+
+    # 2. Collect all persona keys referenced in the hierarchy
+    referenced = set()
+    for layer in ("L0", "L1"):
+        members = hierarchy.get(layer, {}).get("members") or []
+        if isinstance(members, str):
+            members = [members]
+        for m in members:
+            referenced.add(m)
+
+    l2 = hierarchy.get("L2", {})
+    if isinstance(l2, dict):
+        children = l2.get("children") or {}
+        if isinstance(children, dict):
+            for parent, child_list in children.items():
+                referenced.add(parent)
+                if isinstance(child_list, str):
+                    child_list = [child_list]
+                for c in child_list:
+                    referenced.add(c)
+
+    # 3. Check referenced keys exist as personas
+    for ref in sorted(referenced):
+        if ref not in personas:
+            print(f"WARN: hierarchy references persona '{ref}' that is not in "
+                  f"agent.personalities (stale reference)",
+                  file=sys.stderr)
+            warnings += 1
+
+    # 4. Check for orphaned personas
+    for key in sorted(personas.keys()):
+        if key in referenced:
+            continue
+        if key == "jan":  # default voice, always OK outside hierarchy
+            continue
+        print(f"WARN: persona '{key}' exists in agent.personalities but is not "
+              f"referenced in agent.hierarchy (orphaned)",
+              file=sys.stderr)
+        warnings += 1
+
+    # 5. display.personality resolves
+    display_p = cfg.get("display", {}).get("personality")
+    if display_p and display_p not in personas:
+        print(f"WARN: display.personality='{display_p}' does not match any living "
+              f"personality.",
+              file=sys.stderr)
+        warnings += 1
+
+    return warnings
+
+
+def main() -> int:
+    if not FOLDER.is_dir():
+        print(f"ERROR: persona folder missing: {FOLDER}", file=sys.stderr)
+        return 2
+    personas = build_personalities()
+    block = render_block(personas)
+    now = datetime.datetime.now(datetime.timezone.utc).strftime("%H:%M")
+    changed = inject_into_config(block)
+    if not changed:
+        validate_hierarchy(personas)
+        return 0
+    print(f"[{now}] Synced {len(personas)} personas -> config.yaml agent.personalities")
+    for key in sorted(personas):
+        print(f"  - /personality {key}")
+    validate_hierarchy(personas)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

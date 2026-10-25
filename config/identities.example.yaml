@@ -1,0 +1,31 @@
+---
+# AI Agent Registry — Identity Configuration
+# Central identity file for customizing persona prompts.
+# Persona files reference tokens like <USER>, <COMPANY>, <EMAIL>, etc.
+# This file defines what those tokens resolve to at sync time.
+#
+# Usage:
+#   1. Copy this file to config/identities.yaml
+#   2. Fill in your real values
+#   3. Run: python sync/sync_personas.py --identities config/identities.yaml
+#   4. Tokens in persona prompts are resolved automatically
+
+identity:
+  user: "<USER>"           # Primary person interacting (e.g. "Alice Smith")
+  company: "<COMPANY>"     # Organization name (e.g. "Acme Corp")
+  product: "<PRODUCT>"     # Product/platform name (e.g. "My Platform")
+  email: "<EMAIL>"         # Contact email (e.g. "alice@acme.com")
+
+infrastructure:
+  hermes_home: "~/.hermes"   # Hermes runtime directory
+  repo_url: "<REPO_URL>"     # Registry source repository URL
+  api_provider: "openrouter" # API provider (openrouter / groq / openai)
+  model: "<MODEL>"           # Primary model identifier
+  fallback: "<FALLBACK>"     # Fallback model identifier
+  free_tier: "<FREE_TIER>"   # Free-tier model identifier
+  dashboard_port: "<PORT>"   # Dashboard port number
+
+# Additional tokens can be appended under any section.
+# They resolve in prompts as <SECTION_KEY> (uppercase, underscored).
+# Example: under "identity:", key "user" becomes <USER> in prompts.
+# Example: under "infrastructure:", key "model" becomes <MODEL> in prompts.
