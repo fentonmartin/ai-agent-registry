@@ -25,7 +25,7 @@ is active at a time (the default). `Zan` is the standard default.
 
 ### L1 — Domain Experts
 
-Ten peer domain experts. Each L1 owns an entire domain of responsibility.
+Eleven peer domain experts. Each L1 owns an entire domain of responsibility.
 Most L1s do NOT have L2 children — they handle their domain end-to-end.
 
 | Key | Display Name | Domain | Has L2 Children? |
@@ -39,7 +39,8 @@ Most L1s do NOT have L2 children — they handle their domain end-to-end.
 | `qan` | Qan | Quoting & Estimation | No |
 | `ran` | Ran | Research | Yes |
 | `san` | San | Psychology & Mental Health | No |
-| `van` | Van | Devil's Advocate / Critical Review | No |
+|| `van` | Van | Devil's Advocate / Critical Review | No |
+|| `wan` | Wan | Writing / Content / Communication | No |
 
 **Rules:**
 - L1 personas are peers — no parent-child relationships between them.
@@ -66,7 +67,7 @@ Narrow-expertise personas parented to their respective L1.
 | `ian-ux` | Ian-UX | UX research, user journeys, testing |
 | `ian-ui` | Ian-UI | Visual design, Figma, design handoff |
 
-#### Ran L2 (8 specialists) — Research
+#### Ran L2 (7 specialists) — Research
 
 | Key | Display Name | Specialization |
 |-----|-------------|----------------|
@@ -177,8 +178,8 @@ agent:
 
 Current total: **32 personas**
 - L0: 2 (Zan, Jan)
-- L1: 10 (Ian, Ban, Ean, Han, Lan, Pan, Qan, Ran, San, Van)
-- L2: 20 (9 under Ian, 8 under Ran, 3 under Lan)
+- L1: 11 (Ian, Ban, Ean, Han, Lan, Pan, Qan, Ran, San, Van, Wan)
+- L2: 19 (9 under Ian, 7 under Ran, 3 under Lan)
 - L3: 0 (reserved)
 - L4: External tools (not personified)
 - TEAM: Variable (external collaborators)

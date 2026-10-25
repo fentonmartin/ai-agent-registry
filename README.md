@@ -33,9 +33,9 @@ LangGraph, or custom gateways.
 
 | Layer | Role | Count |
 |-------|------|-------|
-| **L0** | Default voices (Zan answers when no persona is named) | 2 |
-| **L1** | Domain experts — peers, no children (except Ian/Ran/Lan) | 10 |
-| **L2** | Specialist children of Ian (9), Ran (8), Lan (3) | 20 |
+|| **L0** | Default voices (Zan answers when no persona is named) | 2 |
+|| **L1** | Domain experts — peers, no children (except Ian/Ran/Lan) | 11 |
+|| **L2** | Specialist children of Ian (9), Ran (7), Lan (3) | 19 |
 | **L3** | Sub-specialists (reserved for future expansion) | 0 |
 | **L4** | External tools / APIs invoked as agents | N/A |
 | **TEAM** | Cross-functional collaborators outside the hierarchy | Variable |
@@ -50,8 +50,8 @@ LangGraph, or custom gateways.
 
 ### Key Rules
 
-- **Only Ian, Ran, Lan** have L2 children. Ban, Ean, Han, Pan, Qan, San, Van
-  are single-focus L1 experts.
+- **Only Ian, Ran, Lan** have L2 children. Ban, Ean, Han, Pan, Qan, San, Van,
+  Wan are single-focus L1 experts.
 - **Ran-People** is strictly for real-person identity verification.
   Use **Ran-Brand** for domains/trademarks instead.
 - **Pan** handles product strategy and delegates research to Ran-* children.

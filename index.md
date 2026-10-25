@@ -17,8 +17,8 @@ for Hermes and import guides for 5+ runtimes.
 | Layer | Scope | What |
 |-------|-------|------|
 | L0 Leadership | Strategic exec | Zan (default), Jan (on-demand) |
-| L1 Domains | 10 peer experts | Ian, Ban, Ean, Pan, Qan, Ran, San, Van, Han, Lan |
-| L2 Specialists | 21 children | Under Ian, Ran, Lan only |
+|| L1 Domains | 11 peer experts | Ian, Ban, Ean, Pan, Qan, Ran, San, Van, Han, Lan, Wan |
+|| L2 Specialists | 19 children | Under Ian, Ran, Lan only |
 | Import Guide | Runtime setup | Hermes, AutoGen, CrewAI, LangGraph, n8n |
 | Naming Guide | Style conventions | Capitalization, casing, token system |
 
@@ -57,6 +57,7 @@ L0: Zan (default)  ·  Jan (explicit only)
      +-- L1: San (Wellness)
      +-- L1: Van (Audit/dev)
      +-- L1: Han (Calm psych)
+     +-- L1: Wan (Writing/content)
      |
      +-- L1: Lan (Legal/QA)
          +-- L2: Lan-Contract
@@ -71,7 +72,7 @@ TEAM: Cross-functional collaborators (external)
 ## How It Works
 
 1. **L0 (Zan)** handles all escalation routing. Default persona for general queries.
-2. **L1** are 10 peer-domain experts. Mention by name to hand off.
+2. **L1** are 11 peer-domain experts. Mention by name to hand off.
 3. **L2** are specialist children under Ian, Ran, and Lan only.
 4. **L3/L4** are sub-specialists and external tools/APIs.
 5. **TEAM** covers external collaborators outside the hierarchy.
