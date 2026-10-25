@@ -1,0 +1,25 @@
+name: Persona proposal
+description: Propose a new persona or a change to an existing one
+labels: [persona]
+body:
+  - type: dropdown
+    id: layer
+    attributes:
+      label: Layer
+      options: [L1 (new domain), "L2 under Ian", "L2 under Ran", "L2 under Lan", Change to existing persona]
+    validations:
+      required: true
+  - type: input
+    id: key
+    attributes:
+      label: Persona key
+      placeholder: ian-security
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      description: What it handles, what it explicitly does NOT handle, and why no existing persona covers it.
+    validations:
+      required: true
