@@ -23,3 +23,5 @@ config/identities.yaml
 
 # Logs
 *.log
+# Build artifacts
+style.css
