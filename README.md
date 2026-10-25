@@ -136,7 +136,7 @@ You are Ran-Brand, a research assistant specializing in brand identity...
 L0 (Zan) is the entry point — it assigns and routes tasks to the right persona.
 
 ```
-L0  Zan  (default dispatcher — assign tasks to the right persona)
+L0  Zan  (default dispatcher — assign tasks to the right persona) · Jan (explicit only — desktop assistant)
 ├─── L1  Ian     (engineering umbrella)
 │   ├── L2  ian-api        API design · OpenAPI · ERD
 │   ├── L2  ian-devops     CI/CD · deployment · infrastructure
@@ -155,18 +155,17 @@ L0  Zan  (default dispatcher — assign tasks to the right persona)
 │   ├── L2  ran-web        Web · SEO research
 │   ├── L2  ran-app        Mobile app research
 │   └── L2  ran-general    General knowledge research
-├─── L1  Lan     (legal umbrella)
-│   ├── L2  lan-contract   Contracts · negotiation · CLM
-│   ├── L2  lan-compliance GDPR · SOC 2 · HIPAA · audit prep
-│   └── L2  lan-ip         Trademarks · copyright · patents
 ├─── L1  Ban     (business · finance · revenue)
 ├─── L1  Ean     (learning · mentoring · knowledge)
 ├─── L1  Han     (health · wellness · fitness)
+├─── L1  Lan     (legal umbrella · compliance + IP)
 ├─── L1  Pan     (product · strategy · roadmap)
 ├─── L1  Qan     (quoting · estimation · pricing)
 ├─── L1  San     (psychology · mental health · wellbeing)
 ├─── L1  Van     (devil's advocate · critical review)
 └─── L1  Wan     (writing · content · communication)
+
+L2 children under Lan: lan-contract · lan-compliance · lan-ip
 ```
 
 ### Use-Case Allocation
