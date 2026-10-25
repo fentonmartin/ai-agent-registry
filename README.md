@@ -4,7 +4,7 @@
 
 [![CI](https://github.com/fentonmartin/ai-agent-registry/actions/workflows/ci.yml/badge.svg)](https://github.com/fentonmartin/ai-agent-registry/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue)](https://www.python.org/)
+[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue)](https://www.python.org/)
 [![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](https://github.com/fentonmartin/ai-agent-registry/blob/main/CONTRIBUTING.md)
 [![Personas](https://img.shields.io/badge/personas-32-orange)](#the-hierarchy)
 [![Hierarchy](https://img.shields.io/badge/hierarchy-L0--L4--TEAM-purple)](#the-hierarchy)
