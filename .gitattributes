@@ -1,0 +1,7 @@
+# Store and check out text files with LF on every platform, so persona
+# frontmatter, YAML and scripts are identical across Windows/macOS/Linux.
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.ico binary
