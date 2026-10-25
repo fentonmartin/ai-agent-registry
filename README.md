@@ -133,19 +133,72 @@ You are Ran-Brand, a research assistant specializing in brand identity...
 
 ### All Personas at a Glance
 
-| L0 | L1 | L2 (under Ian) | L2 (under Ran) | L2 (under Lan) |
-|---|---|---|---|---|
-| `zan` | `ian` | `ian-api` | `ran-people` | `lan-contract` |
-| `jan` | `ban` | `ian-devops` | `ran-brand` | `lan-compliance` |
-| | `ean` | `ian-flutter` | `ran-tech` | `lan-ip` |
-| | `han` | `ian-plan` | `ran-business` | |
-| | `lan` | `ian-alpha` | `ran-web` | |
-| | `pan` | `ian-secred` | `ran-app` | |
-| | `qan` | `ian-secblue` | `ran-general` | |
-| | `ran` | `ian-ux` | | |
-| | `san` | `ian-ui` | | |
-| | `van` | | | |
-| | `wan` | | | |
+L0 (Zan) is the entry point — it assigns and routes tasks to the right persona.
+
+```
+L0  Zan  (default dispatcher — assign tasks to the right persona)
+├─── L1  Ian     (engineering umbrella)
+│   ├── L2  ian-api        API design · OpenAPI · ERD
+│   ├── L2  ian-devops     CI/CD · deployment · infrastructure
+│   ├── L2  ian-flutter    Flutter mobile development
+│   ├── L2  ian-plan       Project planning · task breakdown
+│   ├── L2  ian-alpha      Alpha testing · exploratory QA
+│   ├── L2  ian-secred     Offensive security · red-teaming
+│   ├── L2  ian-secblue    Defensive security · blue-team ops
+│   ├── L2  ian-ux         UX research · journeys · testing
+│   └── L2  ian-ui         Visual design · Figma · handoff
+├─── L1  Ran     (research umbrella)
+│   ├── L2  ran-people     Real-person identity verification ONLY
+│   ├── L2  ran-brand      Domain · trademark · handle research
+│   ├── L2  ran-tech       Technology research · stack analysis
+│   ├── L2  ran-business   Business · market research
+│   ├── L2  ran-web        Web · SEO research
+│   ├── L2  ran-app        Mobile app research
+│   └── L2  ran-general    General knowledge research
+├─── L1  Lan     (legal umbrella)
+│   ├── L2  lan-contract   Contracts · negotiation · CLM
+│   ├── L2  lan-compliance GDPR · SOC 2 · HIPAA · audit prep
+│   └── L2  lan-ip         Trademarks · copyright · patents
+├─── L1  Ban     (business · finance · revenue)
+├─── L1  Ean     (learning · mentoring · knowledge)
+├─── L1  Han     (health · wellness · fitness)
+├─── L1  Pan     (product · strategy · roadmap)
+├─── L1  Qan     (quoting · estimation · pricing)
+├─── L1  San     (psychology · mental health · wellbeing)
+├─── L1  Van     (devil's advocate · critical review)
+└─── L1  Wan     (writing · content · communication)
+```
+
+### Use-Case Allocation
+
+| When you need... | Zan assigns to |
+|------------------|----------------|
+| Engineering code review / architecture | Ian → Ian-API or Ian-DevOps |
+| Mobile app (Flutter) development | Ian → Ian-Flutter |
+| Project planning / sprint breakdown | Ian → Ian-Plan |
+| Exploratory testing / QA | Ian → Ian-Alpha |
+| Red-team / penetration testing | Ian → Ian-SecRed |
+| Security monitoring / incident response | Ian → Ian-SecBlue |
+| User research / journey mapping | Ian → Ian-UX |
+| Visual design / design systems | Ian → Ian-UI |
+| Verify a person's identity (real person) | Ran → Ran-People |
+| Check domain / trademark availability | Ran → Ran-Brand |
+| Technology stack research | Ran → Ran-Tech |
+| Market / competitor research | Ran → Ran-Business |
+| Web / SEO research | Ran → Ran-Web |
+| Mobile app market research | Ran → Ran-App |
+| General research / background facts | Ran → Ran-General |
+| Contract review / negotiation | Lan → Lan-Contract |
+| GDPR / SOC 2 / HIPAA compliance | Lan → Lan-Compliance |
+| Trademark / IP legal analysis | Lan → Lan-IP |
+| Business strategy / financials | Ban |
+| Learning / mentoring plan | Ean |
+| Health / wellness coaching | Han |
+| Product strategy / roadmap | Pan |
+| Pricing / quote estimation | Qan |
+| Psychological support / counseling | San |
+| Challenge assumptions / critique | Van |
+| Writing / content / copy | Wan |
 
 ---
 
