@@ -25,8 +25,7 @@ for f in sorted(PERSONA_DIR.rglob("*.md")):
         errors.append(f"{f.relative_to(PERSONA_DIR)}: missing YAML frontmatter (must start with ---)")
         continue
 
-    parts = re.split(r"^---\s*$", content, maxsplit=2, flags=re.MULTILINE) \
-        if False else content.split("---\n", 2)
+    parts = content.split("---\n", 2)
     if len(parts) < 3:
         errors.append(f"{f.relative_to(PERSONA_DIR)}: malformed frontmatter")
         continue

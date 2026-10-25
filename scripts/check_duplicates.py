@@ -7,7 +7,7 @@ seen = {}
 dups = False
 
 for f in sorted(persona_dir.rglob("*.md")):
-    content = f.read_text()
+    content = f.read_text(encoding="utf-8")
     parts = content.split("---\n", 2)
     if len(parts) >= 3:
         fm = yaml.safe_load(parts[1])
