@@ -18,8 +18,8 @@ add personas, improve prompts, and extend the framework.
 # L2 under Ian
 touch personas/l2/ian/ian-security.md
 
-# L1 new domain
-touch personas/l1/security.md
+# L1 new domain (L1 keys are short names, e.g. "xan")
+touch personas/l1/xan.md
 ```
 
 ### 3. Add YAML Frontmatter
@@ -48,17 +48,22 @@ After the `---` closing the frontmatter, write a clear, scoped system prompt:
 - **Specify output format:** Where does it write results?
 - **Add escalation rules:** When to delegate or escalate
 
-### 5. Run the Sync Script
+### 5. Run the Validators
 
 ```bash
-python sync/sync_personas.py --check
+pip install -r requirements.txt
+python scripts/validate_personas.py
+python scripts/check_duplicates.py
 ```
 
-This validates:
-- All frontmatter is well-formed YAML
-- All `parent:` references point to existing L1 personas
-- No duplicate keys
-- No orphaned personas
+`validate_personas.py` checks that frontmatter is well-formed YAML, that
+`name` is lowercase, that every `parent:` points to an existing L1 persona,
+and that no sensitive patterns appear. `check_duplicates.py` checks that no
+two files share a `name`.
+
+Orphaned personas are reported by the sync script, but only against a
+runtime `config.yaml` with an `agent.hierarchy` block (see
+[docs/HIERARCHY.md](docs/HIERARCHY.md#hierarchy-config-format)).
 
 ### 6. Submit a Pull Request
 
@@ -81,7 +86,7 @@ git push origin add-persona-ian-security
 **DO:** `Ian-API` (ALL-CAPS acronym)
 **DON'T:** `Ian-Api` (lowercase "api")
 
-**DO:** `Ran-People` (ALL-CAPS research domain)
+**DO:** `Ran-People` (capitalized domain word)
 **DON'T:** `Ran-people` (inconsistent casing)
 
 ## Layer Rules
@@ -94,10 +99,14 @@ git push origin add-persona-ian-security
 ## Testing Your Changes
 
 ```bash
-# Check persona files are valid
-python sync/sync_personas.py --check --persona-dir personas --identities config/identities.example.yaml
+# Validate persona files
+python scripts/validate_personas.py
+python scripts/check_duplicates.py
 
-# Full sync (dry run)
+# List personas and unresolved tokens (point PERSONA_DIR elsewhere to check another folder)
+python sync/sync_personas.py --check --identities config/identities.example.yaml
+
+# Full sync (dry run, writes nothing)
 python sync/sync_personas.py --dry-run
 ```
 

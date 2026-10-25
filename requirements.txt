@@ -1,0 +1,4 @@
+# Needed by scripts/validate_personas.py and scripts/check_duplicates.py.
+# sync/sync_personas.py runs without it, but skips identity tokens and
+# hierarchy validation.
+pyyaml>=6.0
