@@ -7,7 +7,8 @@
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue)](https://www.python.org/)
 [![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](https://github.com/fentonmartin/ai-agent-registry/blob/main/CONTRIBUTING.md)
 [![Personas](https://img.shields.io/badge/personas-32-orange)](#the-hierarchy)
-[![L0-L4](https://img.shields.io/badge/hierarchy-L0--L4--TEAM-purple)](#the-hierarchy)
+[![Hierarchy](https://img.shields.io/badge/hierarchy-L0--L4--TEAM-purple)](#the-hierarchy)
+[![Release](https://img.shields.io/github/v/tag/fentonmartin/ai-agent-registry?label=release)](https://github.com/fentonmartin/ai-agent-registry/releases)
 
 ---
 
@@ -210,6 +211,21 @@ full guide on adding personas, improving prompts, and extending the framework.
 2. Improve an existing prompt — open a PR
 3. Add an import guide — help more runtimes adopt this
 4. Report bugs — open an issue
+
+---
+
+## Versioning
+
+We use **year-based versioning**: `v{year}.{major}.{minor}`
+
+- **v2026.0.1** — Initial public release (current)
+- **v2026.1.0** — Would be the next major update in 2026
+- Patch releases increment the minor: `v2026.0.2`, `v2026.0.3`, ...
+
+Major version (the middle number) resets to 0 each year. A new year starts
+at `.0.1`.
+
+See [Releases](https://github.com/fentonmartin/ai-agent-registry/releases).
 
 ---
 
