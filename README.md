@@ -248,8 +248,12 @@ ai-agent-registry/
 │   └── NAMING.md
 ├── tests/                       # Unit tests (python -m unittest discover -s tests)
 ├── examples/                    # Template persona files
-├── .github/workflows/ci.yml     # Validation CI
+├── .github/                     # CI workflow, issue & PR templates
 ├── requirements.txt             # PyYAML
+├── CHANGELOG.md
+├── CODE_OF_CONDUCT.md
+├── CONTRIBUTING.md
+├── SECURITY.md
 ├── LICENSE                      # MIT
 └── README.md
 ```
