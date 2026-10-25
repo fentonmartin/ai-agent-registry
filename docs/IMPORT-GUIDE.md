@@ -87,7 +87,7 @@ persona_dir = pathlib.Path("personas")
 agents = {}
 
 for f in persona_dir.rglob("*.md"):
-    src = f.read_text()
+    src = f.read_text(encoding="utf-8")
     # Parse frontmatter + body
     if src.startswith("---"):
         parts = src.split("---\n", 2)
@@ -122,7 +122,7 @@ from autogen import AssistantAgent
 
 ran_brand = AssistantAgent(
     name="ran-brand",
-    system_message=pathlib.Path("personas/l2/ran/ran-brand.md").read_text().split("---\n", 2)[2].strip()
+    system_message=pathlib.Path("personas/l2/ran/ran-brand.md").read_text(encoding="utf-8").split("---\n", 2)[2].strip()
 )
 ```
 
@@ -142,7 +142,7 @@ def import_persona(key: str, persona_dir="personas") -> Agent:
     """Import a single persona as a CrewAI Agent."""
     # Find the file
     for f in Path(persona_dir).rglob("*.md"):
-        src = f.read_text()
+        src = f.read_text(encoding="utf-8")
         if src.startswith("---"):
             parts = src.split("---\n", 2)
             if len(parts) >= 3:
@@ -182,7 +182,7 @@ import yaml as y
 def load_persona(key: str, persona_dir="personas"):
     """Load a persona prompt as a LangChain ChatPromptTemplate."""
     for f in Path(persona_dir).rglob("*.md"):
-        src = f.read_text()
+        src = f.read_text(encoding="utf-8")
         if src.startswith("---"):
             parts = src.split("---\n", 2)
             if len(parts) >= 3:
@@ -201,6 +201,32 @@ result = llm.invoke(system_prompt.format())
 
 ---
 
+## n8n
+
+n8n's **AI Agent** node accepts a system prompt under
+*Options → System Message*. You can load a persona into it at runtime:
+
+1. **HTTP Request** node: `GET` the raw persona file, e.g.
+   `https://raw.githubusercontent.com/fentonmartin/ai-agent-registry/main/personas/l2/ran/ran-brand.md`.
+   Set *Response Format* to *Text*.
+2. **Code** node: remove the frontmatter and substitute tokens:
+   ```javascript
+   const src = $input.first().json.data;
+   const body = src.replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n/, '').trim();
+   const tokens = { USER: 'Alice', COMPANY: 'Acme' };   // your identities
+   const prompt = body.replace(/<([A-Z_]+)>/g, (m, k) => tokens[k] ?? m);
+   return [{ json: { prompt } }];
+   ```
+3. **AI Agent** node: set *System Message* to the expression
+   `{{ $json.prompt }}`.
+
+To pick the persona dynamically, put the persona path in the trigger
+payload (for example a Webhook body field) and reference it in the HTTP
+Request URL. Routing between L0, L1 and L2 is up to your workflow, for
+example with a **Switch** node.
+
+---
+
 ## Generic / Raw Import
 
 If your runtime just needs the raw system prompt string:
@@ -212,7 +238,7 @@ import yaml as y
 def get_persona_prompt(key: str, persona_dir="personas") -> str:
     """Return the raw system prompt for a persona key."""
     for f in Path(persona_dir).rglob("*.md"):
-        src = f.read_text()
+        src = f.read_text(encoding="utf-8")
         if src.startswith("---"):
             parts = src.split("---\n", 2)
             if len(parts) >= 3:
@@ -260,4 +286,5 @@ for k, v in tokens.items():
 | AutoGen | Manual script | No | Manual |
 | CrewAI | Custom converter | No | Manual |
 | LangGraph | Custom loader | No | Manual |
+| n8n | HTTP Request + Code node | No (build with Switch) | Code node |
 | Raw/Gateway | Direct prompt | No | Manual |

@@ -21,7 +21,7 @@ ad-hoc prompt collections, personas are:
 - **Parented** to L1 domain experts (e.g., `ian-api` belongs to `ian`)
 - **Scoped** to narrow domains (e.g., `ran-brand` handles domains/trademarks only)
 - **Invoked** via a consistent interface (`/personality <key>`)
-- **Validated** structurally by the sync script
+- **Validated** structurally by the validator scripts and CI
 
 **Goal:** Make it trivial to create, maintain, and operate a fleet of
 specialized AI agents across any runtime — Hermes, AutoGen, CrewAI,
@@ -33,9 +33,9 @@ LangGraph, or custom gateways.
 
 | Layer | Role | Count |
 |-------|------|-------|
-|| **L0** | Default voices (Zan answers when no persona is named) | 2 |
-|| **L1** | Domain experts — peers, no children (except Ian/Ran/Lan) | 11 |
-|| **L2** | Specialist children of Ian (9), Ran (7), Lan (3) | 19 |
+| **L0** | Default voices (Zan answers when no persona is named) | 2 |
+| **L1** | Domain experts — peers, no children (except Ian/Ran/Lan) | 11 |
+| **L2** | Specialist children of Ian (9), Ran (7), Lan (3) | 19 |
 | **L3** | Sub-specialists (reserved for future expansion) | 0 |
 | **L4** | External tools / APIs invoked as agents | N/A |
 | **TEAM** | Cross-functional collaborators outside the hierarchy | Variable |
@@ -46,7 +46,7 @@ LangGraph, or custom gateways.
 |-----------|------|
 | **Simple** (single domain) | Invoke L1 directly: `/personality pan` |
 | **Complex** (multi-domain) | L0 routes to multiple L1s, each may delegate to L2 |
-| **Research needed** | L1 delegates to its L2 children (Pan → Ran-*, Lan → Ran-Brand) |
+| **Research needed** | L1 delegates to L2 specialists (Pan → Ran-*, Lan → Ran-Brand) |
 
 ### Key Rules
 
@@ -86,8 +86,9 @@ export HERMES_HOME=~/.hermes
 python sync/sync_personas.py
 ```
 
-> **No dependencies.** The sync script uses only the Python standard library.
-> PyYAML is optional (hierarchy validation only).
+> The sync script runs on the Python standard library alone. Install PyYAML
+> (`pip install -r requirements.txt`) to enable identity tokens, hierarchy
+> validation and the validator scripts.
 
 ### 4. Invoke a Persona
 
@@ -136,13 +137,13 @@ You are Ran-Brand, a research assistant specializing in brand identity...
 L0 (Zan) is the entry point — it assigns and routes tasks to the right persona.
 
 ```
-L0  Zan  (default dispatcher — assign tasks to the right persona) · Jan (explicit only — desktop assistant)
+L0  Zan  (default dispatcher — assign tasks to the right persona) · Jan (explicit only — desktop assistant, analyst tone)
 ├─── L1  Ian     (engineering umbrella)
 │   ├── L2  ian-api        API design · OpenAPI · ERD
 │   ├── L2  ian-devops     CI/CD · deployment · infrastructure
 │   ├── L2  ian-flutter    Flutter mobile development
 │   ├── L2  ian-plan       Project planning · task breakdown
-│   ├── L2  ian-alpha      Alpha testing · exploratory QA
+│   ├── L2  ian-alpha      Lead orchestration · delivery board
 │   ├── L2  ian-secred     Offensive security · red-teaming
 │   ├── L2  ian-secblue    Defensive security · blue-team ops
 │   ├── L2  ian-ux         UX research · journeys · testing
@@ -175,7 +176,7 @@ L2 children under Lan: lan-contract · lan-compliance · lan-ip
 | Engineering code review / architecture | Ian → Ian-API or Ian-DevOps |
 | Mobile app (Flutter) development | Ian → Ian-Flutter |
 | Project planning / sprint breakdown | Ian → Ian-Plan |
-| Exploratory testing / QA | Ian → Ian-Alpha |
+| Multi-specialist delivery / task board | Ian → Ian-Alpha |
 | Red-team / penetration testing | Ian → Ian-SecRed |
 | Security monitoring / incident response | Ian → Ian-SecBlue |
 | User research / journey mapping | Ian → Ian-UX |
@@ -212,7 +213,7 @@ Persona files are plain Markdown with YAML frontmatter — no vendor lock-in.
 | **AutoGen** | Supported | Scripts in [docs/IMPORT-GUIDE.md](docs/IMPORT-GUIDE.md#autogen) |
 | **CrewAI** | Supported | Scripts in [docs/IMPORT-GUIDE.md](docs/IMPORT-GUIDE.md#crewai) |
 | **LangGraph** | Supported | Scripts in [docs/IMPORT-GUIDE.md](docs/IMPORT-GUIDE.md#langgraph) |
-| **n8n** | Supported | Use the HTTP/webhook trigger to invoke persona prompts |
+| **n8n** | Supported | Workflow in [docs/IMPORT-GUIDE.md](docs/IMPORT-GUIDE.md#n8n) |
 | **Any runtime** | Raw import | Copy the prompt text from the file body after `---` |
 
 **Hermes native features:**
@@ -229,15 +230,15 @@ Persona files are plain Markdown with YAML frontmatter — no vendor lock-in.
 ai-agent-registry/
 ├── personas/
 │   ├── l0/      # Default voices (Zan, Jan)
-│   ├── l1/      # 10 domain experts
+│   ├── l1/      # 11 domain experts
 │   └── l2/
 │       ├── ian/  # 9 engineering specialists
-│       ├── ran/  # 8 research specialists
+│       ├── ran/  # 7 research specialists
 │       └── lan/  # 3 legal specialists
 ├── config/
 │   └── identities.example.yaml  # Copy → identities.yaml (gitignored)
 ├── sync/
-│   └── sync_personas.py         # Stdlib-only sync + validator
+│   └── sync_personas.py         # Sync into runtime config + hierarchy check
 ├── scripts/
 │   ├── validate_personas.py
 │   └── check_duplicates.py
@@ -247,6 +248,7 @@ ai-agent-registry/
 │   └── NAMING.md
 ├── examples/                    # Template persona files
 ├── .github/workflows/ci.yml     # Validation CI
+├── requirements.txt             # PyYAML
 ├── LICENSE                      # MIT
 └── README.md
 ```

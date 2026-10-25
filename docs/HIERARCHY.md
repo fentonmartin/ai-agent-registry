@@ -16,7 +16,7 @@ is active at a time (the default). `Zan` is the standard default.
 | Key | Display Name | Role |
 |-----|-------------|------|
 | `zan` | Zan | Executive Assistant, default voice |
-| `jan` | Jan | Default analyst tone (pull-only) |
+| `jan` | Jan | Desktop assistant, analyst tone (explicit only) |
 
 **Rules:**
 - L0 is listed in `agent.hierarchy.L0.members`; the active default is set
@@ -40,8 +40,8 @@ Most L1s do NOT have L2 children — they handle their domain end-to-end.
 | `qan` | Qan | Quoting & Estimation | No |
 | `ran` | Ran | Research | Yes |
 | `san` | San | Psychology & Mental Health | No |
-|| `van` | Van | Devil's Advocate / Critical Review | No |
-|| `wan` | Wan | Writing / Content / Communication | No |
+| `van` | Van | Devil's Advocate / Critical Review | No |
+| `wan` | Wan | Writing / Content / Communication | No |
 
 **Rules:**
 - L1 personas are peers — no parent-child relationships between them.
@@ -62,7 +62,7 @@ Narrow-expertise personas parented to their respective L1.
 | `ian-devops` | Ian-DevOps | CI/CD, deployment, infrastructure |
 | `ian-flutter` | Ian-Flutter | Flutter mobile development |
 | `ian-plan` | Ian-Plan | Project planning, task breakdown |
-| `ian-alpha` | Ian-Alpha | Alpha testing, exploratory QA |
+| `ian-alpha` | Ian-Alpha | Lead orchestration, specialist assignment, delivery board |
 | `ian-secred` | Ian-SecRed | Offensive security, red-teaming |
 | `ian-secblue` | Ian-SecBlue | Defensive security, blue-team operations |
 | `ian-ux` | Ian-UX | UX research, user journeys, testing |

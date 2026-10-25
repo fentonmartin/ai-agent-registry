@@ -16,9 +16,9 @@ for Hermes and import guides for 5+ runtimes.
 
 | Layer | Scope | What |
 |-------|-------|------|
-| L0 Leadership | Strategic exec | Zan (default), Jan (on-demand) |
-|| L1 Domains | 11 peer experts | Ian, Ban, Ean, Pan, Qan, Ran, San, Van, Han, Lan, Wan |
-|| L2 Specialists | 19 children | Under Ian, Ran, Lan only |
+| L0 Default voices | Entry point | Zan (default), Jan (explicit only) |
+| L1 Domains | 11 peer experts | Ian, Ban, Ean, Pan, Qan, Ran, San, Van, Han, Lan, Wan |
+| L2 Specialists | 19 children | Under Ian, Ran, Lan only |
 | Import Guide | Runtime setup | Hermes, AutoGen, CrewAI, LangGraph, n8n |
 | Naming Guide | Style conventions | Capitalization, casing, token system |
 
@@ -40,10 +40,10 @@ L0: Zan (default)  ·  Jan (explicit only)
      |   +-- L2: Ian-UI
      |   +-- L2: Ian-UX
      |
-     +-- L1: Ban (Biz)
-     +-- L1: Ean (Learning/UX)
+     +-- L1: Ban (Business)
+     +-- L1: Ean (Learning)
      +-- L1: Pan (Product)
-     +-- L1: Qan (Specs/ERD)
+     +-- L1: Qan (Quoting/Estimation)
      |
      +-- L1: Ran (Research)
      |   +-- L2: Ran-People
@@ -54,12 +54,12 @@ L0: Zan (default)  ·  Jan (explicit only)
      |   +-- L2: Ran-App
      |   +-- L2: Ran-General
      |
-     +-- L1: San (Wellness)
-     +-- L1: Van (Audit/dev)
-     +-- L1: Han (Calm psych)
+     +-- L1: San (Psychology)
+     +-- L1: Van (Devil's advocate)
+     +-- L1: Han (Health/Wellness)
      +-- L1: Wan (Writing/content)
      |
-     +-- L1: Lan (Legal/QA)
+     +-- L1: Lan (Legal)
          +-- L2: Lan-Contract
          +-- L2: Lan-Compliance
          +-- L2: Lan-IP
@@ -109,4 +109,4 @@ python3 scripts/check_duplicates.py
 
 ## License
 
-MIT — see [LICENSE](LICENSE). Prompts are meant to be adapted; zero friction for adoption.
+MIT — see [LICENSE](https://github.com/fentonmartin/ai-agent-registry/blob/main/LICENSE). Prompts are meant to be adapted; zero friction for adoption.

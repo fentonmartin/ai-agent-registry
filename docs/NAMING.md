@@ -48,7 +48,7 @@ Technical and domain acronyms are written in ALL CAPS:
 
 ### Research Domain Names (Ran Family)
 
-The "Ran" prefix is mixed-case; the domain suffix is ALL-CAPS:
+The "Ran" prefix and the domain word are both capitalized (acronyms stay ALL-CAPS):
 
 | Key | Display Name |
 |-----|-------------|
