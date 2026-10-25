@@ -20,6 +20,7 @@ Thumbs.db
 
 # Local config (do NOT commit your identities)
 config/identities.yaml
+config/sensitive-patterns.txt
 
 # Logs
 *.log

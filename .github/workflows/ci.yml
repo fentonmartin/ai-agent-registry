@@ -26,6 +26,9 @@ jobs:
 
       - name: Validate persona files
         run: python scripts/validate_personas.py
+        env:
+          # Comma-separated private names to keep out of personas (repo secret).
+          SENSITIVE_PATTERNS: ${{ secrets.SENSITIVE_PATTERNS }}
 
       - name: Check for duplicate keys
         run: python scripts/check_duplicates.py

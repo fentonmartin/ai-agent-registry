@@ -11,10 +11,11 @@ Checks:
     L1 persona allowed to have children, and the key starts with "<parent>-"
   - L0/L1 personas declare no parent
   - `triggers`, if present, is a list
-  - no sensitive patterns
+  - no private sensitive patterns, email addresses or API keys
   - persona counts quoted in README.md, index.md and docs/HIERARCHY.md
     match the files on disk
 """
+import os
 import pathlib
 import re
 import sys
@@ -33,8 +34,26 @@ PARENTS_WITH_CHILDREN = {"ian", "ran", "lan"}
 REQUIRED_FIELDS = ("name", "title", "role")
 KEY_RE = re.compile(r"^[a-z][a-z0-9-]*$")
 
-SENSITIVE = ["FEN", "Fenton", "fentonmartin", "fentonxm",
-             "Fayolex", "fayolex", "E3 Platform"]
+# Private names to keep out of persona files are NOT listed here (this file
+# is public). They come from config/sensitive-patterns.txt (gitignored, one
+# per line) and/or the SENSITIVE_PATTERNS env var (comma-separated, e.g. a
+# CI secret).
+SENSITIVE_FILE = REPO_ROOT / "config" / "sensitive-patterns.txt"
+
+# Generic leaks: real email addresses and common API key formats.
+SECRET_RE = re.compile(
+    r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}"
+    r"|sk-[A-Za-z0-9_-]{20,}|gh[pousr]_[A-Za-z0-9]{30,}|AKIA[0-9A-Z]{16}"
+)
+
+
+def load_sensitive():
+    patterns = [p.strip() for p in os.environ.get("SENSITIVE_PATTERNS", "").split(",")]
+    if SENSITIVE_FILE.exists():
+        for ln in SENSITIVE_FILE.read_text(encoding="utf-8").splitlines():
+            if not ln.lstrip().startswith("#"):
+                patterns.append(ln.strip())
+    return [p for p in patterns if p]
 
 # Docs that quote persona counts.
 COUNT_DOCS = ("README.md", "index.md", "docs/HIERARCHY.md")
@@ -66,7 +85,7 @@ def layer_of(rel):
     return None, None
 
 
-def validate_file(path, persona_dir, l1_keys, sensitive=SENSITIVE):
+def validate_file(path, persona_dir, l1_keys, sensitive=()):
     """Return (layer, errors) for one persona file."""
     rel = path.relative_to(persona_dir)
     errors = []
@@ -120,6 +139,8 @@ def validate_file(path, persona_dir, l1_keys, sensitive=SENSITIVE):
     for s in sensitive:
         if s in content:
             err(f"contains sensitive pattern '{s}'")
+    for m in SECRET_RE.finditer(content):
+        err(f"looks like an email or API key: '{m.group(0)[:12]}...'")
 
     return layer, errors
 
@@ -151,11 +172,15 @@ def validate_counts(repo_root, counts):
 
 def main():
     l1_keys = {p.stem for p in (PERSONA_DIR / "l1").glob("*.md")}
+    sensitive = load_sensitive()
+    if not sensitive:
+        print("NOTE: no private sensitive patterns configured "
+              f"({SENSITIVE_FILE.relative_to(REPO_ROOT).as_posix()} or SENSITIVE_PATTERNS).")
     errors = []
     counts = {"L0": 0, "L1": 0, "L2": 0}
     files = sorted(PERSONA_DIR.rglob("*.md"))
     for f in files:
-        layer, errs = validate_file(f, PERSONA_DIR, l1_keys)
+        layer, errs = validate_file(f, PERSONA_DIR, l1_keys, sensitive)
         errors.extend(errs)
         if layer:
             counts[layer] += 1

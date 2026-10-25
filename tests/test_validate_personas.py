@@ -88,6 +88,16 @@ class ValidateFileTest(unittest.TestCase):
         self.assertError(self.check("l1/pan.md", "name: pan\ntitle: P\nrole: r\n", "a SECRET\n"),
                          "sensitive pattern")
 
+    def test_email_and_api_key(self):
+        fm = "name: pan\ntitle: P\nrole: r\n"
+        self.assertError(self.check("l1/pan.md", fm, "mail a@b.co\n"), "email or API key")
+        self.assertError(self.check("l1/pan.md", fm, "key sk-abcdefghijklmnopqrstuvwxyz\n"),
+                         "email or API key")
+
+    def test_tokens_are_not_flagged(self):
+        fm = "name: pan\ntitle: P\nrole: r\n"
+        self.assertEqual(self.check("l1/pan.md", fm, "mail <EMAIL>\n")[1], [])
+
 
 class ValidateCountsTest(unittest.TestCase):
     def test_detects_stale_counts(self):

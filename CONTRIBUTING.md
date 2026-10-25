@@ -64,7 +64,10 @@ python scripts/check_duplicates.py
 - L2 personas declare a `parent` that matches their folder and is one of
   the L1s allowed to have children, and their key starts with `<parent>-`
 - `triggers`, if present, is a list
-- no sensitive patterns appear
+- there are no email addresses or API keys, and none of the maintainers' private
+  sensitive patterns. Those are kept in the gitignored
+  `config/sensitive-patterns.txt` and the `SENSITIVE_PATTERNS` CI secret,
+  never in the repo.
 - the persona counts in README.md, index.md and docs/HIERARCHY.md match
   the files. Update those numbers when you add or remove a persona.
 
