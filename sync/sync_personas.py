@@ -164,44 +164,96 @@ def build_personalities(tokens: dict[str, str] | None = None) -> dict[str, tuple
     return out
 
 
-def render_block(personalities: dict[str, tuple[str, str, str]]) -> str:
-    """Render the agent.personalities YAML block (JSON scalars => valid YAML)."""
-    lines = [f"{START}", "agent:", "  personalities:"]
+def render_block(personalities: dict[str, tuple[str, str, str]], indent: str = "  ") -> str:
+    """Render the personalities YAML block, indented to sit under `agent:`
+    (JSON scalars => valid YAML)."""
+    lines = [f"{indent}{START}", f"{indent}personalities:"]
     for key in sorted(personalities):
         prompt = personalities[key][0]
-        lines.append(f"    {key}: {json.dumps(prompt, ensure_ascii=False)}")
-    lines.append(END)
+        lines.append(f"{indent}  {key}: {json.dumps(prompt, ensure_ascii=False)}")
+    lines.append(f"{indent}{END}")
     return "\n".join(lines) + "\n"
 
 
-def inject_into_config(block: str) -> bool:
-    """Replace the marker block, or insert it after _config_version. Return True if changed."""
+# existing marker block, at any indentation (incl. the legacy top-level form)
+BLOCK_RE = re.compile(
+    rf"^[ \t]*{re.escape(START)}[ \t]*\n.*?^[ \t]*{re.escape(END)}[ \t]*(?:\n|\Z)",
+    re.S | re.M,
+)
+AGENT_RE = re.compile(r"^agent:[ \t]*(?:#.*)?$", re.M)
+
+
+def child_indent(text: str, pos: int) -> str:
+    """Indentation of the first child line after `pos` (default two spaces)."""
+    for ln in text[pos:].splitlines():
+        if not ln.strip() or ln.lstrip().startswith("#"):
+            continue
+        indent = ln[: len(ln) - len(ln.lstrip())]
+        return indent or "  "
+    return "  "
+
+
+def merge_block(text: str, personalities: dict[str, tuple[str, str, str]]) -> str:
+    """Return `text` with the personalities block placed under the top-level
+    `agent:` key. A single `agent:` mapping is kept so a user-maintained
+    `agent.hierarchy` and the synced `agent.personalities` never collide."""
+    base = BLOCK_RE.sub("", text)
+    m = AGENT_RE.search(base)
+    if m:
+        nl = base.find("\n", m.end())
+        if nl == -1:
+            base += "\n"
+            nl = len(base) - 1
+        pos = nl + 1
+        return base[:pos] + render_block(personalities, child_indent(base, pos)) + base[pos:]
+    lines = base.splitlines(keepends=True)
+    anchor = 0
+    for i, ln in enumerate(lines):
+        if ln.startswith("_config_version:"):
+            anchor = i + 1
+            break
+    head = "".join(lines[:anchor])
+    if head and not head.endswith("\n"):
+        head += "\n"
+    return head + "agent:\n" + render_block(personalities) + "".join(lines[anchor:])
+
+
+def strict_yaml_load(text: str):
+    """yaml.safe_load that rejects duplicate mapping keys instead of
+    silently keeping the last one."""
+    import yaml
+
+    class StrictLoader(yaml.SafeLoader):
+        pass
+
+    def construct_mapping(loader, node, deep=False):
+        seen = set()
+        for key_node, _ in node.value:
+            key = loader.construct_object(key_node, deep=deep)
+            if key in seen:
+                raise yaml.constructor.ConstructorError(
+                    None, None, f"duplicate key {key!r}", key_node.start_mark)
+            seen.add(key)
+        return loader.construct_mapping(node, deep)
+
+    StrictLoader.add_constructor(
+        yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG, construct_mapping)
+    return yaml.load(text, Loader=StrictLoader)
+
+
+def inject_into_config(personalities: dict[str, tuple[str, str, str]]) -> bool:
+    """Write the personalities block under `agent:` in config.yaml. Return True if changed."""
     if not CONFIG_PATH.exists():
         print(f"WARN: config.yaml not found at {CONFIG_PATH}", file=sys.stderr)
         print(f"Set HERMES_HOME env var to your runtime config directory.", file=sys.stderr)
         return False
     text = CONFIG_PATH.read_text(encoding="utf-8")
-    if START in text:
-        new = re.sub(
-            rf"\n{re.escape(START)}.*?{re.escape(END)}\n",
-            lambda m: "\n" + block,
-            text,
-            flags=re.S,
-        )
-    else:
-        lines = text.splitlines(keepends=True)
-        anchor = 0
-        for i, ln in enumerate(lines):
-            if ln.startswith("_config_version:"):
-                anchor = i + 1
-                break
-        new = text[: len("".join(lines[:anchor]))] + block + "".join(lines[anchor:])
+    new = merge_block(text, personalities)
     if new == text:
         return False
-    # self-check: refuse to write invalid YAML
+    # self-check: refuse to write invalid YAML (or YAML with duplicate keys)
     try:
-        import yaml
-        yaml.safe_load(new)
+        strict_yaml_load(new)
     except ImportError:
         pass
     except Exception as e:
@@ -337,7 +389,6 @@ def main() -> int:
         validate_hierarchy(personas)
         return 0
 
-    block = render_block(personas)
     now = datetime.datetime.now(datetime.timezone.utc).strftime("%H:%M")
 
     if args.dry_run:
@@ -347,7 +398,7 @@ def main() -> int:
         validate_hierarchy(personas)
         return 0
 
-    changed = inject_into_config(block)
+    changed = inject_into_config(personas)
     if not changed:
         validate_hierarchy(personas)
         return 0
