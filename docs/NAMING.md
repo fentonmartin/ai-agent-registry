@@ -113,10 +113,16 @@ Persona prompts may contain uppercase token placeholders:
 | `<COMPANY>` | `identity.company` |
 | `<PRODUCT>` | `identity.product` |
 | `<EMAIL>` | `identity.email` |
+| `<HERMES_HOME>` | `infrastructure.hermes_home` |
+| `<REPO_URL>` | `infrastructure.repo_url` |
+| `<REPO_PATH>` | `infrastructure.repo_path` |
+| `<API_PROVIDER>` | `infrastructure.api_provider` |
 | `<MODEL>` | `infrastructure.model` |
 | `<FALLBACK>` | `infrastructure.fallback` |
-| `<REPO_PATH>` | `infrastructure.repo_url` |
-| `<PORT>` | `infrastructure.dashboard_port` |
+| `<FREE_TIER>` | `infrastructure.free_tier` |
+| `<DASHBOARD_PORT>` | `infrastructure.dashboard_port` |
 
-Custom tokens can be added to `config/identities.yaml` under any section —
-they resolve as `<SECTION_KEY>` in persona prompts.
+Custom tokens can be added to `config/identities.yaml` under any section.
+Each key resolves as `<KEY>` (uppercased). The section name is not part of
+the token, so keys must be unique across sections. The sync script warns
+when two sections define the same key.

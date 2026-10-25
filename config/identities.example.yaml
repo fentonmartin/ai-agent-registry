@@ -19,13 +19,15 @@ identity:
 infrastructure:
   hermes_home: "~/.hermes"   # Hermes runtime directory
   repo_url: "<REPO_URL>"     # Registry source repository URL
+  repo_path: "<REPO_PATH>"   # Local directory holding your project repos
   api_provider: "openrouter" # API provider (openrouter / groq / openai)
   model: "<MODEL>"           # Primary model identifier
   fallback: "<FALLBACK>"     # Fallback model identifier
   free_tier: "<FREE_TIER>"   # Free-tier model identifier
-  dashboard_port: "<PORT>"   # Dashboard port number
+  dashboard_port: "<DASHBOARD_PORT>"  # Dashboard port number
 
 # Additional tokens can be appended under any section.
-# They resolve in prompts as <SECTION_KEY> (uppercase, underscored).
+# Each key resolves in prompts as <KEY> (uppercased). The section name is
+# NOT part of the token, so keep keys unique across sections.
 # Example: under "identity:", key "user" becomes <USER> in prompts.
 # Example: under "infrastructure:", key "model" becomes <MODEL> in prompts.

@@ -64,10 +64,17 @@ def load_identities(path: pathlib.Path | None = None) -> dict[str, str]:
         return {}
 
     tokens: dict[str, str] = {}
+    origin: dict[str, str] = {}
     for section, values in (data or {}).items():
         if isinstance(values, dict):
             for k, v in values.items():
-                tokens[f"<{k.upper()}>"] = str(v) if v is not None else ""
+                token = f"<{k.upper()}>"
+                if token in origin:
+                    print(f"WARN: token {token} defined in both '{origin[token]}' and "
+                          f"'{section}' sections; using the '{section}' value.",
+                          file=sys.stderr)
+                origin[token] = section
+                tokens[token] = str(v) if v is not None else ""
     return tokens
 
 

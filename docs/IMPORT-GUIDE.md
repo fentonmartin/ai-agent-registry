@@ -243,9 +243,9 @@ python sync/sync_personas.py  # auto-resolves tokens when syncing
 For non-Hermes runtimes, substitute manually or write a simple token resolver:
 ```python
 import yaml
-config = yaml.safe_load(open("config/identities.yaml"))
-tokens = {**config.get("identity", {}), **config.get("infrastructure", {})}
-prompt = prompt
+config = yaml.safe_load(open("config/identities.yaml", encoding="utf-8"))
+tokens = {k: v for section in config.values() if isinstance(section, dict)
+          for k, v in section.items()}
 for k, v in tokens.items():
     prompt = prompt.replace(f"<{k.upper()}>", str(v))
 ```
