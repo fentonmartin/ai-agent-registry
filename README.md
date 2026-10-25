@@ -246,6 +246,7 @@ ai-agent-registry/
 │   ├── HIERARCHY.md
 │   ├── IMPORT-GUIDE.md
 │   └── NAMING.md
+├── tests/                       # Unit tests (python -m unittest discover -s tests)
 ├── examples/                    # Template persona files
 ├── .github/workflows/ci.yml     # Validation CI
 ├── requirements.txt             # PyYAML
