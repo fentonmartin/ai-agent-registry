@@ -130,17 +130,29 @@ You are Ran-Brand, a research assistant specializing in brand identity...
 
 ---
 
+## Runtime Compatibility
+
+The AI Agent Registry is designed to work across multiple agent runtimes.
+Persona files are plain Markdown with YAML frontmatter — no vendor lock-in.
+
+| Runtime | Support | Notes |
+|---------|---------|-------|
+| **Hermes** | Native | `python sync/sync_personas.py` auto-syncs to `config.yaml`. Hierarchy validation built-in. |
+| **AutoGen** | Supported | Scripts in [docs/IMPORT-GUIDE.md](docs/IMPORT-GUIDE.md#autogen) |
+| **CrewAI** | Supported | Scripts in [docs/IMPORT-GUIDE.md](docs/IMPORT-GUIDE.md#crewai) |
+| **LangGraph** | Supported | Scripts in [docs/IMPORT-GUIDE.md](docs/IMPORT-GUIDE.md#langgraph) |
+| **n8n** | Supported | Use the HTTP/webhook trigger to invoke persona prompts |
+| **Any runtime** | Raw import | Copy the prompt text from the file body after `---` |
+
+**Hermes native features:**
+- `/personality <key>` — invoke any registered persona
+- Auto-reloads on config.yaml mtime change (no restart needed)
+- Hierarchy dispatch: L0 default → L1 → L2 escalation
+- `/personality zan, <query>` — greet + task in one message
+
+---
+
 ## Import Into Your Runtime
-
-| Runtime | Support |
-|---------|---------|
-| **Hermes** | Native — `python sync/sync_personas.py` |
-| **AutoGen** | [Import guide](docs/IMPORT-GUIDE.md#autogen) |
-| **CrewAI** | [Import guide](docs/IMPORT-GUIDE.md#crewai) |
-| **LangGraph** | [Import guide](docs/IMPORT-GUIDE.md#langgraph) |
-| **Any runtime** | Copy the prompt text from the file body |
-
-Full code examples: [docs/IMPORT-GUIDE.md](docs/IMPORT-GUIDE.md)
 
 ---
 
@@ -189,6 +201,26 @@ full guide on adding personas, improving prompts, and extending the framework.
 
 ## License
 
-MIT — use freely in commercial and non-commercial projects.
+**MIT** — use freely in commercial and non-commercial projects.
+
+The AI Agent Registry uses prompt-based files (Markdown + YAML frontmatter),
+not compiled code. MIT was chosen because:
+
+- **Prompts are meant to be adapted** — MIT lets anyone modify personas for
+  their own use case without copyleft obligations
+- **Zero friction for adoption** — no legal review needed to integrate into
+  commercial products or internal agent systems
+- **Encourages contribution** — companies won't hesitate to submit improvements
+  knowing they retain full rights to their changes
+
+**You can:**
+- Use these personas in any project (commercial or personal)
+- Modify prompts to fit your team's needs
+- Re-license derivative works under any license
+- Submit PRs adding new personas or improving existing ones
+
+**You cannot:**
+- Hold the original authors liable (as-is, no warranty)
+- Remove the license notice from distributions
 
 See [LICENSE](LICENSE).
