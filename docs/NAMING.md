@@ -103,6 +103,15 @@ triggers:
   - ran-brand
 ```
 
+## Language Policy
+
+- **Prompts are written in English** so every contributor can review them.
+- **Triggers may be bilingual.** Indonesian trigger phrases (e.g.
+  `buat rencana`, `koordinasikan`) sit alongside English ones.
+- **Personas reply in the user's language.** A prompt can say so
+  explicitly, and it may include non-English example queries or keywords
+  where they serve a function (e.g. detecting hedging words in Indonesian).
+
 ## Identity Tokens
 
 Persona prompts may contain uppercase token placeholders:
