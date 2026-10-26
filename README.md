@@ -161,7 +161,7 @@ L0  Zan  (default dispatcher — assign tasks to the right persona) · Jan (expl
 ├─── L1  Han     (health · wellness · fitness)
 ├─── L1  Lan     (legal umbrella · compliance + IP)
 ├─── L1  Pan     (product · strategy · roadmap)
-├─── L1  Qan     (quoting · estimation · pricing)
+├─── L1  Qan     (quotes · captions · social copy)
 ├─── L1  San     (psychology · mental health · wellbeing)
 ├─── L1  Van     (devil's advocate · critical review)
 └─── L1  Wan     (writing · content · communication)
@@ -195,7 +195,7 @@ L2 children under Lan: lan-contract · lan-compliance · lan-ip
 | Learning / mentoring plan | Ean |
 | Health / wellness coaching | Han |
 | Product strategy / roadmap | Pan |
-| Pricing / quote estimation | Qan |
+| Quotes / captions for posts | Qan |
 | Psychological support / counseling | San |
 | Challenge assumptions / critique | Van |
 | Writing / content / copy | Wan |

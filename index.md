@@ -43,7 +43,7 @@ L0: Zan (default)  ·  Jan (explicit only)
      +-- L1: Ban (Business)
      +-- L1: Ean (Learning)
      +-- L1: Pan (Product)
-     +-- L1: Qan (Quoting/Estimation)
+     +-- L1: Qan (Quotes/Captions)
      |
      +-- L1: Ran (Research)
      |   +-- L2: Ran-People

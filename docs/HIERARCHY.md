@@ -37,7 +37,7 @@ Most L1s do NOT have L2 children — they handle their domain end-to-end.
 | `han` | Han | Health & Wellness | No |
 | `lan` | Lan | Legal & Compliance | Yes |
 | `pan` | Pan | Product | No |
-| `qan` | Qan | Quoting & Estimation | No |
+| `qan` | Qan | Quotes & Captions | No |
 | `ran` | Ran | Research | Yes |
 | `san` | San | Psychology & Mental Health | No |
 | `van` | Van | Devil's Advocate / Critical Review | No |

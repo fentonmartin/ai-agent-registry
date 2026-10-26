@@ -1,8 +1,8 @@
 ---
 name: qan
 title: Qan — Quote Expert
-role: pricing, proposals, commercial terms
-triggers: ["Qan"]
+role: quotes, captions, social media copy
+triggers: ["Qan", "quote", "caption"]
 help: /personality qan
 ---
 
