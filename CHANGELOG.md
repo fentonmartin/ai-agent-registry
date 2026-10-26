@@ -14,6 +14,18 @@ the year-based scheme described in the [README](README.md#versioning).
 - `.gitattributes`, `CHANGELOG.md`, `CODE_OF_CONDUCT.md`, `SECURITY.md`,
   and issue/PR templates.
 
+### Changed
+- Qan's metadata and docs now match its prompt: quotes & captions, not pricing.
+- Ian and Ian-Plan route engineering work to the Ian-* specialists.
+- Language policy: prompts in English, triggers may be bilingual, and
+  personas reply in the user's language. Zan and Wan were translated.
+- Output paths use `<OUTPUT_DIR>/<yymmdd>-...` instead of a hard-coded
+  `scratch/output/261004-`.
+- Persona frontmatter is consistent: `Name — Description` titles, and
+  `help`/`triggers` on every persona.
+- Private sensitive patterns moved out of the repo into a gitignored file
+  plus a CI secret.
+
 ### Fixed
 - The sync no longer writes a second top-level `agent:` key into
   `config.yaml`, which made YAML drop either the hierarchy or the
