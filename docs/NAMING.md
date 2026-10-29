@@ -20,6 +20,10 @@ Used in `config.yaml`, file names, and invocation commands.
 | Ian-SecRed | `ian-secred` |
 | Ran-People | `ran-people` |
 | Lan-Compliance | `lan-compliance` |
+| Ian-QA-EndToEnd | `ian-qa-endtoend` |
+| Ian-QA-Security | `ian-qa-security` |
+| Ian-UX-Accessibility | `ian-ux-accessibility` |
+| Ran-Web-SEO | `ran-web-seo` |
 
 ## Display Names
 
@@ -74,6 +78,10 @@ personas/l1/ban.md
 personas/l2/ian/ian-api.md
 personas/l2/ran/ran-brand.md
 personas/l2/lan/lan-ip.md
+personas/l3/ian-qa/ian-qa-endtoend.md
+personas/l3/ian-qa/ian-qa-security.md
+personas/l3/ian-ux/ian-ux-accessibility.md
+personas/l3/ran-web/ran-web-seo.md
 ```
 
 ## Hierarchy Placement Rules
@@ -83,8 +91,29 @@ personas/l2/lan/lan-ip.md
 | L0 | N/A | Default voices only; no children |
 | L1 | Only Ian, Ran, Lan | All other L1s are single-focus |
 | L2 | Under Ian, Ran, or Lan | Parent must be specified in frontmatter |
-| L3 | Under L2 (future) | Reserved for sub-specialists |
+| L3 | Under any L2 with a sub-area | Full word, short and self-explanatory; created on demand, no minimum count |
 | L4 | External tools | Not personified |
+
+
+## L3 Naming Convention
+
+L3 personas are sub-specialists under an L2 parent. They are created on demand — no minimum sub-area count is required.
+
+**Pattern:** `<L2-key>-<FullWord>` (full descriptive word, short and self-explanatory)
+
+**Examples:**
+| L2 Parent | L3 Key | Specialty |
+|-----------|--------|-----------|
+| `ian-qa` | `ian-qa-endtoend` | End-to-end testing |
+| `ian-qa` | `ian-qa-security` | Security testing |
+| `ian-ux` | `ian-ux-accessibility` | Accessibility |
+| `ran-web` | `ran-web-seo` | Search engine optimisation |
+
+**Rules:**
+- The parent L2 key is the prefix (e.g. `ian-qa-`, not `ian-`)
+- The suffix is a full word or compound word (no abbreviations)
+- All lowercase, hyphen-separated
+- Placed under `personas/l3/<l2-parent>/<key>.md`
 
 ## Trigger Keywords
 

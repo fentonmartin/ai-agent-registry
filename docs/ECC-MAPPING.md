@@ -19,40 +19,90 @@ Every item was checked against ECC release v2.2.3: the file exists and its descr
 4. A `gap` is a valid result. A mapping is never invented to fill it.
 5. Domains that ECC does not cover (wellness, legal advice, quotation, learning coaching, real-person research) stay untouched.
 
-## Fit per persona
+## Skill assignments (64 skills)
 
-| Persona | Fit | ECC items | Imported skills used |
-|---|---|---|---|
-| Ian | partial | 5 | - |
-| Ian-Plan | strong | 5 | blueprint |
-| Ian-Alpha | partial | 3 | - |
-| Ian-API | partial | 4 | api-design, contract-first, database-migrations, postgres-patterns |
-| Ian-DevOps | strong | 3 | canary-watch, deployment-patterns |
-| Ian-SecRed | partial | 3 | security-review |
-| Ian-SecBlue | gap | 0 | - |
-| Ian-UI | partial | 4 | accessibility |
-| Ian-QA | partial | 7 | e2e-testing |
-| Ian-UX | gap | 0 | - |
-| Ian-Flutter | strong | 7 | dart-flutter-patterns, flutter-dart-code-review |
-| Pan | partial | 4 | product-lens |
-| Ban | partial | 3 | competitive-platform-analysis, investor-materials, market-research |
-| Van | partial | 2 | council |
-| Wan | partial | 2 | article-writing, brand-voice |
-| Zan | partial | 3 | counterparty-channel-discipline, operator-approval-loop |
-| Ran | partial | 3 | market-research |
-| Ran-Business | partial | 3 | benchmark-methodology, competitive-platform-analysis, market-research |
-| Ran-Brand | partial | 2 | benchmark-methodology, brand-voice |
-| Ran-People | gap | 0 | - |
-| Ean | gap | 0 | - |
-| Han | gap | 0 | - |
-| San | gap | 0 | - |
-| Qan | gap | 0 | - |
-| Lan | gap | 0 | - |
-| Lan-Contract | gap | 0 | - |
-| Lan-IP | gap | 0 | - |
-| Lan-Compliance | gap | 0 | - |
+### Assigned (42 skills)
 
-Not assessed in this pass: Jan, Ran-Tech, Ran-Web, Ran-App, Ran-General.
+| ECC Skill | Assigned To |
+|-----------|-------------|
+| `accessibility` | Ian-UI, Ian-UX-Accessibility (L3) |
+| `api-design` | Ian-API |
+| `article-writing` | Wan |
+| `backend-patterns` | Ian-API |
+| `benchmark-methodology` | Ban, Ran-Brand |
+| `blueprint` | Ian-Plan |
+| `brand-discovery` | Ran-Brand |
+| `brand-voice` | Ran-Brand, Wan |
+| `canary-watch` | Ian-DevOps |
+| `change-impact` | Ian-Plan |
+| `coding-standards` | Ian (L1) |
+| `competitive-platform-analysis` | Ban |
+| `competitive-report-structure` | Ban |
+| `content-engine` | Wan |
+| `contract-first` | Ian-API |
+| `council` | Zan |
+| `counterparty-channel-discipline` | Zan |
+| `crosspost` | Wan |
+| `dart-flutter-patterns` | Ian-Flutter |
+| `database-migrations` | Ian-API |
+| `deployment-patterns` | Ian-DevOps |
+| `docs-governance` | Ian-Plan |
+| `e2e-testing` | Ian-QA, Ian-QA-EndToEnd (L3) |
+| `flutter-dart-code-review` | Ian-Flutter |
+| `frontend-patterns` | Ian-UI |
+| `frontend-slides` | Wan |
+| `investor-materials` | Ban |
+| `investor-outreach` | Ban |
+| `make-interfaces-feel-better` | Ian-UI |
+| `market-research` | Ban |
+| `module-regression` | Ian-QA |
+| `operator-approval-loop` | Zan |
+| `parallel-execution-optimizer` | Ian-Opt |
+| `postgres-patterns` | Ian-API |
+| `product-capability` | Pan |
+| `product-lens` | Pan |
+| `production-audit` | Ian-DevOps |
+| `security-review` | Ian-QA-Security (L3) |
+| `seo` | Ran-Web, Ran-Web-SEO (L3) |
+| `test-collaboration` | Ian-QA |
+| `web-perf` | Ian-Opt, Ran-Web |
+| `x-api` | Ran-Web |
+
+### Held back — harness-bound or MCP not configured (17 skills)
+
+These skills reference Claude Code slash commands, ECC-specific tooling, or MCPs not yet configured in Hermes. Mapped to no persona until the dependency is resolved.
+
+| ECC Skill | Reason held back |
+|-----------|-----------------|
+| `agent-introspection-debugging` | Claude Code / agent harness |
+| `agent-sort` | Claude Code harness |
+| `context-and-decisions` | ECC-specific context system |
+| `deep-research` | Requires firecrawl/exa MCP |
+| `dmux-workflows` | tmux/dmux-specific |
+| `documentation-lookup` | Requires Context7 MCP |
+| `ecc-conventions` | ECC-internal meta |
+| `eval-harness` | ECC eval toolchain |
+| `exa-search` | Requires Exa MCP |
+| `mcp-dependency-review` | ECC MCP tooling |
+| `mcp-server-patterns` | ECC MCP tooling |
+| `plan-canvas` | Claude Code /plan canvas |
+| `skill-host-compat` | ECC skill compatibility system |
+| `strategic-compact` | ECC planning system |
+| `tdd-workflow` | Node/TS commands, Claude Code |
+| `unified-memory` | ECC memory system |
+| `verification-loop` | ECC /verify command |
+
+### Niche / on-demand (5 skills)
+
+Mapped to personas but not preloaded. Loaded on demand by skill name when the topic arises.
+
+| ECC Skill | Notes |
+|-----------|-------|
+| `bun-runtime` | On-demand for Bun projects |
+| `fal-ai-media` | On-demand for media generation tasks |
+| `mle-workflow` | On-demand for ML engineering |
+| `nextjs-turbopack` | On-demand for Next.js/Turbopack |
+| `video-editing` | On-demand for video work |
 
 ## Concepts adapted, not copied
 
