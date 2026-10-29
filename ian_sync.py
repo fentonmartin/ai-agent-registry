@@ -364,6 +364,7 @@ def run_audit():
     """Check that mapping, imports and standards agree with each other and with the persona files."""
     mp = load_mapping()
     M, I, NI = mp["mappings"], mp["imports"], mp.get("not_imported", {})
+    NAT = mp.get("native_skills", {})
     std = {p.stem: p.read_text(encoding="utf-8") for p in STANDARDS_DIR.glob("*.md")}
     keys = set()
     for fp in PERSONAS_DIR.rglob("*.md"):
@@ -397,10 +398,21 @@ def run_audit():
                 problems.append("skill {} not named in standards of {}".format(sk, f))
             elif f not in M or "skill:" + sk not in M[f]["items"]:
                 problems.append("skill {} not listed in mapping of {}".format(sk, f))
+    for sk, spec in NAT.items():
+        if sk in I:
+            problems.append("skill is both imported and native: {}".format(sk))
+        for f in spec["for"]:
+            if sk not in std.get(f, ""):
+                problems.append("native skill {} not named in standards of {}".format(sk, f))
+    skills_dir = HERMES_HOME / "skills"
+    if skills_dir.is_dir():
+        for sk in NAT:
+            if not any(skills_dir.rglob(sk + "/SKILL.md")):
+                problems.append("native skill not installed in Hermes: {}".format(sk))
     for k, t in std.items():
         for sk in re.findall(r"/skill ([a-z0-9-]+)", t):
-            if sk not in I:
-                problems.append("standards of {} name a skill that is not imported: {}".format(k, sk))
+            if sk not in I and sk not in NAT:
+                problems.append("standards of {} name a skill that is neither imported nor native: {}".format(k, sk))
         if k not in keys:
             problems.append("standards file has no persona: {}".format(k))
     for fp in PERSONAS_DIR.rglob("*.md"):

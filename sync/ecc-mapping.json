@@ -267,6 +267,41 @@
       "fit": "gap",
       "items": [],
       "note": "intentionally unmapped: Ran-People is strictly for real persons"
+    },
+    "ran-web": {
+      "fit": "partial",
+      "items": [
+        "skill:seo"
+      ],
+      "gaps": [
+        "domain, DNS, SSL and tech-stack lookups",
+        "traffic and backlink data (needs paid sources)"
+      ],
+      "note": "seo covers technical SEO and structured data. Performance and fetch-failure handling come from Hermes native skills."
+    },
+    "ran-tech": {
+      "fit": "gap",
+      "items": [],
+      "gaps": [
+        "package ecosystem and release research"
+      ],
+      "note": "ECC documentation-lookup needs the Context7 MCP server, which is not configured. Hermes grounded-citations covers source discipline."
+    },
+    "ran-app": {
+      "fit": "gap",
+      "items": [],
+      "gaps": [
+        "app store listings, ratings, ASO"
+      ],
+      "note": "No ECC or Hermes skill covers app-store research."
+    },
+    "ran-general": {
+      "fit": "gap",
+      "items": [],
+      "gaps": [
+        "general fact checking"
+      ],
+      "note": "ECC has nothing here. Hermes grounded-citations covers it."
     }
   },
   "imports": {
@@ -440,6 +475,12 @@
         "ian-ui"
       ],
       "patches": []
+    },
+    "seo": {
+      "for": [
+        "ran-web"
+      ],
+      "patches": []
     }
   },
   "not_imported": {
@@ -467,10 +508,28 @@
     "intent-driven-development": "17 KB, large fixed context cost; acceptance-criteria idea already in Ian-Plan"
   },
   "not_assessed": [
-    "jan",
-    "ran-tech",
-    "ran-web",
-    "ran-app",
-    "ran-general"
-  ]
+    "jan"
+  ],
+  "native_skills": {
+    "grounded-citations": {
+      "for": [
+        "ran",
+        "ran-tech",
+        "ran-general"
+      ],
+      "why": "Hermes skill: cited, verifiable sources with retrieval dates"
+    },
+    "web-perf": {
+      "for": [
+        "ran-web"
+      ],
+      "why": "Hermes skill: Core Web Vitals and Lighthouse audits"
+    },
+    "blocked-page-recovery": {
+      "for": [
+        "ran-web"
+      ],
+      "why": "Hermes skill: 403/429, paywall and bot-wall recovery"
+    }
+  }
 }
