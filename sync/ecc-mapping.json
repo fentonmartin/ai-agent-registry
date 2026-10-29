@@ -8,7 +8,7 @@
     "partial": "ECC covers part of the mandate, gaps listed",
     "gap": "ECC has no real coverage; items (if any) are adjacent only"
   },
-  "policy": "Persona fields (title, role, triggers, body) stay authoritative. ECC items are references only. ian-sync never imports ECC prompt text.",
+  "policy": "Persona fields (title, role, triggers, body) stay authoritative. ECC items are references only. ian-sync never imports ECC prompt text. Persona prompts get a WORKING STANDARDS section written in our own words (sync/standards/<key>.md); ECC text is never pasted into personas.",
   "mappings": {
     "ian-api": {
       "fit": "partial",
@@ -121,6 +121,145 @@
       "gaps": [
         "non-code roles on the board (ECC orchestration is git-branch based)"
       ]
+    },
+    "ian": {
+      "fit": "partial",
+      "items": [
+        "skill:orch-pipeline",
+        "skill:verification-loop",
+        "skill:tdd-workflow",
+        "skill:context-budget",
+        "skill:ai-first-engineering"
+      ],
+      "gaps": [
+        "ECC wrappers assume Claude Code commands, Node/TS tooling and git branches; adapted as concepts, not imported"
+      ]
+    },
+    "pan": {
+      "fit": "partial",
+      "items": [
+        "skill:product-lens",
+        "skill:product-capability",
+        "command:prp-prd",
+        "command:plan-prd"
+      ],
+      "gaps": [
+        "pricing, onboarding, retention, growth loops are not covered"
+      ]
+    },
+    "ban": {
+      "fit": "partial",
+      "items": [
+        "skill:market-research",
+        "skill:investor-materials",
+        "skill:competitive-platform-analysis"
+      ],
+      "gaps": [
+        "unit economics, 2030 scenarios, asymmetric-idea framing are not covered"
+      ]
+    },
+    "van": {
+      "fit": "partial",
+      "items": [
+        "skill:council",
+        "skill:santa-method"
+      ],
+      "gaps": [
+        "ECC reviews code and decisions; Van also attacks business and social claims"
+      ]
+    },
+    "wan": {
+      "fit": "partial",
+      "items": [
+        "skill:article-writing",
+        "skill:brand-voice"
+      ],
+      "gaps": [
+        "Indonesian-language editing, structure and narrative coaching are not covered"
+      ]
+    },
+    "zan": {
+      "fit": "partial",
+      "items": [
+        "agent:chief-of-staff",
+        "skill:operator-approval-loop",
+        "skill:counterparty-channel-discipline"
+      ],
+      "gaps": [
+        "CEO advice, energy checks, culture are not covered"
+      ],
+      "note": "chief-of-staff is an agent file (reference only). Approval loop and channel discipline are the design basis for WhatsApp reply-on-behalf."
+    },
+    "ran": {
+      "fit": "partial",
+      "items": [
+        "skill:market-research",
+        "skill:deep-research",
+        "skill:research-ops"
+      ],
+      "gaps": [
+        "deep-research needs firecrawl/exa MCP; Ran uses web_search/web_extract, so it stays reference only"
+      ]
+    },
+    "ran-business": {
+      "fit": "partial",
+      "items": [
+        "skill:market-research",
+        "skill:competitive-platform-analysis",
+        "skill:benchmark-methodology"
+      ]
+    },
+    "ran-brand": {
+      "fit": "partial",
+      "items": [
+        "skill:brand-voice",
+        "skill:benchmark-methodology"
+      ]
+    },
+    "ean": {
+      "fit": "gap",
+      "items": [],
+      "note": "ECC has no learning-coach content (its 'learning' items are agent self-learning)"
+    },
+    "han": {
+      "fit": "gap",
+      "items": [],
+      "note": "ECC health items are clinical software engineering, not wellness coaching"
+    },
+    "san": {
+      "fit": "gap",
+      "items": [],
+      "note": "no psychology or wellbeing content in ECC"
+    },
+    "qan": {
+      "fit": "gap",
+      "items": [],
+      "note": "no quotation or estimate content in ECC"
+    },
+    "lan": {
+      "fit": "gap",
+      "items": [],
+      "note": "no legal advisory content in ECC"
+    },
+    "lan-contract": {
+      "fit": "gap",
+      "items": [],
+      "note": "no contract content in ECC"
+    },
+    "lan-ip": {
+      "fit": "gap",
+      "items": [],
+      "note": "no IP content in ECC"
+    },
+    "lan-compliance": {
+      "fit": "gap",
+      "items": [],
+      "note": "only hipaa-compliance exists and it is US healthcare law; not relevant"
+    },
+    "ran-people": {
+      "fit": "gap",
+      "items": [],
+      "note": "intentionally unmapped: Ran-People is strictly for real persons"
     }
   },
   "imports": {
@@ -188,6 +327,86 @@
         "ian-plan"
       ],
       "patches": []
+    },
+    "contract-first": {
+      "for": [
+        "ian-api"
+      ],
+      "patches": []
+    },
+    "council": {
+      "for": [
+        "van"
+      ],
+      "patches": [
+        {
+          "find": "`~/.claude/notes`",
+          "replace": "`~/.hermes/notes`"
+        },
+        {
+          "find": "- or use `/save-session` if the outcome belongs in session memory",
+          "replace": "- or use the memory tool if the outcome belongs in persistent memory"
+        }
+      ]
+    },
+    "product-lens": {
+      "for": [
+        "pan"
+      ],
+      "patches": []
+    },
+    "market-research": {
+      "for": [
+        "ban",
+        "ran",
+        "ran-business"
+      ],
+      "patches": []
+    },
+    "investor-materials": {
+      "for": [
+        "ban"
+      ],
+      "patches": []
+    },
+    "competitive-platform-analysis": {
+      "for": [
+        "ban",
+        "ran-business"
+      ],
+      "patches": []
+    },
+    "benchmark-methodology": {
+      "for": [
+        "ran-business",
+        "ran-brand"
+      ],
+      "patches": []
+    },
+    "brand-voice": {
+      "for": [
+        "wan",
+        "ran-brand"
+      ],
+      "patches": []
+    },
+    "article-writing": {
+      "for": [
+        "wan"
+      ],
+      "patches": []
+    },
+    "operator-approval-loop": {
+      "for": [
+        "zan"
+      ],
+      "patches": []
+    },
+    "counterparty-channel-discipline": {
+      "for": [
+        "zan"
+      ],
+      "patches": []
     }
   },
   "not_imported": {
@@ -200,9 +419,19 @@
     "verification-loop": "Node/TS-centric commands and /verify; concept to be adapted into Ian L1, not imported",
     "orch-pipeline": "depends on the orch-* command family; concept to be adapted into Ian L1",
     "team-agent-orchestration": "git-branch based; concept only",
-    "operator-approval-loop": "Zan / WhatsApp phase, not Ian",
-    "deep-research": "needs firecrawl/exa MCP; Ran phase",
-    "research-ops": "Ran phase",
-    "hipaa-compliance": "Lan phase"
-  }
+    "deep-research": "needs firecrawl/exa MCP; Ran uses web_search/web_extract. Reference only",
+    "research-ops": "reference only",
+    "hipaa-compliance": "US healthcare law; not relevant to Indonesian HR platform. Not mapped",
+    "santa-method": "references Claude Code; concept (independent reviewer must not be the author) folded into Van and Ian standards",
+    "context-budget": "audits Claude Code agents/MCP/rules; concept folded into Ian standards",
+    "tdd-workflow": "21 KB, Node/TS commands; concept folded into Ian build loop",
+    "product-capability": "dev-oriented PRD to capability plan; reference only"
+  },
+  "not_assessed": [
+    "jan",
+    "ran-tech",
+    "ran-web",
+    "ran-app",
+    "ran-general"
+  ]
 }

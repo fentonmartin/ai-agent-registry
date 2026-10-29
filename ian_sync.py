@@ -251,6 +251,114 @@ def report_imports(latest_tag):
         print("  {:28s} {}{}".format(name, state, " (patched)" if e.get("patched") else ""))
 
 
+# ---- Persona standards (our own words, managed block) ----------------------
+STANDARDS_DIR = REPO_ROOT / "sync" / "standards"
+PERSONAS_DIR = REPO_ROOT / "personas"
+STD_BEGIN = "<!-- ian-sync:standards:begin -->"
+STD_END = "<!-- ian-sync:standards:end -->"
+IDENTITIES_FILE = REPO_ROOT / "config" / "identities.yaml"
+
+
+def _persona_name(text, path=None):
+    """Frontmatter name, else (local runtime sources) the file stem before ' \u2014 ', lowercased."""
+    m = re.search(r"^name:\s*([A-Za-z0-9_-]+)\s*$", text, re.MULTILINE)
+    if m:
+        return m.group(1)
+    if path is not None and " \u2014 " in Path(path).stem:
+        return re.sub(r"[^a-z0-9-]", "", Path(path).stem.split(" \u2014 ")[0].strip().lower()) or None
+    return None
+
+
+def _load_tokens():
+    """Read <USER>/<OUTPUT_DIR> style tokens from config/identities.yaml (gitignored)."""
+    toks = {}
+    try:
+        import yaml
+        data = yaml.safe_load(IDENTITIES_FILE.read_text(encoding="utf-8")) or {}
+        for section in data.values():
+            if isinstance(section, dict):
+                for k, v in section.items():
+                    if v is not None:
+                        toks["<{}>".format(str(k).upper())] = str(v)
+    except Exception:
+        pass
+    toks = {k: v for k, v in toks.items() if not (v.startswith("<") and v.endswith(">"))}  # ignore placeholders
+    if "--user" in sys.argv:
+        toks["<USER>"] = sys.argv[sys.argv.index("--user") + 1]
+    toks.setdefault("<OUTPUT_DIR>", "scratch/output")
+    return toks
+
+
+def upsert_standards_block(content, text):
+    """Insert or replace the managed block. Returns (new_content, changed)."""
+    block = "{}\n{}\n{}".format(STD_BEGIN, text.strip(), STD_END)
+    if STD_BEGIN in content and STD_END in content:
+        pre, rest = content.split(STD_BEGIN, 1)
+        _, post = rest.split(STD_END, 1)
+        new = pre + block + post
+    else:
+        new = content.rstrip() + "\n\n" + block + "\n"
+    return new, new != content
+
+
+def apply_personas(dry_run, local_dir=None):
+    """Registry mode: set ecc-mapping/ecc-fit on every mapped persona, upsert standards blocks.
+    Local mode (--local-source DIR): only upsert standards blocks (tokens resolved) into the
+    runtime source files, and repair a stale Ian roster. Dry run by default."""
+    mp = load_mapping()["mappings"]
+    toks = _load_tokens() if local_dir else {}
+    stds = {p.stem: p.read_text(encoding="utf-8") for p in STANDARDS_DIR.glob("*.md")}
+    root = Path(local_dir) if local_dir else PERSONAS_DIR
+    files = sorted(root.rglob("*.md")) if not local_dir else sorted(root.glob("*.md"))
+    registry_ian = (PERSONAS_DIR / "l1" / "ian.md")
+    report, seen = [], set()
+    backup_dir = BACKUP_ROOT / ("persona-apply-" + __import__("datetime").datetime.now().strftime("%y%m%d-%H%M%S"))
+    for fp in files:
+        text = fp.read_text(encoding="utf-8")
+        key = _persona_name(text, fp if local_dir else None)
+        if not key or key in seen:
+            continue
+        seen.add(key)
+        new, notes = text, []
+        if not local_dir and key in mp:
+            e = mp[key]
+            flow = "[" + ", ".join('"{}"'.format(x) for x in e["items"]) + "]"
+            new = set_frontmatter_field(new, "ecc-mapping", "ecc-mapping: " + flow)
+            new = set_frontmatter_field(new, "ecc-fit", "ecc-fit: " + e["fit"])
+        if local_dir and key == "ian" and "Jan-analyst" in text:
+            body = re.split(r"^---\s*$", registry_ian.read_text(encoding="utf-8"), maxsplit=2, flags=re.MULTILINE)[2]
+            for t, v in toks.items():
+                body = body.replace(t, v)
+            head = re.match(r"^(---\s*\n.*?\n---\s*\n)", text, re.DOTALL)
+            if head:
+                new = head.group(1) + body.lstrip("\n")
+                notes.append("repaired stale roster")
+        if key in stds:
+            std = stds[key]
+            for t, v in toks.items():
+                std = std.replace(t, v)
+            new, _ = upsert_standards_block(new, std)
+        if local_dir and new != text and re.search(r"<(USER|PRODUCT|COMPANY|EMAIL)>", new) and not re.search(r"<(USER|PRODUCT|COMPANY|EMAIL)>", text):
+            print("  {:16s} SKIPPED: unresolved identity token (pass --user NAME)".format(key))
+            continue
+        if new != text:
+            if not notes:
+                notes.append("standards" if key in stds else "ecc fields")
+            report.append((key, fp, new, ", ".join(notes)))
+    print("Persona apply {} ({}): {} file(s) would change".format(
+        "DRY RUN" if dry_run else "RESULT", "local source" if local_dir else "registry", len(report)))
+    for key, fp, new, note in report:
+        print("  {:16s} {}".format(key, note))
+    if dry_run:
+        return 0
+    backup_dir.mkdir(parents=True, exist_ok=True)
+    for key, fp, new, note in report:
+        (backup_dir / fp.name).write_text(fp.read_text(encoding="utf-8"), encoding="utf-8")
+        fp.write_text(new, encoding="utf-8")
+    print("  backup: {}".format(backup_dir))
+    return 0
+
+
 def get_ecc_latest_version():
     """Fetch latest release tag from ECC GitHub repo."""
     try:
@@ -610,11 +718,14 @@ def run_status():
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Usage: ian-sync.py --check | --write | --status | --import-skills [--yes]")
+        print("Usage: ian-sync.py --check | --write | --status | --import-skills [--yes] | --apply-personas [--local-source DIR] [--user NAME] [--yes]")
         sys.exit(1)
 
     cmd = sys.argv[1]
-    if cmd == "--import-skills":
+    if cmd == "--apply-personas":
+        ld = sys.argv[sys.argv.index("--local-source") + 1] if "--local-source" in sys.argv else None
+        sys.exit(apply_personas(dry_run="--yes" not in sys.argv, local_dir=ld))
+    elif cmd == "--import-skills":
         sys.exit(import_skills(dry_run="--yes" not in sys.argv))
     elif cmd == "--check":
         sys.exit(run_check())
@@ -624,5 +735,5 @@ if __name__ == "__main__":
         sys.exit(run_status())
     else:
         print("Unknown command: {}".format(cmd))
-        print("Usage: ian-sync.py --check | --write | --status | --import-skills [--yes]")
+        print("Usage: ian-sync.py --check | --write | --status | --import-skills [--yes] | --apply-personas [--local-source DIR] [--user NAME] [--yes]")
         sys.exit(1)
