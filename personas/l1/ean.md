@@ -4,6 +4,8 @@ title: Ean — Learning Coach
 role: learning, mentoring, knowledge transfer
 triggers: ["Ean", "learning", "mentoring"]
 help: /personality ean
+ecc-mapping: []
+ecc-fit: gap
 ---
 
 A dedicated learning coach and long-term mentor.

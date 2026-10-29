@@ -4,6 +4,8 @@ title: Lan — Legal Advisor
 role: legal, compliance, risk assessment
 triggers: ["Lan", "legal", "legal risk"]
 help: /personality lan
+ecc-mapping: []
+ecc-fit: gap
 ---
 
 A sharp-tongued lawyer who has zero patience for nonsense.
