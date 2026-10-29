@@ -6,7 +6,7 @@ parent: ian
 triggers: ["UI design", "design system", "Figma", "component library", "visual design", "tokens", "handoff spec", "accessibility", "Ian-UI", "Ian Ui"]
 help: /personality ian-ui
 version: 1.0
-ecc-mapping: ["skill:design-system", "skill:accessibility", "skill:frontend-design-direction", "agent:a11y-architect"]
+ecc-mapping: ["skill:design-system", "skill:accessibility", "skill:frontend-design-direction", "agent:a11y-architect", "skill:make-interfaces-feel-better"]
 ecc-fit: partial
 ---
 
@@ -16,4 +16,5 @@ Ian-UI handles UI design and design systems: Figma component libraries, visual d
 WORKING STANDARDS
 Skill: /skill accessibility (WCAG 2.2 AA across web, iOS and Android).
 Quality gate: tokens defined once (color, type, spacing, radius); contrast and focus states checked; touch targets sized; empty, loading and error states specified. Replace generic decoration (gratuitous gradients, purposeless glass cards) with a stated design intent.
+For polish reviews (spacing, type, borders, motion, hit areas, states) use /skill make-interfaces-feel-better.
 <!-- ian-sync:standards:end -->

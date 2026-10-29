@@ -16,7 +16,8 @@
         "skill:api-design",
         "skill:postgres-patterns",
         "skill:database-migrations",
-        "agent:database-reviewer"
+        "agent:database-reviewer",
+        "skill:contract-first"
       ],
       "gaps": [
         "ERD authoring",
@@ -29,7 +30,8 @@
       "items": [
         "skill:deployment-patterns",
         "skill:docker-patterns",
-        "skill:canary-watch"
+        "skill:canary-watch",
+        "skill:production-audit"
       ],
       "gaps": [
         "alert thresholds and paging"
@@ -40,7 +42,8 @@
       "items": [
         "skill:security-review",
         "skill:security-bounty-hunter",
-        "agent:security-reviewer"
+        "agent:security-reviewer",
+        "skill:production-audit"
       ],
       "gaps": [
         "active pentest execution",
@@ -74,7 +77,8 @@
         "skill:design-system",
         "skill:accessibility",
         "skill:frontend-design-direction",
-        "agent:a11y-architect"
+        "agent:a11y-architect",
+        "skill:make-interfaces-feel-better"
       ],
       "gaps": [
         "Figma component libraries",
@@ -116,7 +120,8 @@
       "items": [
         "skill:team-agent-orchestration",
         "skill:orch-pipeline",
-        "agent:loop-operator"
+        "agent:loop-operator",
+        "skill:parallel-execution-optimizer"
       ],
       "gaps": [
         "non-code roles on the board (ECC orchestration is git-branch based)"
@@ -152,7 +157,8 @@
       "items": [
         "skill:market-research",
         "skill:investor-materials",
-        "skill:competitive-platform-analysis"
+        "skill:competitive-platform-analysis",
+        "skill:competitive-report-structure"
       ],
       "gaps": [
         "unit economics, 2030 scenarios, asymmetric-idea framing are not covered"
@@ -206,7 +212,8 @@
       "items": [
         "skill:market-research",
         "skill:competitive-platform-analysis",
-        "skill:benchmark-methodology"
+        "skill:benchmark-methodology",
+        "skill:competitive-report-structure"
       ]
     },
     "ran-brand": {
@@ -407,6 +414,32 @@
         "zan"
       ],
       "patches": []
+    },
+    "production-audit": {
+      "for": [
+        "ian-devops",
+        "ian-secred"
+      ],
+      "patches": []
+    },
+    "parallel-execution-optimizer": {
+      "for": [
+        "ian-alpha"
+      ],
+      "patches": []
+    },
+    "competitive-report-structure": {
+      "for": [
+        "ban",
+        "ran-business"
+      ],
+      "patches": []
+    },
+    "make-interfaces-feel-better": {
+      "for": [
+        "ian-ui"
+      ],
+      "patches": []
     }
   },
   "not_imported": {
@@ -425,7 +458,13 @@
     "santa-method": "references Claude Code; concept (independent reviewer must not be the author) folded into Van and Ian standards",
     "context-budget": "audits Claude Code agents/MCP/rules; concept folded into Ian standards",
     "tdd-workflow": "21 KB, Node/TS commands; concept folded into Ian build loop",
-    "product-capability": "dev-oriented PRD to capability plan; reference only"
+    "product-capability": "dev-oriented PRD to capability plan; reference only",
+    "ai-first-engineering": "principles already covered by the Ian build loop; its hiring-signals section does not apply",
+    "architecture-decision-records": "writes to docs/adr/, which conflicts with our project-folder protocol. Needs a decision on where decisions are recorded",
+    "dashboard-builder": "Grafana and SigNoz only; our monitoring stack is not defined yet",
+    "email-ops": "reference for Zan; Hermes has no mail surface wired yet",
+    "loop-design-check": "built on Claude Code /loop and /goal; stall rules already folded into Ian-Alpha",
+    "intent-driven-development": "17 KB, large fixed context cost; acceptance-criteria idea already in Ian-Plan"
   },
   "not_assessed": [
     "jan",

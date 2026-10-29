@@ -36,5 +36,8 @@ jobs:
       - name: Run sync script check
         run: python sync/sync_personas.py --check --identities config/identities.example.yaml
 
+      - name: Check ECC mapping consistency
+        run: python ian_sync.py --audit
+
       - name: Run unit tests
         run: python -m unittest discover -s tests -v

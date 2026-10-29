@@ -6,7 +6,7 @@ parent: ian
 triggers: ["api", "erd", "desain data"]
 help: /personality ian-api
 version: 1.0
-ecc-mapping: ["skill:api-design", "skill:postgres-patterns", "skill:database-migrations", "agent:database-reviewer"]
+ecc-mapping: ["skill:api-design", "skill:postgres-patterns", "skill:database-migrations", "agent:database-reviewer", "skill:contract-first"]
 ecc-fit: partial
 ---
 

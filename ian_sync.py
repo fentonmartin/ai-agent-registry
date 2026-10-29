@@ -359,6 +359,63 @@ def apply_personas(dry_run, local_dir=None):
     return 0
 
 
+# ---- Offline consistency audit (no network, safe for CI) -------------------
+def run_audit():
+    """Check that mapping, imports and standards agree with each other and with the persona files."""
+    mp = load_mapping()
+    M, I, NI = mp["mappings"], mp["imports"], mp.get("not_imported", {})
+    std = {p.stem: p.read_text(encoding="utf-8") for p in STANDARDS_DIR.glob("*.md")}
+    keys = set()
+    for fp in PERSONAS_DIR.rglob("*.md"):
+        k = _persona_name(fp.read_text(encoding="utf-8"))
+        if k:
+            keys.add(k)
+    problems = []
+    for p in M:
+        if p not in keys:
+            problems.append("mapping persona has no file: {}".format(p))
+    assessed = set(M) | set(mp.get("not_assessed", []))
+    for k in sorted(keys - assessed):
+        problems.append("persona neither mapped nor listed in not_assessed: {}".format(k))
+    listed = set()
+    for p, e in M.items():
+        if e["fit"] == "gap" and e["items"]:
+            problems.append("{} is fit=gap but has items".format(p))
+        for it in e["items"]:
+            kind, name = it.split(":", 1)
+            if kind == "skill":
+                listed.add(name)
+                if name not in I and name not in NI:
+                    problems.append("{} -> skill:{} has no import or not_imported decision".format(p, name))
+    for sk, spec in I.items():
+        if sk not in listed:
+            problems.append("imported skill in no mapping: {}".format(sk))
+        if sk in NI:
+            problems.append("skill both imported and not_imported: {}".format(sk))
+        for f in spec["for"]:
+            if sk not in std.get(f, ""):
+                problems.append("skill {} not named in standards of {}".format(sk, f))
+            elif f not in M or "skill:" + sk not in M[f]["items"]:
+                problems.append("skill {} not listed in mapping of {}".format(sk, f))
+    for k, t in std.items():
+        for sk in re.findall(r"/skill ([a-z0-9-]+)", t):
+            if sk not in I:
+                problems.append("standards of {} name a skill that is not imported: {}".format(k, sk))
+        if k not in keys:
+            problems.append("standards file has no persona: {}".format(k))
+    for fp in PERSONAS_DIR.rglob("*.md"):
+        t = fp.read_text(encoding="utf-8")
+        if "ecc-mapping" in t and _persona_name(t) not in M:
+            problems.append("persona has ecc-mapping but is not in the mapping file: {}".format(fp.name))
+    if problems:
+        print("ian-sync AUDIT: {} problem(s)".format(len(problems)))
+        for x in problems:
+            print("  - " + x)
+        return 1
+    print("ian-sync AUDIT: ok ({} personas mapped, {} imports, {} standards)".format(len(M), len(I), len(std)))
+    return 0
+
+
 def get_ecc_latest_version():
     """Fetch latest release tag from ECC GitHub repo."""
     try:
@@ -447,7 +504,7 @@ def populate_l3_under_l2(l2_path, l2_key):
         return False
 
     # L3 will be populated. Create L3 sub-files.
-    l3_base = Path("/d/GitHub/ai-agent-registry/l3") / l2_key
+    l3_base = REPO_ROOT / "l3" / l2_key
     l3_base.mkdir(parents=True, exist_ok=True)
 
     group_to_short = {
@@ -638,9 +695,11 @@ def run_write():
         l2_path.write_text(content, encoding="utf-8")
         updated.append(l2_path)
 
-    # Populate L3 where eligible
+    # L3 is opt-in: only created with --allow-l3 (see docs/ECC-MAPPING.md)
     l3_eligible_files = []
     for l2_path in l2_files:
+        if "--allow-l3" not in sys.argv:
+            break
         result = populate_l3_under_l2(l2_path, l2_path.stem)
         if result:
             l3_eligible_files.append(l2_path)
@@ -655,31 +714,7 @@ def run_write():
     print("L3 populated under: {}".format(len(l3_eligible_files)))
     print("Backups stored at: {}".format(BACKUP_ROOT))
 
-    # Git commit if in a git repo
-    try:
-        stat_result = subprocess.run(
-            ["git", "status", "--short"], cwd="/d/GitHub/ai-agent-registry",
-            capture_output=True, text=True, timeout=10,
-        )
-        if stat_result.returncode == 0 and stat_result.stdout.strip():
-            diff_result = subprocess.run(
-                ["git", "diff", "--stat"], cwd="/d/GitHub/ai-agent-registry",
-                capture_output=True, text=True, timeout=10,
-            )
-            if diff_result.stdout.strip():
-                add_cmds = ["git", "add"]
-                add_cmds.append("--")
-                for p in updated:
-                    add_cmds.append(str(p))
-                subprocess.run(add_cmds, cwd=str(REPO_ROOT), capture_output=True, timeout=30)
-                subprocess.run(
-                    ["git", "commit", "-m",
-                     "ian-sync: add version metadata & ECC mappings (user-approved)"],
-                    cwd="/d/GitHub/ai-agent-registry", capture_output=True, timeout=30,
-                )
-                print("  -> Changes committed to git repo.")
-    except Exception as e:
-        print("  -> Git commit skipped: {}".format(e))
+    print("  -> Not committed. Review `git diff`, then commit manually.")
 
     print("\n  ian-sync complete. Review the changes above.\n")
 
@@ -700,7 +735,7 @@ def run_status():
         print("  {}: version={}, ecc-mapping={}".format(l2_path.name, has_version, ecc_map))
 
     # L3 directory
-    l3_dir = Path("/d/GitHub/ai-agent-registry/l3")
+    l3_dir = REPO_ROOT / "l3"
     if l3_dir.exists():
         l3_files = list(l3_dir.glob("*.md"))
         print("\n--- L3 files ({}):".format(len(l3_files)))
@@ -718,11 +753,13 @@ def run_status():
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Usage: ian-sync.py --check | --write | --status | --import-skills [--yes] | --apply-personas [--local-source DIR] [--user NAME] [--yes]")
+        print("Usage: ian-sync.py --check | --audit | --write [--allow-l3] | --status | --import-skills [--yes] | --apply-personas [--local-source DIR] [--user NAME] [--yes]")
         sys.exit(1)
 
     cmd = sys.argv[1]
-    if cmd == "--apply-personas":
+    if cmd == "--audit":
+        sys.exit(run_audit())
+    elif cmd == "--apply-personas":
         ld = sys.argv[sys.argv.index("--local-source") + 1] if "--local-source" in sys.argv else None
         sys.exit(apply_personas(dry_run="--yes" not in sys.argv, local_dir=ld))
     elif cmd == "--import-skills":
@@ -735,5 +772,5 @@ if __name__ == "__main__":
         sys.exit(run_status())
     else:
         print("Unknown command: {}".format(cmd))
-        print("Usage: ian-sync.py --check | --write | --status | --import-skills [--yes] | --apply-personas [--local-source DIR] [--user NAME] [--yes]")
+        print("Usage: ian-sync.py --check | --audit | --write [--allow-l3] | --status | --import-skills [--yes] | --apply-personas [--local-source DIR] [--user NAME] [--yes]")
         sys.exit(1)

@@ -61,7 +61,7 @@ Not assessed in this pass: Jan, Ran-Tech, Ran-Web, Ran-App, Ran-General.
 - Context discipline (from `context-budget`): skills load on demand, never preloaded.
 - Zan outbound approval (from `operator-approval-loop`): draft, show exact text, send only after approval of that exact text, keep a record.
 
-## Imported skills (21)
+## Imported skills (25)
 
 Verbatim from v2.2.3, MIT. Patches only where a path or command does not exist in Hermes.
 
@@ -84,6 +84,10 @@ Verbatim from v2.2.3, MIT. Patches only where a path or command does not exist i
 - `benchmark-methodology`: ran-business, ran-brand
 - `brand-voice`: wan, ran-brand
 - `article-writing`: wan
+- `production-audit`: ian-devops, ian-secred
+- `parallel-execution-optimizer`: ian-alpha
+- `competitive-report-structure`: ban, ran-business
+- `make-interfaces-feel-better`: ian-ui
 - `operator-approval-loop`: zan
 - `counterparty-channel-discipline`: zan
 
@@ -105,6 +109,12 @@ Verbatim from v2.2.3, MIT. Patches only where a path or command does not exist i
 - `context-budget`: audits Claude Code agents/MCP/rules; concept folded into Ian standards
 - `tdd-workflow`: 21 KB, Node/TS commands; concept folded into Ian build loop
 - `product-capability`: dev-oriented PRD to capability plan; reference only
+- `ai-first-engineering`: principles already covered by the Ian build loop; its hiring-signals section does not apply
+- `architecture-decision-records`: writes to docs/adr/, which conflicts with our project-folder protocol. Needs a decision on where decisions are recorded
+- `dashboard-builder`: Grafana and SigNoz only; our monitoring stack is not defined yet
+- `email-ops`: reference for Zan; Hermes has no mail surface wired yet
+- `loop-design-check`: built on Claude Code /loop and /goal; stall rules already folded into Ian-Alpha
+- `intent-driven-development`: 17 KB, large fixed context cost; acceptance-criteria idea already in Ian-Plan
 
 ## Known gaps
 
