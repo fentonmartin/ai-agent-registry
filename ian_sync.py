@@ -44,18 +44,6 @@ KEYWORD_GROUPS = {
     "orchestration": {"orchestrate", "koordinasikan", "assign specialist", "track checkpoint", "exit criteria", "board"},
 }
 
-# ECC mapping table: Ian L2 key -> list of ECC agent/skill names
-ECC_MAPPING_TABLE = {
-    "ian-api": ["ecc api-design"],
-    "ian-devops": ["ecc deployment-pipeline"],
-    "ian-secblue": ["ecc security-monitoring"],
-    "ian-secred": ["ecc security-audit"],
-    "ian-ux": ["ecc ux-research"],
-    "ian-ui": ["ecc design-system"],
-    "ian-flutter": ["ecc mobile"],
-    "ian-plan": ["ecc project-plan"],
-    "ian-alpha": ["ecc orchestrator"],
-}
 
 
 def parse_frontmatter(path):
@@ -96,8 +84,55 @@ def detect_keyword_groups(triggers_list, description_text):
     return found
 
 
+import json
+
+MAPPING_FILE = REPO_ROOT / "sync" / "ecc-mapping.json"
+
+
+def load_mapping():
+    """Load the verified ECC mapping (source of truth). See docs/ECC-MAPPING.md."""
+    return json.loads(MAPPING_FILE.read_text(encoding="utf-8"))
+
+
 def get_ecc_mapping(ian_l2_key):
-    return ECC_MAPPING_TABLE.get(ian_l2_key, [])
+    entry = load_mapping()["mappings"].get(ian_l2_key)
+    return entry["items"] if entry else []
+
+
+def get_ecc_fit(ian_l2_key):
+    entry = load_mapping()["mappings"].get(ian_l2_key)
+    return entry["fit"] if entry else None
+
+
+def fetch_ecc_tree():
+    """Return the set of file paths in the live ECC repo, or None if unreachable."""
+    try:
+        r = subprocess.run(
+            ["gh", "api", "repos/{}/git/trees/main?recursive=1".format(GITHUB_REPO),
+             "--jq", ".tree[] | select(.type==\"blob\") | .path"],
+            capture_output=True, text=True, timeout=60,
+        )
+        if r.returncode == 0 and r.stdout.strip():
+            return set(r.stdout.split())
+    except Exception:
+        pass
+    return None
+
+
+def item_path(item):
+    kind, name = item.split(":", 1)
+    return {"skill": "skills/{}/SKILL.md", "agent": "agents/{}.md",
+            "command": "commands/{}.md"}[kind].format(name)
+
+
+def verify_mapping(tree):
+    """Return list of (persona, item) that no longer exist in the live ECC tree."""
+    missing = []
+    for persona, entry in load_mapping()["mappings"].items():
+        for item in entry["items"]:
+            if item_path(item) not in tree:
+                missing.append((persona, item))
+    return missing
 
 
 def get_ecc_latest_version():
@@ -149,12 +184,23 @@ def add_version_if_missing(content, fields):
     return insert_frontmatter_line(content, "version: 1.0")
 
 
-def add_ecc_mapping(content, fields, mapping):
-    """Add ecc-mapping: inside the frontmatter if not already present."""
-    if "ecc-mapping" in fields:
+def set_frontmatter_field(content, key, value_line):
+    """Replace 'key: ...' inside the frontmatter if present, else insert it. Body untouched."""
+    m = re.match(r"^(---\r?\n)(.*?)(\r?\n---)", content, re.DOTALL)
+    if not m:
         return content
+    block = m.group(2)
+    pat = re.compile(r"^{}:.*$".format(re.escape(key)), re.MULTILINE)
+    if pat.search(block):
+        block = pat.sub(lambda _m: value_line, block, count=1)
+        return m.group(1) + block + content[m.end(2):]
+    return insert_frontmatter_line(content, value_line)
+
+
+def add_ecc_mapping(content, fields, mapping):
+    """Set ecc-mapping inside the frontmatter (replaces a stale value, never touches body)."""
     flow = "[" + ", ".join('"{}"'.format(x) for x in mapping) + "]"
-    return insert_frontmatter_line(content, "ecc-mapping: " + flow)
+    return set_frontmatter_field(content, "ecc-mapping", "ecc-mapping: " + flow)
 
 
 def populate_l3_under_l2(l2_path, l2_key):
@@ -282,6 +328,20 @@ def run_check():
     # Config.yaml L3 status
     print("\n--- config.yaml L3 children: currently empty (children: {})")
 
+    # Live verification of the mapping against ECC
+    tree = fetch_ecc_tree()
+    broken = []
+    if tree is None:
+        print("\n--- ECC live check: SKIPPED (could not reach GitHub)")
+    else:
+        broken = verify_mapping(tree)
+        if broken:
+            print("\n--- ECC live check: {} item(s) MISSING (review docs/ECC-MAPPING.md):".format(len(broken)))
+            for persona, item in broken:
+                print("  MISSING {} -> {}".format(persona, item))
+        else:
+            print("\n--- ECC live check: all mapped items exist in ECC {}".format(ecc_latest))
+
     # Summary
     missing_count = sum(1 for l2 in l2_files if "version" not in parse_frontmatter(l2))
     l3_eligible_count = sum(
@@ -342,9 +402,11 @@ def run_write():
 
         # Add ecc-mapping if missing
         ecc_map = get_ecc_mapping(key)
-        if ecc_map:
+        fit = get_ecc_fit(key)
+        if fit:
             content = add_ecc_mapping(content, fields, ecc_map)
-            print("  -> Added ecc-mapping: {} to {}".format(ecc_map, l2_path.name))
+            content = set_frontmatter_field(content, "ecc-fit", "ecc-fit: " + fit)
+            print("  -> ecc-mapping {} (fit: {}) -> {}".format(ecc_map, fit, l2_path.name))
 
         # Write back
         l2_path.write_text(content, encoding="utf-8")

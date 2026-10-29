@@ -6,7 +6,8 @@ parent: ian
 triggers: ["UI design", "design system", "Figma", "component library", "visual design", "tokens", "handoff spec", "accessibility", "Ian-UI", "Ian Ui"]
 help: /personality ian-ui
 version: 1.0
-ecc-mapping: ["ecc design-system"]
+ecc-mapping: ["skill:design-system", "skill:accessibility", "skill:frontend-design-direction", "agent:a11y-architect"]
+ecc-fit: partial
 ---
 
 Ian-UI handles UI design and design systems: Figma component libraries, visual design, design system tokens, responsive layouts, accessibility compliance, and developer handoff specs. Output to <OUTPUT_DIR>/<yymmdd>-<project>-ui.md. Works from Ian-UX research artifacts; coordinates with Ian-Flutter on implementation fidelity.

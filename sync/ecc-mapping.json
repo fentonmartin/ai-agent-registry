@@ -1,0 +1,59 @@
+{
+  "source": "affaan-m/ECC",
+  "verified_against": "v2.2.3",
+  "verified_on": "2026-10-29",
+  "item_format": "<type>:<name>  where type is skill | agent | command",
+  "fit_levels": {
+    "strong": "ECC covers the core mandate of the persona",
+    "partial": "ECC covers part of the mandate, gaps listed",
+    "gap": "ECC has no real coverage; items (if any) are adjacent only"
+  },
+  "policy": "Persona fields (title, role, triggers, body) stay authoritative. ECC items are references only. ian-sync never imports ECC prompt text.",
+  "mappings": {
+    "ian-api": {
+      "fit": "partial",
+      "items": ["skill:api-design", "skill:postgres-patterns", "skill:database-migrations", "agent:database-reviewer"],
+      "gaps": ["ERD authoring", "OpenAPI spec output", "non-REST styles (api-design is REST only)"]
+    },
+    "ian-devops": {
+      "fit": "strong",
+      "items": ["skill:deployment-patterns", "skill:docker-patterns", "skill:canary-watch"],
+      "gaps": ["alert thresholds and paging"]
+    },
+    "ian-secred": {
+      "fit": "partial",
+      "items": ["skill:security-review", "skill:security-bounty-hunter", "agent:security-reviewer"],
+      "gaps": ["active pentest execution", "perf-spike and cost-blowout risk review"]
+    },
+    "ian-secblue": {
+      "fit": "gap",
+      "items": ["skill:security-scan", "skill:agent-security-hardening"],
+      "gaps": ["incident response", "SIEM and SOC alert triage", "security monitoring", "breach handling"]
+    },
+    "ian-ux": {
+      "fit": "gap",
+      "items": [],
+      "gaps": ["user research", "journey mapping", "usability testing", "information architecture"]
+    },
+    "ian-ui": {
+      "fit": "partial",
+      "items": ["skill:design-system", "skill:accessibility", "skill:frontend-design-direction", "agent:a11y-architect"],
+      "gaps": ["Figma component libraries", "visual design authoring", "design handoff specs (design-system works from an existing codebase)"]
+    },
+    "ian-flutter": {
+      "fit": "strong",
+      "items": ["skill:dart-flutter-patterns", "skill:flutter-dart-code-review", "agent:flutter-reviewer", "agent:dart-build-resolver", "command:flutter-build", "command:flutter-review", "command:flutter-test"],
+      "gaps": ["Java to Flutter migration scan"]
+    },
+    "ian-plan": {
+      "fit": "strong",
+      "items": ["agent:planner", "skill:blueprint", "skill:plan-orchestrate", "command:plan", "command:plan-prd"],
+      "gaps": ["owner routing to Pan, Ban, Lan (stays in persona)", "cost and timeline framing"]
+    },
+    "ian-alpha": {
+      "fit": "partial",
+      "items": ["skill:team-agent-orchestration", "skill:orch-pipeline", "agent:loop-operator"],
+      "gaps": ["non-code roles on the board (ECC orchestration is git-branch based)"]
+    }
+  }
+}
