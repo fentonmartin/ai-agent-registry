@@ -104,11 +104,11 @@ def get_ecc_fit(ian_l2_key):
     return entry["fit"] if entry else None
 
 
-def fetch_ecc_tree():
-    """Return the set of file paths in the live ECC repo, or None if unreachable."""
+def fetch_ecc_tree(ref="main"):
+    """Return the set of file paths in ECC at <ref> (release tag), or None if unreachable."""
     try:
         r = subprocess.run(
-            ["gh", "api", "repos/{}/git/trees/main?recursive=1".format(GITHUB_REPO),
+            ["gh", "api", "repos/{}/git/trees/{}?recursive=1".format(GITHUB_REPO, ref),
              "--jq", ".tree[] | select(.type==\"blob\") | .path"],
             capture_output=True, text=True, timeout=60,
         )
@@ -133,6 +133,122 @@ def verify_mapping(tree):
             if item_path(item) not in tree:
                 missing.append((persona, item))
     return missing
+
+
+# ---- ECC skill import (verbatim copy + lockfile) ---------------------------
+import hashlib
+import base64
+
+HERMES_HOME = Path(os.environ.get("HERMES_HOME") or (Path(os.environ.get("LOCALAPPDATA", str(Path.home()))) / "hermes"))
+ECC_SKILLS_DIR = HERMES_HOME / "skills" / "ecc"
+LOCK_FILE = ECC_SKILLS_DIR / ".ecc-lock.json"
+
+
+def _sha(b):
+    return hashlib.sha256(b).hexdigest()
+
+
+def fetch_file(path, ref):
+    r = subprocess.run(
+        ["gh", "api", "repos/{}/contents/{}?ref={}".format(GITHUB_REPO, path, ref), "--jq", ".content"],
+        capture_output=True, timeout=60)
+    if r.returncode != 0 or not r.stdout.strip():
+        return None
+    return base64.b64decode(r.stdout.strip())
+
+
+def _local_hashes(dest):
+    out = {}
+    if dest.exists():
+        for fp in sorted(dest.rglob("*")):
+            if fp.is_file():
+                out[fp.relative_to(dest).as_posix()] = _sha(fp.read_bytes())
+    return out
+
+
+def import_skills(dry_run):
+    """Copy mapped ECC skills into HERMES_HOME/skills/ecc verbatim (plus declared patches).
+    Never overwrites a skill whose local files differ from the lockfile (user edited it)."""
+    mp = load_mapping()
+    imports = mp.get("imports", {})
+    tag = get_ecc_latest_version()
+    if tag == "unknown":
+        print("Cannot determine ECC release tag. Aborting.")
+        return 1
+    tree = fetch_ecc_tree(tag)
+    if not tree:
+        print("Cannot read ECC tree at {}. Aborting.".format(tag))
+        return 1
+    lock = json.loads(LOCK_FILE.read_text(encoding="utf-8")) if LOCK_FILE.exists() else {"skills": {}}
+    results = []
+    for name, spec in imports.items():
+        prefix = "skills/{}/".format(name)
+        files = sorted(p for p in tree if p.startswith(prefix))
+        if not files:
+            results.append((name, "MISSING at {}".format(tag)))
+            continue
+        dest = ECC_SKILLS_DIR / name
+        entry = lock["skills"].get(name)
+        if entry and dest.exists() and _local_hashes(dest) != entry["local_sha256"]:
+            results.append((name, "SKIPPED: local files modified since import"))
+            continue
+        up, loc, blobs = {}, {}, {}
+        failed = False
+        for fp in files:
+            rel = fp[len(prefix):]
+            data = fetch_file(fp, tag)
+            if data is None:
+                results.append((name, "FETCH FAILED: " + fp))
+                failed = True
+                break
+            up[rel] = _sha(data)
+            if rel == "SKILL.md":
+                for pt in spec.get("patches", []):
+                    txt = data.decode("utf-8")
+                    if pt["find"] not in txt:
+                        results.append((name, "PATCH TARGET NOT FOUND: " + pt["find"]))
+                        failed = True
+                        break
+                    data = txt.replace(pt["find"], pt["replace"]).encode("utf-8")
+                if failed:
+                    break
+            loc[rel] = _sha(data)
+            blobs[rel] = data
+        if failed:
+            continue
+        if entry and entry["upstream_sha256"] == up and entry.get("tag") == tag and dest.exists():
+            results.append((name, "up to date ({})".format(tag)))
+            continue
+        if not dry_run:
+            for rel, data in blobs.items():
+                tgt = dest / rel
+                tgt.parent.mkdir(parents=True, exist_ok=True)
+                tgt.write_bytes(data)
+            lock["skills"][name] = {"tag": tag, "for": spec.get("for", []), "patched": bool(spec.get("patches")),
+                                    "upstream_sha256": up, "local_sha256": loc}
+        results.append((name, ("would import " if dry_run else "imported ") + "{} file(s) from {}".format(len(blobs), tag)))
+    if not dry_run:
+        ECC_SKILLS_DIR.mkdir(parents=True, exist_ok=True)
+        lock.update({"ecc_repo": GITHUB_REPO, "ecc_tag": tag})
+        LOCK_FILE.write_text(json.dumps(lock, indent=2), encoding="utf-8")
+    print("ECC import {} (tag {}) -> {}".format("DRY RUN" if dry_run else "RESULT", tag, ECC_SKILLS_DIR))
+    for name, msg in results:
+        print("  {:28s} {}".format(name, msg))
+    return 0
+
+
+def report_imports(latest_tag):
+    """Read-only drift report for --check."""
+    print("\n--- ECC imported skills ---")
+    if not LOCK_FILE.exists():
+        print("  none imported yet (run --import-skills)")
+        return
+    lock = json.loads(LOCK_FILE.read_text(encoding="utf-8"))
+    print("  imported from {}; latest release {}{}".format(
+        lock.get("ecc_tag"), latest_tag, "  ** UPDATE AVAILABLE **" if lock.get("ecc_tag") != latest_tag else ""))
+    for name, e in lock["skills"].items():
+        state = "ok" if _local_hashes(ECC_SKILLS_DIR / name) == e["local_sha256"] else "LOCALLY MODIFIED"
+        print("  {:28s} {}{}".format(name, state, " (patched)" if e.get("patched") else ""))
 
 
 def get_ecc_latest_version():
@@ -329,7 +445,7 @@ def run_check():
     print("\n--- config.yaml L3 children: currently empty (children: {})")
 
     # Live verification of the mapping against ECC
-    tree = fetch_ecc_tree()
+    tree = fetch_ecc_tree(ecc_latest if ecc_latest != "unknown" else "main")
     broken = []
     if tree is None:
         print("\n--- ECC live check: SKIPPED (could not reach GitHub)")
@@ -341,6 +457,8 @@ def run_check():
                 print("  MISSING {} -> {}".format(persona, item))
         else:
             print("\n--- ECC live check: all mapped items exist in ECC {}".format(ecc_latest))
+
+    report_imports(ecc_latest)
 
     # Summary
     missing_count = sum(1 for l2 in l2_files if "version" not in parse_frontmatter(l2))
@@ -492,11 +610,13 @@ def run_status():
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Usage: ian-sync.py --check | --write | --status")
+        print("Usage: ian-sync.py --check | --write | --status | --import-skills [--yes]")
         sys.exit(1)
 
     cmd = sys.argv[1]
-    if cmd == "--check":
+    if cmd == "--import-skills":
+        sys.exit(import_skills(dry_run="--yes" not in sys.argv))
+    elif cmd == "--check":
         sys.exit(run_check())
     elif cmd == "--write":
         sys.exit(run_write())
@@ -504,5 +624,5 @@ if __name__ == "__main__":
         sys.exit(run_status())
     else:
         print("Unknown command: {}".format(cmd))
-        print("Usage: ian-sync.py --check | --write | --status")
+        print("Usage: ian-sync.py --check | --write | --status | --import-skills [--yes]")
         sys.exit(1)

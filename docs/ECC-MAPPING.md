@@ -2,7 +2,7 @@
 name: ECC Mapping Reference
 date: 2026-10-29
 version: v2026.0.1
-status: Verified against ECC v2.2.3
+status: Verified against ECC release tag v2.2.3 (not main)
 ---
 
 # ECC Mapping Reference (Ian L2)
@@ -31,7 +31,7 @@ Every item below was checked against the live ECC repository (`affaan-m/ECC`, re
 | Ian-SecRed | partial | 3 |
 | Ian-UI | partial | 4 |
 | Ian-Alpha | partial | 3 |
-| Ian-SecBlue | gap | 2 (adjacent only) |
+| Ian-SecBlue | gap | 0 |
 | Ian-UX | gap | 0 |
 
 ## Per-persona detail
@@ -84,9 +84,9 @@ Every item below was checked against the live ECC repository (`affaan-m/ECC`, re
 - Gap: ECC orchestration is git-branch based. Ian-Alpha's board also covers non-code roles, so the persona keeps its own board format.
 
 ### Ian-SecBlue (gap)
-- Adjacent only: `skill:security-scan` (scans agent config via AgentShield), `skill:agent-security-hardening`.
-- No ECC coverage for incident response, SIEM and SOC triage, monitoring, or breach handling.
-- Do not present these two items as a real mapping.
+- No real ECC coverage: incident response, SIEM and SOC triage, monitoring, breach handling.
+- `skill:security-scan` only scans `.claude/` config (AgentShield). `skill:agent-security-hardening` exists on `main` but not in release v2.2.3. Neither is mapped.
+- `ecc-mapping` stays empty. That is the correct result.
 
 ### Ian-UX (gap)
 - Nothing in ECC covers user research, journey mapping, usability testing, or information architecture.
@@ -111,3 +111,32 @@ The first mapping was name guesses. Checked against the ECC tree, 7 of 9 did not
 3. Report MISSING items, new ECC release version, and personas whose `ecc-fit` is `gap`.
 4. On `--write`, set `ecc-mapping` and `ecc-fit` in each persona frontmatter. Nothing else.
 5. Any new mapping or fit change is added to this file first, then to the JSON.
+
+## Import policy (what lands in Hermes)
+
+Imports are copied verbatim from the release tag (never `main`) into `skills/ecc/` in the Hermes home. A lockfile (`skills/ecc/.ecc-lock.json`) stores the upstream and local hashes of every file.
+
+Imported now (10 skills, MIT, copyright notice retained by ECC's LICENSE):
+- Ian-API: `api-design`, `postgres-patterns`, `database-migrations`
+- Ian-DevOps: `deployment-patterns`, `canary-watch` (one patch: log path `~/.claude/` to `~/.hermes/`)
+- Ian-SecRed: `security-review`
+- Ian-UI: `accessibility`
+- Ian-Flutter: `dart-flutter-patterns`, `flutter-dart-code-review`
+- Ian-Plan: `blueprint`
+
+Rules enforced by `ian_sync.py --import-skills`:
+1. Dry run by default. `--yes` is required to write.
+2. Only the `skills/ecc/` namespace is touched. Existing Hermes skills are never overwritten.
+3. A skill whose local files differ from the lockfile is SKIPPED, not overwritten (local edits win).
+4. A patch whose target text is not found aborts that skill. Upstream changes are never patched blindly.
+5. Re-running with no upstream change is a no-op.
+6. `--check` reports a new ECC release and any locally modified skill.
+
+Deliberately not imported, with reason (also in `sync/ecc-mapping.json` under `not_imported`):
+- `security-scan`: Claude-specific. `docker-patterns`: tied to ECC's own compose files.
+- `design-system`, `frontend-design-direction`: reference only (ECC slash commands).
+- `security-bounty-hunter`: bounty-triage framing does not match the SecRed mandate.
+- `plan-orchestrate`, `verification-loop`, `orch-pipeline`, `team-agent-orchestration`: concepts to adapt for Ian L1, not to import as-is.
+- `operator-approval-loop` (Zan), `deep-research` and `research-ops` (Ran), `hipaa-compliance` (Lan): later phases.
+
+Hooks: ECC ships two Hermes-native hooks (`config-protection`, `check-console-log`). They are NOT installed. Installing them means editing `config.yaml`, which needs a separate decision.

@@ -6,7 +6,7 @@ parent: ian
 triggers: ["incident response", "monitoring", "SIEM", "SOC", "blue-team", "breach", "defensive", "security incident", "Ian-SecBlue", "Ian SecBlue"]
 help: /personality ian-secblue
 version: 1.0
-ecc-mapping: ["skill:security-scan", "skill:agent-security-hardening"]
+ecc-mapping: []
 ecc-fit: gap
 ---
 

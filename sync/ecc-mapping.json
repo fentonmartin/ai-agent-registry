@@ -1,6 +1,6 @@
 {
   "source": "affaan-m/ECC",
-  "verified_against": "v2.2.3",
+  "verified_against": "v2.2.3 (release tag, not main)",
   "verified_on": "2026-10-29",
   "item_format": "<type>:<name>  where type is skill | agent | command",
   "fit_levels": {
@@ -12,48 +12,197 @@
   "mappings": {
     "ian-api": {
       "fit": "partial",
-      "items": ["skill:api-design", "skill:postgres-patterns", "skill:database-migrations", "agent:database-reviewer"],
-      "gaps": ["ERD authoring", "OpenAPI spec output", "non-REST styles (api-design is REST only)"]
+      "items": [
+        "skill:api-design",
+        "skill:postgres-patterns",
+        "skill:database-migrations",
+        "agent:database-reviewer"
+      ],
+      "gaps": [
+        "ERD authoring",
+        "OpenAPI spec output",
+        "non-REST styles (api-design is REST only)"
+      ]
     },
     "ian-devops": {
       "fit": "strong",
-      "items": ["skill:deployment-patterns", "skill:docker-patterns", "skill:canary-watch"],
-      "gaps": ["alert thresholds and paging"]
+      "items": [
+        "skill:deployment-patterns",
+        "skill:docker-patterns",
+        "skill:canary-watch"
+      ],
+      "gaps": [
+        "alert thresholds and paging"
+      ]
     },
     "ian-secred": {
       "fit": "partial",
-      "items": ["skill:security-review", "skill:security-bounty-hunter", "agent:security-reviewer"],
-      "gaps": ["active pentest execution", "perf-spike and cost-blowout risk review"]
+      "items": [
+        "skill:security-review",
+        "skill:security-bounty-hunter",
+        "agent:security-reviewer"
+      ],
+      "gaps": [
+        "active pentest execution",
+        "perf-spike and cost-blowout risk review"
+      ]
     },
     "ian-secblue": {
       "fit": "gap",
-      "items": ["skill:security-scan", "skill:agent-security-hardening"],
-      "gaps": ["incident response", "SIEM and SOC alert triage", "security monitoring", "breach handling"]
+      "items": [],
+      "gaps": [
+        "incident response",
+        "SIEM and SOC alert triage",
+        "security monitoring",
+        "breach handling"
+      ],
+      "note": "skill:security-scan only scans .claude/ config via AgentShield; agent-security-hardening exists on main but not in tag v2.2.3. Neither is a real fit."
     },
     "ian-ux": {
       "fit": "gap",
       "items": [],
-      "gaps": ["user research", "journey mapping", "usability testing", "information architecture"]
+      "gaps": [
+        "user research",
+        "journey mapping",
+        "usability testing",
+        "information architecture"
+      ]
     },
     "ian-ui": {
       "fit": "partial",
-      "items": ["skill:design-system", "skill:accessibility", "skill:frontend-design-direction", "agent:a11y-architect"],
-      "gaps": ["Figma component libraries", "visual design authoring", "design handoff specs (design-system works from an existing codebase)"]
+      "items": [
+        "skill:design-system",
+        "skill:accessibility",
+        "skill:frontend-design-direction",
+        "agent:a11y-architect"
+      ],
+      "gaps": [
+        "Figma component libraries",
+        "visual design authoring",
+        "design handoff specs (design-system works from an existing codebase)"
+      ]
     },
     "ian-flutter": {
       "fit": "strong",
-      "items": ["skill:dart-flutter-patterns", "skill:flutter-dart-code-review", "agent:flutter-reviewer", "agent:dart-build-resolver", "command:flutter-build", "command:flutter-review", "command:flutter-test"],
-      "gaps": ["Java to Flutter migration scan"]
+      "items": [
+        "skill:dart-flutter-patterns",
+        "skill:flutter-dart-code-review",
+        "agent:flutter-reviewer",
+        "agent:dart-build-resolver",
+        "command:flutter-build",
+        "command:flutter-review",
+        "command:flutter-test"
+      ],
+      "gaps": [
+        "Java to Flutter migration scan"
+      ]
     },
     "ian-plan": {
       "fit": "strong",
-      "items": ["agent:planner", "skill:blueprint", "skill:plan-orchestrate", "command:plan", "command:plan-prd"],
-      "gaps": ["owner routing to Pan, Ban, Lan (stays in persona)", "cost and timeline framing"]
+      "items": [
+        "agent:planner",
+        "skill:blueprint",
+        "skill:plan-orchestrate",
+        "command:plan",
+        "command:plan-prd"
+      ],
+      "gaps": [
+        "owner routing to Pan, Ban, Lan (stays in persona)",
+        "cost and timeline framing"
+      ]
     },
     "ian-alpha": {
       "fit": "partial",
-      "items": ["skill:team-agent-orchestration", "skill:orch-pipeline", "agent:loop-operator"],
-      "gaps": ["non-code roles on the board (ECC orchestration is git-branch based)"]
+      "items": [
+        "skill:team-agent-orchestration",
+        "skill:orch-pipeline",
+        "agent:loop-operator"
+      ],
+      "gaps": [
+        "non-code roles on the board (ECC orchestration is git-branch based)"
+      ]
     }
+  },
+  "imports": {
+    "api-design": {
+      "for": [
+        "ian-api"
+      ],
+      "patches": []
+    },
+    "postgres-patterns": {
+      "for": [
+        "ian-api"
+      ],
+      "patches": []
+    },
+    "database-migrations": {
+      "for": [
+        "ian-api"
+      ],
+      "patches": []
+    },
+    "deployment-patterns": {
+      "for": [
+        "ian-devops"
+      ],
+      "patches": []
+    },
+    "canary-watch": {
+      "for": [
+        "ian-devops"
+      ],
+      "patches": [
+        {
+          "find": "~/.claude/canary-watch.log",
+          "replace": "~/.hermes/canary-watch.log"
+        }
+      ]
+    },
+    "security-review": {
+      "for": [
+        "ian-secred"
+      ],
+      "patches": []
+    },
+    "accessibility": {
+      "for": [
+        "ian-ui"
+      ],
+      "patches": []
+    },
+    "dart-flutter-patterns": {
+      "for": [
+        "ian-flutter"
+      ],
+      "patches": []
+    },
+    "flutter-dart-code-review": {
+      "for": [
+        "ian-flutter"
+      ],
+      "patches": []
+    },
+    "blueprint": {
+      "for": [
+        "ian-plan"
+      ],
+      "patches": []
+    }
+  },
+  "not_imported": {
+    "security-scan": "scans .claude/ config with AgentShield, Claude-specific",
+    "docker-patterns": "built around ECC's own docker/plugin-setup compose files",
+    "design-system": "examples use ECC slash commands that do not exist in Hermes; reference only",
+    "frontend-design-direction": "ECC-specific design direction; reference only",
+    "security-bounty-hunter": "bounty-triage framing ('does this pay?') does not match SecRed's review mandate; reference only",
+    "plan-orchestrate": "emits ECC slash commands, useless outside ECC",
+    "verification-loop": "Node/TS-centric commands and /verify; concept to be adapted into Ian L1, not imported",
+    "orch-pipeline": "depends on the orch-* command family; concept to be adapted into Ian L1",
+    "team-agent-orchestration": "git-branch based; concept only",
+    "operator-approval-loop": "Zan / WhatsApp phase, not Ian",
+    "deep-research": "needs firecrawl/exa MCP; Ran phase",
+    "research-ops": "Ran phase",
+    "hipaa-compliance": "Lan phase"
   }
 }
