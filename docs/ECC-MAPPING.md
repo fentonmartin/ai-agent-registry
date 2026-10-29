@@ -61,7 +61,7 @@ Not assessed in this pass: Jan, Ran-Tech, Ran-Web, Ran-App, Ran-General.
 - Context discipline (from `context-budget`): skills load on demand, never preloaded.
 - Zan outbound approval (from `operator-approval-loop`): draft, show exact text, send only after approval of that exact text, keep a record.
 
-## Imported skills (25)
+## Imported skills (26)
 
 Verbatim from v2.2.3, MIT. Patches only where a path or command does not exist in Hermes.
 
@@ -88,6 +88,7 @@ Verbatim from v2.2.3, MIT. Patches only where a path or command does not exist i
 - `parallel-execution-optimizer`: ian-alpha
 - `competitive-report-structure`: ban, ran-business
 - `make-interfaces-feel-better`: ian-ui
+- `seo`: ran-web
 - `operator-approval-loop`: zan
 - `counterparty-channel-discipline`: zan
 
@@ -130,3 +131,16 @@ Verbatim from v2.2.3, MIT. Patches only where a path or command does not exist i
 - `--apply-personas [--local-source DIR] [--user NAME] [--yes]`: sets `ecc-mapping` and `ecc-fit` (registry) and upserts the standards block between `ian-sync:standards` markers. Dry run by default. Refuses to write unresolved identity tokens. Idempotent.
 - `--write [--yes]`: legacy Ian L2 metadata writer.
 - Order for changes: update this file, then `sync/ecc-mapping.json`, then `sync/standards/`, then run the commands.
+
+## Native Hermes skills used by personas
+
+Not from ECC. Listed in `native_skills` in the mapping file and checked by `--audit` (must be installed and named in the persona standards).
+
+- `grounded-citations`: ran, ran-tech, ran-general
+- `web-perf`: ran-web
+- `blocked-page-recovery`: ran-web
+
+## Own material, no external source
+
+- Ian-SecBlue: contain, fix, learn incident runbook, written by us. ECC has no incident response or SIEM material. The `ai-sec-incident` skill in `berani-ai-skills` was read and informed the three-move shape, but it is tied to that suite's `.ai-skills/` folder layout and its paths, so it was not imported.
+- Ran-Tech, Ran-App, Ran-General: no ECC fit. Ran-Tech would need the Context7 MCP server for ECC `documentation-lookup`, which is not configured.
