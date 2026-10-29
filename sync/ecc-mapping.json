@@ -271,7 +271,9 @@
     "ran-web": {
       "fit": "partial",
       "items": [
-        "skill:seo"
+        "skill:x-api",
+        "skill:seo",
+        "native:web-perf"
       ],
       "gaps": [
         "domain, DNS, SSL and tech-stack lookups",
@@ -320,6 +322,42 @@
         "ECC testing skills are stack specific (Node/TS, Playwright, per-language); only e2e-testing is imported"
       ],
       "note": "TDD, debugging and exploratory browser testing come from Hermes native skills."
+    },
+    "ian-opt": {
+      "fit": "strong",
+      "items": [
+        "skill:parallel-execution-optimizer",
+        "native:web-perf"
+      ],
+      "gaps": []
+    },
+    "ian-qa-endtoend": {
+      "fit": "strong",
+      "items": [
+        "skill:e2e-testing"
+      ],
+      "gaps": []
+    },
+    "ian-qa-security": {
+      "fit": "strong",
+      "items": [
+        "skill:security-review"
+      ],
+      "gaps": []
+    },
+    "ian-ux-accessibility": {
+      "fit": "strong",
+      "items": [
+        "skill:accessibility"
+      ],
+      "gaps": []
+    },
+    "ran-web-seo": {
+      "fit": "strong",
+      "items": [
+        "skill:seo"
+      ],
+      "gaps": []
     }
   },
   "imports": {
@@ -505,6 +543,12 @@
         "ian-qa"
       ],
       "patches": []
+    },
+    "x-api": {
+      "for": [
+        "ran-web"
+      ],
+      "patches": []
     }
   },
   "not_imported": {
@@ -547,7 +591,8 @@
     },
     "web-perf": {
       "for": [
-        "ran-web"
+        "ran-web",
+        "ian-opt"
       ],
       "why": "Hermes skill: Core Web Vitals and Lighthouse audits"
     },
