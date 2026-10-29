@@ -1,142 +1,122 @@
 ---
 name: ECC Mapping Reference
 date: 2026-10-29
-version: v2026.0.1
+version: v2026.0.2
 status: Verified against ECC release tag v2.2.3 (not main)
 ---
 
-# ECC Mapping Reference (Ian L2)
+# ECC Mapping Reference
 
-Single reference for `ian-sync`. Machine-readable twin: `sync/ecc-mapping.json` (source of truth for the script; this file explains the reasoning).
+Single reference for `ian-sync`. Machine-readable twin: `sync/ecc-mapping.json` (the script reads it; this file explains it).
 
-Every item below was checked against the live ECC repository (`affaan-m/ECC`, release v2.2.3): the file exists and its description was read. Nothing is mapped by name guess.
+Every item was checked against ECC release v2.2.3: the file exists and its description was read. Nothing is mapped by name guess. The first draft guessed names and 7 of 9 did not exist; that draft was discarded.
 
-## Rules
+## Principles
 
-1. Persona fields (`title`, `role`, `triggers`, body) stay authoritative. ECC is a reference, never a replacement.
-2. `ian-sync` writes two frontmatter fields only: `ecc-mapping` (list of `type:name`) and `ecc-fit` (`strong`, `partial`, `gap`).
-3. `ian-sync` never copies ECC prompt text into a persona.
-4. A `gap` is a valid result. Do not invent a mapping to fill it.
-5. On every run, each item is re-checked against the live ECC tree. Missing items are reported as MISSING and are never auto-removed. A human decides.
-6. When a persona's own choices differ from an ECC pattern (for example the fixed Flutter stack in Ian-Flutter), the persona wins.
+1. Persona fields (`title`, `role`, `triggers`, body) stay authoritative. ECC is a reference.
+2. ECC prompt text is never pasted into a persona. Each persona gets a short WORKING STANDARDS block written in our own words (`sync/standards/<key>.md`), which names the ECC skills to load on demand with `/skill <name>`.
+3. ECC skills are imported verbatim from the release tag into `skills/ecc/` in the Hermes home, with a lockfile. Local edits always win.
+4. A `gap` is a valid result. A mapping is never invented to fill it.
+5. Domains that ECC does not cover (wellness, legal advice, quotation, learning coaching, real-person research) stay untouched.
 
-## Fit summary
+## Fit per persona
 
-| Persona | Fit | ECC items |
-|---|---|---|
-| Ian-Flutter | strong | 7 |
-| Ian-DevOps | strong | 3 |
-| Ian-Plan | strong | 5 |
-| Ian-API | partial | 4 |
-| Ian-SecRed | partial | 3 |
-| Ian-UI | partial | 4 |
-| Ian-Alpha | partial | 3 |
-| Ian-SecBlue | gap | 0 |
-| Ian-UX | gap | 0 |
+| Persona | Fit | ECC items | Imported skills used |
+|---|---|---|---|
+| Ian | partial | 5 | - |
+| Ian-Plan | strong | 5 | blueprint |
+| Ian-Alpha | partial | 3 | - |
+| Ian-API | partial | 4 | api-design, contract-first, database-migrations, postgres-patterns |
+| Ian-DevOps | strong | 3 | canary-watch, deployment-patterns |
+| Ian-SecRed | partial | 3 | security-review |
+| Ian-SecBlue | gap | 0 | - |
+| Ian-UI | partial | 4 | accessibility |
+| Ian-UX | gap | 0 | - |
+| Ian-Flutter | strong | 7 | dart-flutter-patterns, flutter-dart-code-review |
+| Pan | partial | 4 | product-lens |
+| Ban | partial | 3 | competitive-platform-analysis, investor-materials, market-research |
+| Van | partial | 2 | council |
+| Wan | partial | 2 | article-writing, brand-voice |
+| Zan | partial | 3 | counterparty-channel-discipline, operator-approval-loop |
+| Ran | partial | 3 | market-research |
+| Ran-Business | partial | 3 | benchmark-methodology, competitive-platform-analysis, market-research |
+| Ran-Brand | partial | 2 | benchmark-methodology, brand-voice |
+| Ran-People | gap | 0 | - |
+| Ean | gap | 0 | - |
+| Han | gap | 0 | - |
+| San | gap | 0 | - |
+| Qan | gap | 0 | - |
+| Lan | gap | 0 | - |
+| Lan-Contract | gap | 0 | - |
+| Lan-IP | gap | 0 | - |
+| Lan-Compliance | gap | 0 | - |
 
-## Per-persona detail
+Not assessed in this pass: Jan, Ran-Tech, Ran-Web, Ran-App, Ran-General.
 
-### Ian-Flutter (strong)
-- `skill:dart-flutter-patterns`: null safety, immutable state, state management, GoRouter, networking.
-- `skill:flutter-dart-code-review`: library-agnostic review checklist.
-- `agent:flutter-reviewer`, `agent:dart-build-resolver`: review and build error repair.
-- `command:flutter-build`, `command:flutter-review`, `command:flutter-test`.
-- Gap: Java to Flutter migration scan is not in ECC. Ian-Flutter keeps it.
-- Note: ECC lists several state managers; Ian-Flutter's fixed stack stays authoritative.
+## Concepts adapted, not copied
 
-### Ian-DevOps (strong)
-- `skill:deployment-patterns`: CI/CD, Docker, health checks, rollback, production readiness. Direct match to the release, rollback, and health-check mandate.
-- `skill:docker-patterns`: Dockerfile and Compose patterns, container security.
-- `skill:canary-watch`: post-deploy smoke and canary verification.
-- Gap: alert thresholds and paging.
+- Ian L1 build loop: size the request, plan, GATE 1 (approval), build tests-first, verify with PASS or FAIL, review, GATE 2 (confirm before commit or deploy), remember. Based on `orch-pipeline`, `verification-loop`, `tdd-workflow`; rewritten for our work (not Node/TS, not Claude Code commands).
+- Stall rules for Ian-Alpha (from `loop-operator`): stop after two checkpoints without progress.
+- Independent review (from `santa-method`): the reviewer is never the author. Placed in Van and Ian.
+- Context discipline (from `context-budget`): skills load on demand, never preloaded.
+- Zan outbound approval (from `operator-approval-loop`): draft, show exact text, send only after approval of that exact text, keep a record.
 
-### Ian-Plan (strong)
-- `agent:planner`: planning specialist for complex features.
-- `skill:blueprint`: one-line objective to step-by-step plan with dependency graph.
-- `skill:plan-orchestrate`: decompose a plan into steps.
-- `command:plan`: waits for user confirmation before any code. Fits the go/no-go gate.
-- `command:plan-prd`: lean problem-first PRD.
-- Gap: routing work packages to Pan, Ban, Lan and cost/timeline framing stay in the persona.
+## Imported skills (21)
 
-### Ian-API (partial)
-- `skill:api-design`: REST only (naming, status codes, pagination, errors, versioning).
-- `skill:postgres-patterns`, `skill:database-migrations`, `agent:database-reviewer`: schema design and migrations, PostgreSQL focus.
-- Gaps: ERD authoring, OpenAPI spec output, non-REST styles.
+Verbatim from v2.2.3, MIT. Patches only where a path or command does not exist in Hermes.
 
-### Ian-SecRed (partial)
-- `skill:security-review`: security checklist (auth, input, secrets, endpoints).
-- `skill:security-bounty-hunter`: remotely reachable, reportable vulnerabilities.
-- `agent:security-reviewer`: vulnerability detection in code.
-- Gaps: active pentest execution, perf-spike and cost-blowout review (not security topics).
+- `api-design`: ian-api
+- `postgres-patterns`: ian-api
+- `database-migrations`: ian-api
+- `deployment-patterns`: ian-devops
+- `canary-watch`: ian-devops (patched)
+- `security-review`: ian-secred
+- `accessibility`: ian-ui
+- `dart-flutter-patterns`: ian-flutter
+- `flutter-dart-code-review`: ian-flutter
+- `blueprint`: ian-plan
+- `contract-first`: ian-api
+- `council`: van (patched)
+- `product-lens`: pan
+- `market-research`: ban, ran, ran-business
+- `investor-materials`: ban
+- `competitive-platform-analysis`: ban, ran-business
+- `benchmark-methodology`: ran-business, ran-brand
+- `brand-voice`: wan, ran-brand
+- `article-writing`: wan
+- `operator-approval-loop`: zan
+- `counterparty-channel-discipline`: zan
 
-### Ian-UI (partial)
-- `skill:design-system`: extract or audit design tokens from a codebase.
-- `skill:accessibility`: WCAG 2.2 AA across web, iOS, Android.
-- `skill:frontend-design-direction`: product-specific UI direction.
-- `agent:a11y-architect`: WCAG 2.2 architecture.
-- Gaps: Figma libraries, visual design authoring, handoff specs.
-- Excluded: `frontend-a11y` (React and Next.js only, too narrow for this persona).
+## Not imported, with reason
 
-### Ian-Alpha (partial)
-- `skill:team-agent-orchestration`: owners, kanban state, branch isolation, merge gates.
-- `skill:orch-pipeline`: gated research, plan, TDD, review, commit pipeline with two human gates.
-- `agent:loop-operator`: monitor loops and intervene when they stall.
-- Gap: ECC orchestration is git-branch based. Ian-Alpha's board also covers non-code roles, so the persona keeps its own board format.
+- `security-scan`: scans .claude/ config with AgentShield, Claude-specific
+- `docker-patterns`: built around ECC's own docker/plugin-setup compose files
+- `design-system`: examples use ECC slash commands that do not exist in Hermes; reference only
+- `frontend-design-direction`: ECC-specific design direction; reference only
+- `security-bounty-hunter`: bounty-triage framing ('does this pay?') does not match SecRed's review mandate; reference only
+- `plan-orchestrate`: emits ECC slash commands, useless outside ECC
+- `verification-loop`: Node/TS-centric commands and /verify; concept to be adapted into Ian L1, not imported
+- `orch-pipeline`: depends on the orch-* command family; concept to be adapted into Ian L1
+- `team-agent-orchestration`: git-branch based; concept only
+- `deep-research`: needs firecrawl/exa MCP; Ran uses web_search/web_extract. Reference only
+- `research-ops`: reference only
+- `hipaa-compliance`: US healthcare law; not relevant to Indonesian HR platform. Not mapped
+- `santa-method`: references Claude Code; concept (independent reviewer must not be the author) folded into Van and Ian standards
+- `context-budget`: audits Claude Code agents/MCP/rules; concept folded into Ian standards
+- `tdd-workflow`: 21 KB, Node/TS commands; concept folded into Ian build loop
+- `product-capability`: dev-oriented PRD to capability plan; reference only
 
-### Ian-SecBlue (gap)
-- No real ECC coverage: incident response, SIEM and SOC triage, monitoring, breach handling.
-- `skill:security-scan` only scans `.claude/` config (AgentShield). `skill:agent-security-hardening` exists on `main` but not in release v2.2.3. Neither is mapped.
-- `ecc-mapping` stays empty. That is the correct result.
+## Known gaps
 
-### Ian-UX (gap)
-- Nothing in ECC covers user research, journey mapping, usability testing, or information architecture.
-- Closest research tooling (`deep-research`, `research-ops`) belongs to Ran, not Ian-UX.
-
-## Found during verification, for later personas (not applied)
-
-- `agent:chief-of-staff`: triages email, Slack, LINE, Messenger and drafts replies. Candidate for Zan.
-- `skill:operator-approval-loop`: approval contract for agent-drafted outbound messages. Directly relevant to the WhatsApp reply-on-behalf design.
-- `skill:deep-research`, `skill:research-ops`: cited research workflows. Candidates for Ran.
-- `skill:hipaa-compliance`: candidate for Lan-Compliance.
-- Ian L1 level: `skill:orch-pipeline`, `skill:verification-loop`, `skill:tdd-workflow`.
-
-## Corrections from the first draft
-
-The first mapping was name guesses. Checked against the ECC tree, 7 of 9 did not exist: `deployment-pipeline`, `security-monitoring`, `security-audit`, `ux-research`, `mobile`, `project-plan`, `orchestrator`. Only `api-design` and `design-system` were real. This file replaces that draft.
+- Ian-SecBlue: no ECC coverage for incident response, SIEM or monitoring. Needs another source.
+- Ian-UX: no ECC coverage for user research. Needs another source.
+- ECC agent and command items are listed as references only. Hermes has no equivalent format, so they are not installed.
+- Hooks: ECC ships two Hermes-native hooks (`config-protection`, `check-console-log`). Not installed: this needs an edit to `config.yaml` and a separate decision.
 
 ## How ian-sync uses this
 
-1. Load `sync/ecc-mapping.json`.
-2. Fetch the live ECC tree and confirm every item exists (skills at `skills/<name>/SKILL.md`, agents at `agents/<name>.md`, commands at `commands/<name>.md`).
-3. Report MISSING items, new ECC release version, and personas whose `ecc-fit` is `gap`.
-4. On `--write`, set `ecc-mapping` and `ecc-fit` in each persona frontmatter. Nothing else.
-5. Any new mapping or fit change is added to this file first, then to the JSON.
-
-## Import policy (what lands in Hermes)
-
-Imports are copied verbatim from the release tag (never `main`) into `skills/ecc/` in the Hermes home. A lockfile (`skills/ecc/.ecc-lock.json`) stores the upstream and local hashes of every file.
-
-Imported now (10 skills, MIT, copyright notice retained by ECC's LICENSE):
-- Ian-API: `api-design`, `postgres-patterns`, `database-migrations`
-- Ian-DevOps: `deployment-patterns`, `canary-watch` (one patch: log path `~/.claude/` to `~/.hermes/`)
-- Ian-SecRed: `security-review`
-- Ian-UI: `accessibility`
-- Ian-Flutter: `dart-flutter-patterns`, `flutter-dart-code-review`
-- Ian-Plan: `blueprint`
-
-Rules enforced by `ian_sync.py --import-skills`:
-1. Dry run by default. `--yes` is required to write.
-2. Only the `skills/ecc/` namespace is touched. Existing Hermes skills are never overwritten.
-3. A skill whose local files differ from the lockfile is SKIPPED, not overwritten (local edits win).
-4. A patch whose target text is not found aborts that skill. Upstream changes are never patched blindly.
-5. Re-running with no upstream change is a no-op.
-6. `--check` reports a new ECC release and any locally modified skill.
-
-Deliberately not imported, with reason (also in `sync/ecc-mapping.json` under `not_imported`):
-- `security-scan`: Claude-specific. `docker-patterns`: tied to ECC's own compose files.
-- `design-system`, `frontend-design-direction`: reference only (ECC slash commands).
-- `security-bounty-hunter`: bounty-triage framing does not match the SecRed mandate.
-- `plan-orchestrate`, `verification-loop`, `orch-pipeline`, `team-agent-orchestration`: concepts to adapt for Ian L1, not to import as-is.
-- `operator-approval-loop` (Zan), `deep-research` and `research-ops` (Ran), `hipaa-compliance` (Lan): later phases.
-
-Hooks: ECC ships two Hermes-native hooks (`config-protection`, `check-console-log`). They are NOT installed. Installing them means editing `config.yaml`, which needs a separate decision.
+- `--check`: reads the mapping, verifies every item exists at the latest ECC release, reports a new release, missing items, and locally modified imports.
+- `--import-skills [--yes]`: copies mapped skills from the release tag. Dry run by default. Skips any skill whose local files changed. Aborts a skill if a patch target is missing.
+- `--apply-personas [--local-source DIR] [--user NAME] [--yes]`: sets `ecc-mapping` and `ecc-fit` (registry) and upserts the standards block between `ian-sync:standards` markers. Dry run by default. Refuses to write unresolved identity tokens. Idempotent.
+- `--write [--yes]`: legacy Ian L2 metadata writer.
+- Order for changes: update this file, then `sync/ecc-mapping.json`, then `sync/standards/`, then run the commands.
