@@ -179,7 +179,10 @@ agent:
               ran-web, ran-app, ran-general]
         lan: [lan-contract, lan-compliance, lan-ip]
     L3:
-      members: []
+      children:
+        ian-qa: [ian-qa-endtoend, ian-qa-security]
+        ian-ux: [ian-ux-accessibility]
+        ran-web: [ran-web-seo]
     L4:
       members: []
     TEAM:

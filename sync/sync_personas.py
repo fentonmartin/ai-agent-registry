@@ -334,6 +334,17 @@ def validate_hierarchy(personas: dict[str, tuple[str, str, str]]) -> int:
                 for c in child_list:
                     referenced.add(c)
 
+    l3 = hierarchy.get("L3", {})
+    if isinstance(l3, dict):
+        l3_children = l3.get("children") or {}
+        if isinstance(l3_children, dict):
+            for parent, child_list in l3_children.items():
+                referenced.add(parent)
+                if isinstance(child_list, str):
+                    child_list = [child_list]
+                for c in child_list:
+                    referenced.add(c)
+
     # 3. Check referenced keys exist as personas
     for ref in sorted(referenced):
         if ref not in personas:
