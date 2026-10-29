@@ -54,7 +54,7 @@ Most L1s do NOT have L2 children — they handle their domain end-to-end.
 
 Narrow-expertise personas parented to their respective L1.
 
-#### Ian L2 (10 specialists) — Engineering
+#### Ian L2 (11 specialists) — Engineering
 
 | Key | Display Name | Specialization |
 |-----|-------------|----------------|
@@ -68,6 +68,7 @@ Narrow-expertise personas parented to their respective L1.
 | `ian-ux` | Ian-UX | UX research, user journeys, usability testing with users |
 | `ian-ui` | Ian-UI | Visual design, Figma, design handoff |
 | `ian-qa` | Ian-QA | Test strategy, test automation, release verification (software projects only) |
+| `ian-opt` | Ian-Opt | Optimization engineering — web performance, parallel execution |
 
 #### Ran L2 (7 specialists) — Research
 
@@ -99,8 +100,14 @@ Narrow-expertise personas parented to their respective L1.
 
 ### L3 — Sub-specialists
 
-Reserved for future expansion (e.g., Ian-Flutter splitting into
-Ian-Flutter-Android / Ian-Flutter-iOS).
+Narrow-expertise personas parented to an L2 specialist. Created on demand when an L2's scope becomes too broad. No minimum sub-area count required.
+
+| Key | Display Name | Parent | Specialization |
+|-----|-------------|--------|----------------|
+| `ian-qa-endtoend` | Ian-QA-EndToEnd | ian-qa | E2E test automation — Playwright, Page Object Model, CI integration |
+| `ian-qa-security` | Ian-QA-Security | ian-qa | Pre-release security gate — OWASP Top 10, auth testing, vulnerability verification |
+| `ian-ux-accessibility` | Ian-UX-Accessibility | ian-ux | Accessibility design & audit — WCAG 2.2 AA, ARIA, screen reader, keyboard nav |
+| `ran-web-seo` | Ran-Web-SEO | ran-web | Technical SEO research & audit — crawlability, Core Web Vitals, schema markup |
 
 ### L4 — External Tools / APIs
 
@@ -167,7 +174,7 @@ agent:
     L2:
       children:
         ian: [ian-api, ian-devops, ian-flutter, ian-plan, ian-alpha,
-              ian-secred, ian-secblue, ian-ux, ian-ui, ian-qa]
+              ian-secred, ian-secblue, ian-ux, ian-ui, ian-qa, ian-opt]
         ran: [ran-people, ran-brand, ran-tech, ran-business,
               ran-web, ran-app, ran-general]
         lan: [lan-contract, lan-compliance, lan-ip]
@@ -190,10 +197,10 @@ somewhere in the hierarchy.
 
 ## Counting the Personas
 
-Current total: **33 personas**
+Current total: **38 personas**
 - L0: 2 (Zan, Jan)
 - L1: 11 (Ian, Ban, Ean, Han, Lan, Pan, Qan, Ran, San, Van, Wan)
-- L2: 20 (10 under Ian, 7 under Ran, 3 under Lan)
-- L3: 0 (reserved)
+- L2: 21 (11 under Ian, 7 under Ran, 3 under Lan)
+- L3: 4 (Ian-QA-EndToEnd, Ian-QA-Security, Ian-UX-Accessibility, Ran-Web-SEO)
 - L4: External tools (not personified)
 - TEAM: Variable (external collaborators)

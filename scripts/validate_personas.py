@@ -82,6 +82,8 @@ def layer_of(rel):
         return parts[0].upper(), None
     if len(parts) == 3 and parts[0] == "l2":
         return "L2", parts[1]
+    if len(parts) == 3 and parts[0] == "l3":
+        return "L3", parts[1]
     return None, None
 
 
@@ -119,7 +121,7 @@ def validate_file(path, persona_dir, l1_keys, sensitive=()):
     elif layer in ("L0", "L1"):
         if parent:
             err(f"{layer} personas must not declare a parent (found '{parent}')")
-    else:
+    elif layer == "L2":
         if not parent:
             err(f"L2 persona must declare 'parent: {folder_parent}'")
         elif parent != folder_parent:
@@ -131,6 +133,9 @@ def validate_file(path, persona_dir, l1_keys, sensitive=()):
                 f"{', '.join(sorted(PARENTS_WITH_CHILDREN))})")
         if parent and not name.startswith(f"{parent}-"):
             err(f"L2 key '{name}' must start with '{parent}-'")
+    elif layer == "L3":
+        if not parent:
+            err(f"L3 persona must declare 'parent: {folder_parent}'")
 
     triggers = fm.get("triggers")
     if triggers is not None and not isinstance(triggers, list):
@@ -177,7 +182,7 @@ def main():
         print("NOTE: no private sensitive patterns configured "
               f"({SENSITIVE_FILE.relative_to(REPO_ROOT).as_posix()} or SENSITIVE_PATTERNS).")
     errors = []
-    counts = {"L0": 0, "L1": 0, "L2": 0}
+    counts = {"L0": 0, "L1": 0, "L2": 0, "L3": 0}
     files = sorted(PERSONA_DIR.rglob("*.md"))
     for f in files:
         layer, errs = validate_file(f, PERSONA_DIR, l1_keys, sensitive)
@@ -191,7 +196,7 @@ def main():
             print(f"  ERROR: {e}")
         return 1
     print(f"All {len(files)} persona files validated successfully "
-          f"(L0={counts['L0']}, L1={counts['L1']}, L2={counts['L2']}).")
+          f"(L0={counts['L0']}, L1={counts['L1']}, L2={counts['L2']}, L3={counts['L3']}).")
     return 0
 
 
