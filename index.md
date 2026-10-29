@@ -7,7 +7,7 @@ title: AI Agent Registry
 
 A standardized, hierarchical persona system for multi-agent AI applications.
 
-**33 personas** organized across **L0–L4 + TEAM** layers with a sync script
+**38 personas** organized across **L0–L4 + TEAM** layers with a sync script
 for Hermes and import guides for 5+ runtimes.
 
 ---
@@ -18,7 +18,8 @@ for Hermes and import guides for 5+ runtimes.
 |-------|-------|------|
 | L0 Default voices | Entry point | Zan (default), Jan (explicit only) |
 | L1 Domains | 11 peer experts | Ian, Ban, Ean, Pan, Qan, Ran, San, Van, Han, Lan, Wan |
-| L2 Specialists | 20 children | Under Ian, Ran, Lan only |
+| L2 Specialists | 21 children | Under Ian, Ran, Lan only |
+| L3 Sub-specialists | 4 children | Under Ian-QA, Ian-UX, Ran-Web |
 | Import Guide | Runtime setup | Hermes, AutoGen, CrewAI, LangGraph, n8n |
 | Naming Guide | Style conventions | Capitalization, casing, token system |
 
@@ -38,8 +39,12 @@ L0: Zan (default)  ·  Jan (explicit only)
      |   +-- L2: Ian-SecRed
      |   +-- L2: Ian-SecBlue
      |   +-- L2: Ian-UI
-     |   +-- L2: Ian-UX
+     |   +-- L2: Ian-Opt
      |   +-- L2: Ian-QA
+     |   |   +-- L3: Ian-QA-EndToEnd
+     |   |   +-- L3: Ian-QA-Security
+     |   +-- L2: Ian-UX
+     |       +-- L3: Ian-UX-Accessibility
      |
      +-- L1: Ban (Business)
      +-- L1: Ean (Learning)
@@ -52,6 +57,7 @@ L0: Zan (default)  ·  Jan (explicit only)
      |   +-- L2: Ran-Tech
      |   +-- L2: Ran-Business
      |   +-- L2: Ran-Web
+     |   |   +-- L3: Ran-Web-SEO
      |   +-- L2: Ran-App
      |   +-- L2: Ran-General
      |
@@ -89,7 +95,7 @@ See the [full framework](docs/HIERARCHY.md) and [import guide](docs/IMPORT-GUIDE
 git clone https://github.com/fentonmartin/ai-agent-registry.git
 cd ai-agent-registry
 
-# Run sync (checks all 33 personas)
+# Run sync (checks all 38 personas)
 python3 sync/sync_personas.py --check
 
 # Copy identity config (tokens resolved at sync time)

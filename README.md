@@ -6,7 +6,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue)](https://www.python.org/)
 [![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](https://github.com/fentonmartin/ai-agent-registry/blob/main/CONTRIBUTING.md)
-[![Personas](https://img.shields.io/badge/personas-33-orange)](#the-hierarchy)
+[![Personas](https://img.shields.io/badge/personas-38-orange)](#the-hierarchy)
 [![Hierarchy](https://img.shields.io/badge/hierarchy-L0--L4--TEAM-purple)](#the-hierarchy)
 [![Release](https://img.shields.io/github/v/tag/fentonmartin/ai-agent-registry?label=release)](https://github.com/fentonmartin/ai-agent-registry/releases)
 
@@ -35,8 +35,8 @@ LangGraph, or custom gateways.
 |-------|------|-------|
 | **L0** | Default voices (Zan answers when no persona is named) | 2 |
 | **L1** | Domain experts — peers, no children (except Ian/Ran/Lan) | 11 |
-| **L2** | Specialist children of Ian (10), Ran (7), Lan (3) | 20 |
-| **L3** | Sub-specialists (reserved for future expansion) | 0 |
+| **L2** | Specialist children of Ian (11), Ran (7), Lan (3) | 21 |
+| **L3** | Sub-specialists under Ian-QA (2), Ian-UX (1), Ran-Web (1) | 4 |
 | **L4** | External tools / APIs invoked as agents | N/A |
 | **TEAM** | Cross-functional collaborators outside the hierarchy | Variable |
 
@@ -146,15 +146,20 @@ L0  Zan  (default dispatcher — assign tasks to the right persona) · Jan (expl
 │   ├── L2  ian-alpha      Lead orchestration · delivery board
 │   ├── L2  ian-secred     Offensive security · red-teaming
 │   ├── L2  ian-secblue    Defensive security · blue-team ops
-│   ├── L2  ian-ux         UX research · journeys · usability
+│   ├── L2  ian-qa         QA · test strategy · release verification
+│   │   ├── L3  ian-qa-endtoend    E2E test automation (Playwright)
+│   │   └── L3  ian-qa-security   Pre-release security gate (OWASP)
+│   ├── L2  ian-opt        Optimization · web performance · parallel execution
 │   ├── L2  ian-ui         Visual design · Figma · handoff
-│   └── L2  ian-qa         QA · test strategy · release verification
+│   └── L2  ian-ux         UX research · journeys · usability
+│       └── L3  ian-ux-accessibility  WCAG 2.2 AA audit & design
 ├─── L1  Ran     (research umbrella)
 │   ├── L2  ran-people     Real-person identity verification ONLY
 │   ├── L2  ran-brand      Domain · trademark · handle research
 │   ├── L2  ran-tech       Technology research · stack analysis
 │   ├── L2  ran-business   Business · market research
 │   ├── L2  ran-web        Web · SEO research
+│   │   └── L3  ran-web-seo  Technical SEO research & audit
 │   ├── L2  ran-app        Mobile app research
 │   └── L2  ran-general    General knowledge research
 ├─── L1  Ban     (business · finance · revenue)
@@ -182,7 +187,11 @@ L2 children under Lan: lan-contract · lan-compliance · lan-ip
 | Security monitoring / incident response | Ian → Ian-SecBlue |
 | User research / journey mapping | Ian → Ian-UX |
 | Visual design / design systems | Ian → Ian-UI |
-| Test plan / regression / release verification (tech projects) | Ian → Ian-QA |
+| Performance / optimization / web vitals | Ian → Ian-Opt |
+| E2E / Playwright test automation | Ian → Ian-QA → Ian-QA-EndToEnd |
+| Pre-release security gate (OWASP) | Ian → Ian-QA → Ian-QA-Security |
+| Accessibility audit (WCAG 2.2) | Ian → Ian-UX → Ian-UX-Accessibility |
+| SEO audit & strategy | Ran → Ran-Web → Ran-Web-SEO |
 | Verify a person's identity (real person) | Ran → Ran-People |
 | Check domain / trademark availability | Ran → Ran-Brand |
 | Technology stack research | Ran → Ran-Tech |
@@ -233,10 +242,14 @@ ai-agent-registry/
 ├── personas/
 │   ├── l0/      # Default voices (Zan, Jan)
 │   ├── l1/      # 11 domain experts
-│   └── l2/
-│       ├── ian/  # 10 engineering specialists
-│       ├── ran/  # 7 research specialists
-│       └── lan/  # 3 legal specialists
+│   ├── l2/
+│   │   ├── ian/  # 11 engineering specialists
+│   │   ├── ran/  # 7 research specialists
+│   │   └── lan/  # 3 legal specialists
+│   └── l3/
+│       ├── ian-qa/   # Ian-QA-EndToEnd, Ian-QA-Security
+│       ├── ian-ux/   # Ian-UX-Accessibility
+│       └── ran-web/  # Ran-Web-SEO
 ├── config/
 │   └── identities.example.yaml  # Copy → identities.yaml (gitignored)
 ├── sync/
@@ -279,8 +292,8 @@ full guide on adding personas, improving prompts, and extending the framework.
 
 We use **year-based versioning**: `v{year}.{major}.{minor}`
 
-- **v2026.0.1** — Initial public release (current)
-- **v2026.1.0** — Would be the next major update in 2026
+|- **v2026.0.1** — Initial public release
+|- **v2026.0.2** — L3 layer, Ian-Opt, full ECC mapping (current)
 - Patch releases increment the minor: `v2026.0.2`, `v2026.0.3`, ...
 
 Major version (the middle number) resets to 0 each year. A new year starts
