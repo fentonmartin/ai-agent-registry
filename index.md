@@ -7,7 +7,7 @@ title: AI Agent Registry
 
 A standardized, hierarchical persona system for multi-agent AI applications.
 
-**32 personas** organized across **L0–L4 + TEAM** layers with a sync script
+**33 personas** organized across **L0–L4 + TEAM** layers with a sync script
 for Hermes and import guides for 5+ runtimes.
 
 ---
@@ -18,7 +18,7 @@ for Hermes and import guides for 5+ runtimes.
 |-------|-------|------|
 | L0 Default voices | Entry point | Zan (default), Jan (explicit only) |
 | L1 Domains | 11 peer experts | Ian, Ban, Ean, Pan, Qan, Ran, San, Van, Han, Lan, Wan |
-| L2 Specialists | 19 children | Under Ian, Ran, Lan only |
+| L2 Specialists | 20 children | Under Ian, Ran, Lan only |
 | Import Guide | Runtime setup | Hermes, AutoGen, CrewAI, LangGraph, n8n |
 | Naming Guide | Style conventions | Capitalization, casing, token system |
 
@@ -39,6 +39,7 @@ L0: Zan (default)  ·  Jan (explicit only)
      |   +-- L2: Ian-SecBlue
      |   +-- L2: Ian-UI
      |   +-- L2: Ian-UX
+     |   +-- L2: Ian-QA
      |
      +-- L1: Ban (Business)
      +-- L1: Ean (Learning)
@@ -88,7 +89,7 @@ See the [full framework](docs/HIERARCHY.md) and [import guide](docs/IMPORT-GUIDE
 git clone https://github.com/fentonmartin/ai-agent-registry.git
 cd ai-agent-registry
 
-# Run sync (checks all 32 personas)
+# Run sync (checks all 33 personas)
 python3 sync/sync_personas.py --check
 
 # Copy identity config (tokens resolved at sync time)

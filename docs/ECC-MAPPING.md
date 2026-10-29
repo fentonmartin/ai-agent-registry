@@ -31,6 +31,7 @@ Every item was checked against ECC release v2.2.3: the file exists and its descr
 | Ian-SecRed | partial | 3 | security-review |
 | Ian-SecBlue | gap | 0 | - |
 | Ian-UI | partial | 4 | accessibility |
+| Ian-QA | partial | 7 | e2e-testing |
 | Ian-UX | gap | 0 | - |
 | Ian-Flutter | strong | 7 | dart-flutter-patterns, flutter-dart-code-review |
 | Pan | partial | 4 | product-lens |
@@ -55,13 +56,14 @@ Not assessed in this pass: Jan, Ran-Tech, Ran-Web, Ran-App, Ran-General.
 
 ## Concepts adapted, not copied
 
+- Ian-QA (new L2, QA for tech projects only): evidence rule (a check not run is NOT RUN), INCONCLUSIVE without environment or baseline, read-only on production, every fixed bug gets a regression test, no retry-until-green. Taken from `browser-qa`, `ai-regression-testing` and `verification-loop` as ideas; those three are not imported (Claude-specific tools, stack-specific).
 - Ian L1 build loop: size the request, plan, GATE 1 (approval), build tests-first, verify with PASS or FAIL, review, GATE 2 (confirm before commit or deploy), remember. Based on `orch-pipeline`, `verification-loop`, `tdd-workflow`; rewritten for our work (not Node/TS, not Claude Code commands).
 - Stall rules for Ian-Alpha (from `loop-operator`): stop after two checkpoints without progress.
 - Independent review (from `santa-method`): the reviewer is never the author. Placed in Van and Ian.
 - Context discipline (from `context-budget`): skills load on demand, never preloaded.
 - Zan outbound approval (from `operator-approval-loop`): draft, show exact text, send only after approval of that exact text, keep a record.
 
-## Imported skills (26)
+## Imported skills (27)
 
 Verbatim from v2.2.3, MIT. Patches only where a path or command does not exist in Hermes.
 
@@ -89,6 +91,7 @@ Verbatim from v2.2.3, MIT. Patches only where a path or command does not exist i
 - `competitive-report-structure`: ban, ran-business
 - `make-interfaces-feel-better`: ian-ui
 - `seo`: ran-web
+- `e2e-testing`: ian-qa
 - `operator-approval-loop`: zan
 - `counterparty-channel-discipline`: zan
 
@@ -139,6 +142,9 @@ Not from ECC. Listed in `native_skills` in the mapping file and checked by `--au
 - `grounded-citations`: ran, ran-tech, ran-general
 - `web-perf`: ran-web
 - `blocked-page-recovery`: ran-web
+- `test-driven-development`: ian-qa
+- `systematic-debugging`: ian-qa
+- `dogfood`: ian-qa
 
 ## Own material, no external source
 

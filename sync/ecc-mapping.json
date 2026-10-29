@@ -302,6 +302,24 @@
         "general fact checking"
       ],
       "note": "ECC has nothing here. Hermes grounded-citations covers it."
+    },
+    "ian-qa": {
+      "fit": "partial",
+      "items": [
+        "skill:e2e-testing",
+        "skill:tdd-workflow",
+        "skill:verification-loop",
+        "skill:browser-qa",
+        "skill:ai-regression-testing",
+        "agent:e2e-runner",
+        "agent:tdd-guide"
+      ],
+      "gaps": [
+        "performance and load testing",
+        "test plan and bug report formats (stay in persona)",
+        "ECC testing skills are stack specific (Node/TS, Playwright, per-language); only e2e-testing is imported"
+      ],
+      "note": "TDD, debugging and exploratory browser testing come from Hermes native skills."
     }
   },
   "imports": {
@@ -481,6 +499,12 @@
         "ran-web"
       ],
       "patches": []
+    },
+    "e2e-testing": {
+      "for": [
+        "ian-qa"
+      ],
+      "patches": []
     }
   },
   "not_imported": {
@@ -505,7 +529,9 @@
     "dashboard-builder": "Grafana and SigNoz only; our monitoring stack is not defined yet",
     "email-ops": "reference for Zan; Hermes has no mail surface wired yet",
     "loop-design-check": "built on Claude Code /loop and /goal; stall rules already folded into Ian-Alpha",
-    "intent-driven-development": "17 KB, large fixed context cost; acceptance-criteria idea already in Ian-Plan"
+    "intent-driven-development": "17 KB, large fixed context cost; acceptance-criteria idea already in Ian-Plan",
+    "browser-qa": "names claude-in-chrome MCP tools that do not exist in Hermes; the dogfood skill covers it. Its read-only-on-production, INCONCLUSIVE-without-baseline and partial-accessibility rules are in the Ian-QA standards",
+    "ai-regression-testing": "Next.js, Vitest and Supabase specific, with a .claude/commands sample; the idea that every fixed bug needs a regression test is in the Ian-QA standards"
   },
   "not_assessed": [
     "jan"
@@ -530,6 +556,24 @@
         "ran-web"
       ],
       "why": "Hermes skill: 403/429, paywall and bot-wall recovery"
+    },
+    "test-driven-development": {
+      "for": [
+        "ian-qa"
+      ],
+      "why": "Hermes skill: red, green, refactor with failing test first"
+    },
+    "systematic-debugging": {
+      "for": [
+        "ian-qa"
+      ],
+      "why": "Hermes skill: root cause before fix"
+    },
+    "dogfood": {
+      "for": [
+        "ian-qa"
+      ],
+      "why": "Hermes skill: exploratory web QA with the Hermes browser toolset and a bug report template"
     }
   }
 }

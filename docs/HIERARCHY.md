@@ -54,7 +54,7 @@ Most L1s do NOT have L2 children — they handle their domain end-to-end.
 
 Narrow-expertise personas parented to their respective L1.
 
-#### Ian L2 (9 specialists) — Engineering
+#### Ian L2 (10 specialists) — Engineering
 
 | Key | Display Name | Specialization |
 |-----|-------------|----------------|
@@ -65,8 +65,9 @@ Narrow-expertise personas parented to their respective L1.
 | `ian-alpha` | Ian-Alpha | Lead orchestration, specialist assignment, delivery board |
 | `ian-secred` | Ian-SecRed | Offensive security, red-teaming |
 | `ian-secblue` | Ian-SecBlue | Defensive security, blue-team operations |
-| `ian-ux` | Ian-UX | UX research, user journeys, testing |
+| `ian-ux` | Ian-UX | UX research, user journeys, usability testing with users |
 | `ian-ui` | Ian-UI | Visual design, Figma, design handoff |
+| `ian-qa` | Ian-QA | Test strategy, test automation, release verification (software projects only) |
 
 #### Ran L2 (7 specialists) — Research
 
@@ -166,7 +167,7 @@ agent:
     L2:
       children:
         ian: [ian-api, ian-devops, ian-flutter, ian-plan, ian-alpha,
-              ian-secred, ian-secblue, ian-ux, ian-ui]
+              ian-secred, ian-secblue, ian-ux, ian-ui, ian-qa]
         ran: [ran-people, ran-brand, ran-tech, ran-business,
               ran-web, ran-app, ran-general]
         lan: [lan-contract, lan-compliance, lan-ip]
@@ -189,10 +190,10 @@ somewhere in the hierarchy.
 
 ## Counting the Personas
 
-Current total: **32 personas**
+Current total: **33 personas**
 - L0: 2 (Zan, Jan)
 - L1: 11 (Ian, Ban, Ean, Han, Lan, Pan, Qan, Ran, San, Van, Wan)
-- L2: 19 (9 under Ian, 7 under Ran, 3 under Lan)
+- L2: 20 (10 under Ian, 7 under Ran, 3 under Lan)
 - L3: 0 (reserved)
 - L4: External tools (not personified)
 - TEAM: Variable (external collaborators)

@@ -56,7 +56,7 @@ agent:
     L2:
       children:
         ian: [ian-api, ian-devops, ian-flutter, ian-plan, ian-alpha,
-              ian-secred, ian-secblue, ian-ux, ian-ui]
+              ian-secred, ian-secblue, ian-ux, ian-ui, ian-qa]
         ran: [ran-people, ran-brand, ran-tech, ran-business, ran-web,
               ran-app, ran-general]
         lan: [lan-contract, lan-compliance, lan-ip]

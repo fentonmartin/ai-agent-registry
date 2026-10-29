@@ -6,7 +6,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue)](https://www.python.org/)
 [![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](https://github.com/fentonmartin/ai-agent-registry/blob/main/CONTRIBUTING.md)
-[![Personas](https://img.shields.io/badge/personas-32-orange)](#the-hierarchy)
+[![Personas](https://img.shields.io/badge/personas-33-orange)](#the-hierarchy)
 [![Hierarchy](https://img.shields.io/badge/hierarchy-L0--L4--TEAM-purple)](#the-hierarchy)
 [![Release](https://img.shields.io/github/v/tag/fentonmartin/ai-agent-registry?label=release)](https://github.com/fentonmartin/ai-agent-registry/releases)
 
@@ -35,7 +35,7 @@ LangGraph, or custom gateways.
 |-------|------|-------|
 | **L0** | Default voices (Zan answers when no persona is named) | 2 |
 | **L1** | Domain experts — peers, no children (except Ian/Ran/Lan) | 11 |
-| **L2** | Specialist children of Ian (9), Ran (7), Lan (3) | 19 |
+| **L2** | Specialist children of Ian (10), Ran (7), Lan (3) | 20 |
 | **L3** | Sub-specialists (reserved for future expansion) | 0 |
 | **L4** | External tools / APIs invoked as agents | N/A |
 | **TEAM** | Cross-functional collaborators outside the hierarchy | Variable |
@@ -146,8 +146,9 @@ L0  Zan  (default dispatcher — assign tasks to the right persona) · Jan (expl
 │   ├── L2  ian-alpha      Lead orchestration · delivery board
 │   ├── L2  ian-secred     Offensive security · red-teaming
 │   ├── L2  ian-secblue    Defensive security · blue-team ops
-│   ├── L2  ian-ux         UX research · journeys · testing
-│   └── L2  ian-ui         Visual design · Figma · handoff
+│   ├── L2  ian-ux         UX research · journeys · usability
+│   ├── L2  ian-ui         Visual design · Figma · handoff
+│   └── L2  ian-qa         QA · test strategy · release verification
 ├─── L1  Ran     (research umbrella)
 │   ├── L2  ran-people     Real-person identity verification ONLY
 │   ├── L2  ran-brand      Domain · trademark · handle research
@@ -181,6 +182,7 @@ L2 children under Lan: lan-contract · lan-compliance · lan-ip
 | Security monitoring / incident response | Ian → Ian-SecBlue |
 | User research / journey mapping | Ian → Ian-UX |
 | Visual design / design systems | Ian → Ian-UI |
+| Test plan / regression / release verification (tech projects) | Ian → Ian-QA |
 | Verify a person's identity (real person) | Ran → Ran-People |
 | Check domain / trademark availability | Ran → Ran-Brand |
 | Technology stack research | Ran → Ran-Tech |
@@ -232,7 +234,7 @@ ai-agent-registry/
 │   ├── l0/      # Default voices (Zan, Jan)
 │   ├── l1/      # 11 domain experts
 │   └── l2/
-│       ├── ian/  # 9 engineering specialists
+│       ├── ian/  # 10 engineering specialists
 │       ├── ran/  # 7 research specialists
 │       └── lan/  # 3 legal specialists
 ├── config/
