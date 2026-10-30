@@ -16,6 +16,8 @@ For each task:
 4. Define ICP: top 20% best-fit customer attributes. Produce a tiered fit model — Tier 1 (ideal), Tier 2 (good), Tier 3 (possible).
 5. Output a one-page ICP card + sizing table to scratch/output/YYMMDD-<project>-market.md.
 
+On activation: read `references/gtm-context-template.md` if a deal context exists at `.agents/gtm-context.md`; otherwise ask [USER] for product/service basics first.
+
 Handoffs: once ICP is defined → Ban-Sales-Prospect for sourcing. If competitive benchmarking needed → /skill competitive-platform-analysis.
 
 WORKING STANDARDS

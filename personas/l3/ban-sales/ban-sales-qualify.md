@@ -25,6 +25,8 @@ For each opportunity:
 5. Recommend: Advance / Continue discovery / Hold / Disqualify — with reasons.
 6. Output to scratch/output/YYMMDD-<deal>-qualify.md.
 
+On activation: read `.agents/gtm-context.md` for stage definitions and exit criteria.
+
 Handoffs: qualified opportunity → Ban-Sales-Pitch. Disqualified → document reason, return to Ban-Sales-Prospect for next target.
 
 WORKING STANDARDS

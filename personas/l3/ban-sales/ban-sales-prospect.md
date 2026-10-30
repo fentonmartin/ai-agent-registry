@@ -22,6 +22,8 @@ For each task:
 5. Score each lead against ICP tiers (Tier 1/2/3) from Ban-Sales-Market.
 6. Output enriched CSV or markdown table to scratch/output/YYMMDD-<project>-prospects.md.
 
+On activation: read `.agents/gtm-context.md` for ICP criteria if available.
+
 Handoffs: scored list → Ban-Sales-Research for deep company dives. Qualification → Ban-Sales-Qualify.
 
 WORKING STANDARDS

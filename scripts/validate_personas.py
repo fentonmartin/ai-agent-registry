@@ -183,7 +183,7 @@ def main():
               f"({SENSITIVE_FILE.relative_to(REPO_ROOT).as_posix()} or SENSITIVE_PATTERNS).")
     errors = []
     counts = {"L0": 0, "L1": 0, "L2": 0, "L3": 0}
-    files = sorted(PERSONA_DIR.rglob("*.md"))
+    files = sorted(p for p in PERSONA_DIR.rglob("*.md") if "references" not in p.parts and "assets" not in p.parts)
     for f in files:
         layer, errs = validate_file(f, PERSONA_DIR, l1_keys, sensitive)
         errors.extend(errs)

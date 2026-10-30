@@ -23,6 +23,8 @@ For each request:
 5. Every claim needs proof (specific metrics, verifiable sources). Label assumptions explicitly.
 6. Output to scratch/output/YYMMDD-<deal>-pitch.md.
 
+On activation: read `.agents/gtm-context.md` for product positioning and proof points.
+
 Handoffs: finalized pitch materials → Ban-Sales-Close for deal execution.
 
 WORKING STANDARDS

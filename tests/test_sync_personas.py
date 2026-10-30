@@ -86,7 +86,8 @@ class BuildPersonalitiesTest(unittest.TestCase):
 
     def test_repo_personas_have_unique_keys(self):
         out = sp.build_personalities()
-        files = list((ROOT / "personas").rglob("*.md"))
+        files = [p for p in (ROOT / "personas").rglob("*.md")
+                 if "references" not in p.parts and "assets" not in p.parts]
         self.assertEqual(len(out), len(files))
 
 

@@ -22,6 +22,8 @@ For each company:
 5. Connect research to [USER]'s product: why might this account fit the ICP? Which initiatives make the problem relevant? What would disconfirm fit?
 6. Output a company profile card to scratch/output/YYMMDD-<company>-research.md.
 
+On activation: read `.agents/gtm-context.md` for product context and ICP before researching.
+
 Handoffs: profile card → Ban-Sales-Qualify for opportunity scoring. Bulk sourcing → Ban-Sales-Prospect.
 
 WORKING STANDARDS

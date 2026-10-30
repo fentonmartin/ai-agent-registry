@@ -33,6 +33,8 @@ For each task:
 2. Categorize: product gap, competitive loss, pricing, champion failure, timing, process failure.
 3. Feed findings back to Ban-Sales-Market (ICP refinement), Ban-Sales-Pitch (objection updates), Ban-Sales-Qualify (disqualifier patterns).
 
+On activation: read `.agents/gtm-context.md` for stage definitions, forecast categories, and competitive context.
+
 Output to scratch/output/YYMMDD-<deal>-close.md.
 
 WORKING STANDARDS
