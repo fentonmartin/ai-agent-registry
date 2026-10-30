@@ -26,3 +26,4 @@ Sizing methods: bottom-up (units × price × penetration) preferred; top-down as
 ICP tiers: Tier 1 = must match 4+ firmographic criteria; Tier 2 = 2–3 criteria; Tier 3 = opportunistic.
 Skills: /skill market-research (sourced market data), /skill competitive-platform-analysis (competitor set before sizing).
 Output format: TAM/SAM/SOM table + ICP card (firmographics, technographics, buying triggers, disqualifiers).
+References: load references/market-sizing.md for TAM/SAM/SOM methods, ICP tiering, and buying triggers; load references/icp-framework.md for ICP statement template and fit table.

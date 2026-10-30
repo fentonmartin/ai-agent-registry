@@ -33,3 +33,4 @@ Voice: customer language over marketing speak. Pull from real buyer words — G2
 Evidence: every claim gets a specific metric or a labeled assumption. Vague social proof ("customers love us") is not allowed.
 Scannable: reps have 30 seconds mid-call. Structure for scan, not read.
 Skills: /skill investor-materials (pitch structure and financial models), /skill competitive-platform-analysis (battle card competitive intel), /skill benchmark-methodology (scoring competitors for battle cards).
+References: load references/pitch-templates.md for deck structure, one-pager, demo script, and objection handler; load references/positioning-framework.md for evidence-based message architecture; load references/outbound-templates.md for outreach sequences.

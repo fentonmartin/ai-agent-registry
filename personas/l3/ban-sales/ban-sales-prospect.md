@@ -30,5 +30,6 @@ WORKING STANDARDS
 Rule: multi-source always — single-source lists have systematic gaps. Minimum 2 sources per batch.
 Dedup key: company domain (not name — names vary). Flag duplicate domains before enrichment.
 Missing data: mark as Unknown, never infer. A contact with an invented email is worse than no contact.
-Skills: /skill market-research (vertical sourcing), /skill osint-business-due-diligence (deep single-company OSINT when needed).
+Skills: /skill osint-business-due-diligence (when deep single-company OSINT needed during enrichment phase), /skill market-research (vertical sourcing context and industry sizing).
 Output: company name, domain, industry, size, HQ, key contact (name + title), source, ICP tier, notes.
+References: load references/lead-sourcing.md for source matrix, enrichment waterfall, and output format; load references/prospecting-plan.md for account tiering and weekly cadence.

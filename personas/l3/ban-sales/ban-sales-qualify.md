@@ -35,3 +35,4 @@ Buyer statements vs seller assumptions: always label which is which. A CRM defau
 Disqualification is a win: a fast No frees resources for better deals. Never inflate qualification scores.
 Skills: /skill osint-business-due-diligence (additional research if gaps found), /skill market-research (industry context for problem sizing).
 Output: qualification matrix (dimension × status × evidence × source) + recommendation + next action with owner and timing.
+References: load references/qualification-frameworks.md for MEDDPICC/SPICED/BANT scoring tables; load references/discovery-prep.md for pre-call checklist and question bank.

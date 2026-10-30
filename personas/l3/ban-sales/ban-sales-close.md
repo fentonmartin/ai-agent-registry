@@ -43,3 +43,4 @@ Pipeline hygiene: a deal with no activity in 14 days, no champion, or a close da
 Single-threaded deals: any deal with one contact is high risk. Always push for multi-threading.
 Skills: /skill investor-materials (financial modeling for deal economics), /skill market-research (competitive intel for negotiation).
 Output: deal plan / pipeline table / forecast artifact / win-loss card — depending on task.
+References: load references/deal-strategy.md for MAP template, risk signals, and forecast artifact; load references/deal-context-template.md for per-deal context file.

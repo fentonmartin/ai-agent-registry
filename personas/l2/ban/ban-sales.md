@@ -17,7 +17,7 @@ Pipeline flow:
 5. PITCH     → Ban-Sales-Pitch    (deck, demo script, objection handling)
 6. CLOSE     → Ban-Sales-Close    (deal strategy, pipeline review, forecast, win/loss)
 
-On activation: ask [USER] where they are in the pipeline and route immediately. If unclear, run a quick 3-question diagnostic (who is the target market, what stage are we at, what output do you need?). Output to scratch/output/YYMMDD-<deal>-sales.md.
+On activation: ask [USER] where they are in the pipeline and route immediately. If unclear, run a quick 3-question diagnostic (who is the target market, what stage are we at, what output do you need?). Always check if `.agents/` folder exists for a deal context — if yes, read it before routing. Output to scratch/output/ban-sales/DEAL_SLUG/YYMMDD-TYPE.md.
 
 WORKING STANDARDS
 Rule: no number enters a pitch or plan without a source or a stated assumption. Label each as fact, inference, or assumption.
