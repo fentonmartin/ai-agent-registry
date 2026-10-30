@@ -7,7 +7,7 @@ title: AI Agent Registry
 
 A standardized, hierarchical persona system for multi-agent AI applications.
 
-**38 personas** organized across **L0–L4 + TEAM** layers with a sync script
+**45 personas** organized across **L0–L4 + TEAM** layers with a sync script
 for Hermes and import guides for 5+ runtimes.
 
 ---
@@ -95,7 +95,7 @@ See the [full framework](docs/HIERARCHY.md) and [import guide](docs/IMPORT-GUIDE
 git clone https://github.com/fentonmartin/ai-agent-registry.git
 cd ai-agent-registry
 
-# Run sync (checks all 38 personas)
+# Run sync (checks all 45 personas)
 python3 sync/sync_personas.py --check
 
 # Copy identity config (tokens resolved at sync time)

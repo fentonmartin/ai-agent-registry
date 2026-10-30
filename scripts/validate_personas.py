@@ -30,7 +30,7 @@ REPO_ROOT = pathlib.Path(__file__).resolve().parent.parent
 PERSONA_DIR = REPO_ROOT / "personas"
 
 # Only these L1 personas may have L2 children (see docs/HIERARCHY.md).
-PARENTS_WITH_CHILDREN = {"ian", "ran", "lan"}
+PARENTS_WITH_CHILDREN = {"ian", "ran", "lan", "ban"}
 REQUIRED_FIELDS = ("name", "title", "role")
 KEY_RE = re.compile(r"^[a-z][a-z0-9-]*$")
 

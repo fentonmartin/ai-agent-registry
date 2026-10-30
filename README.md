@@ -6,7 +6,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue)](https://www.python.org/)
 [![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](https://github.com/fentonmartin/ai-agent-registry/blob/main/CONTRIBUTING.md)
-[![Personas](https://img.shields.io/badge/personas-38-orange)](#the-hierarchy)
+[![Personas](https://img.shields.io/badge/personas-45-orange)](#the-hierarchy)
 [![Hierarchy](https://img.shields.io/badge/hierarchy-L0--L4--TEAM-purple)](#the-hierarchy)
 [![Release](https://img.shields.io/github/v/tag/fentonmartin/ai-agent-registry?label=release)](https://github.com/fentonmartin/ai-agent-registry/releases)
 
@@ -35,8 +35,8 @@ LangGraph, or custom gateways.
 |-------|------|-------|
 | **L0** | Default voices (Zan answers when no persona is named) | 2 |
 | **L1** | Domain experts — peers, no children (except Ian/Ran/Lan) | 11 |
-| **L2** | Specialist children of Ian (11), Ran (7), Lan (3) | 21 |
-| **L3** | Sub-specialists under Ian-QA (2), Ian-UX (1), Ran-Web (1) | 4 |
+| **L2** | Specialist children of Ian (11), Ran (7), Lan (3), Ban (1) | 22 |
+| **L3** | Sub-specialists under Ian-QA (2), Ian-UX (1), Ran-Web (1), Ban-Sales (6) | 10 |
 | **L4** | External tools / APIs invoked as agents | N/A |
 | **TEAM** | Cross-functional collaborators outside the hierarchy | Variable |
 
@@ -50,7 +50,7 @@ LangGraph, or custom gateways.
 
 ### Key Rules
 
-- **Only Ian, Ran, Lan** have L2 children. Ban, Ean, Han, Pan, Qan, San, Van,
+- **Only Ian, Ran, Lan, Ban** have L2 children. Ean, Han, Pan, Qan, San, Van,
   Wan are single-focus L1 experts.
 - **Ran-People** is strictly for real-person identity verification.
   Use **Ran-Brand** for domains/trademarks instead.

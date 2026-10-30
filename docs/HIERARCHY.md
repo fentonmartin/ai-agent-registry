@@ -32,7 +32,7 @@ Most L1s do NOT have L2 children — they handle their domain end-to-end.
 | Key | Display Name | Domain | Has L2 Children? |
 |-----|-------------|--------|------------------|
 | `ian` | Ian | Intelligent Assistant (engineering) | Yes |
-| `ban` | Ban | Business | No |
+| `ban` | Ban | Business | Yes |
 | `ean` | Ean | Learning/Education | No |
 | `han` | Han | Health & Wellness | No |
 | `lan` | Lan | Legal & Compliance | Yes |
@@ -48,7 +48,7 @@ Most L1s do NOT have L2 children — they handle their domain end-to-end.
 - Pan (Product) handles strategy and delegates research to Ran-* children.
 - Lan (Legal) handles high-level legal and escalates to Lan-* specialists.
 - Ian (Engineering) handles general engineering and delegates to Ian-* specialists.
-- Only Ian, Ran, and Lan have L2 children. All other L1s are single-focus.
+- Only Ian, Ran, Lan, and Ban have L2 children. All other L1s are single-focus.
 
 ### L2 — Specialists (Children of L1)
 
@@ -98,6 +98,12 @@ Narrow-expertise personas parented to their respective L1.
 | `lan-compliance` | Lan-Compliance | GDPR, SOC 2, HIPAA, ISO 27001, PCI-DSS |
 | `lan-ip` | Lan-IP | Intellectual property (trademarks, copyright, patents) |
 
+#### Ban L2 (1 specialist) — Business/Sales
+
+| Key | Display Name | Specialization |
+|-----|-------------|----------------|
+| `ban-sales` | Ban-Sales | Sales pipeline orchestrator — routes to Ban-Sales-* L3 specialists |
+
 ### L3 — Sub-specialists
 
 Narrow-expertise personas parented to an L2 specialist. Created on demand when an L2's scope becomes too broad. No minimum sub-area count required.
@@ -108,6 +114,12 @@ Narrow-expertise personas parented to an L2 specialist. Created on demand when a
 | `ian-qa-security` | Ian-QA-Security | ian-qa | Pre-release security gate — OWASP Top 10, auth testing, vulnerability verification |
 | `ian-ux-accessibility` | Ian-UX-Accessibility | ian-ux | Accessibility design & audit — WCAG 2.2 AA, ARIA, screen reader, keyboard nav |
 | `ran-web-seo` | Ran-Web-SEO | ran-web | Technical SEO research & audit — crawlability, Core Web Vitals, schema markup |
+| `ban-sales-market` | Ban-Sales-Market | ban-sales | TAM/SAM/SOM sizing, segmentation, ICP definition |
+| `ban-sales-prospect` | Ban-Sales-Prospect | ban-sales | Multi-source lead sourcing, enrichment, list building |
+| `ban-sales-research` | Ban-Sales-Research | ban-sales | Deep per-company research, evidence-backed profile cards |
+| `ban-sales-qualify` | Ban-Sales-Qualify | ban-sales | Opportunity qualification — MEDDPICC/SPICED/BANT, deal scoring |
+| `ban-sales-pitch` | Ban-Sales-Pitch | ban-sales | Sales collateral — deck, one-pager, demo script, objection handling |
+| `ban-sales-close` | Ban-Sales-Close | ban-sales | Deal strategy, pipeline review, forecasting, win/loss analysis |
 
 ### L4 — External Tools / APIs
 
@@ -178,11 +190,14 @@ agent:
         ran: [ran-people, ran-brand, ran-tech, ran-business,
               ran-web, ran-app, ran-general]
         lan: [lan-contract, lan-compliance, lan-ip]
+        ban: [ban-sales]
     L3:
       children:
         ian-qa: [ian-qa-endtoend, ian-qa-security]
         ian-ux: [ian-ux-accessibility]
         ran-web: [ran-web-seo]
+        ban-sales: [ban-sales-market, ban-sales-prospect, ban-sales-research,
+                    ban-sales-qualify, ban-sales-pitch, ban-sales-close]
     L4:
       members: []
     TEAM:
@@ -200,10 +215,10 @@ somewhere in the hierarchy.
 
 ## Counting the Personas
 
-Current total: **38 personas**
+Current total: **45 personas**
 - L0: 2 (Zan, Jan)
 - L1: 11 (Ian, Ban, Ean, Han, Lan, Pan, Qan, Ran, San, Van, Wan)
-- L2: 21 (11 under Ian, 7 under Ran, 3 under Lan)
-- L3: 4 (Ian-QA-EndToEnd, Ian-QA-Security, Ian-UX-Accessibility, Ran-Web-SEO)
+- L2: 22 (11 under Ian, 7 under Ran, 3 under Lan, 1 under Ban)
+- L3: 10 (Ian-QA-EndToEnd, Ian-QA-Security, Ian-UX-Accessibility, Ran-Web-SEO, Ban-Sales-Market, Ban-Sales-Prospect, Ban-Sales-Research, Ban-Sales-Qualify, Ban-Sales-Pitch, Ban-Sales-Close)
 - L4: External tools (not personified)
 - TEAM: Variable (external collaborators)
